@@ -4,8 +4,10 @@
     <strong>The ultimate AI agent skills framework — 26 skills · 22 commands · 26 workflows · 7 agents · 10 cursor rules</strong>
   </p>
   <p align="center">
-    Make your AI coding assistant think like a staff engineer. 🇮🇳
+    Make your AI coding assistant think like a staff engineer.
   </p>
+  <p align="center">
+    <img src="https://img.shields.io/badge/Made_in-India-FF9933?style=flat-square&labelColor=138808" alt="Made in India">
   <p align="center">
     <a href="#-quick-start"><img src="https://img.shields.io/badge/Get_Started-blue?style=for-the-badge" alt="Get Started"></a>
     <a href="https://boparaiamrit.github.io/skills-by-amrit/"><img src="https://img.shields.io/badge/Website-7c3aed?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Website"></a>
@@ -641,5 +643,5 @@ This project stands on the shoulders of giants. Huge thanks to these projects th
   <br><br>
   <a href="https://github.com/boparaiamrit">🐙 GitHub</a> · <a href="https://x.com/boparaiamrit">🐦 X/Twitter</a> · <a href="https://boparaiamrit.github.io/skills-by-amrit/">🌐 Website</a>
   <br><br>
-  🇮🇳
+  <img src="https://flagcdn.com/w40/in.png" width="20" alt="India"  srcset="https://flagcdn.com/w40/in.png 2x">
 </p>
