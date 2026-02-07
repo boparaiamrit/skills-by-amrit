@@ -85,13 +85,13 @@ const AGENTS: AgentConfig[] = [
   {
     name: "gemini-cli",
     displayName: "Gemini CLI",
-    localDir: ".agents/skills",
+    localDir: ".gemini/skills",
     globalDir: join(HOME, ".gemini", "skills"),
   },
   {
     name: "github-copilot",
     displayName: "GitHub Copilot",
-    localDir: ".agents/skills",
+    localDir: ".github/skills",
     globalDir: join(HOME, ".copilot", "skills"),
   },
   {

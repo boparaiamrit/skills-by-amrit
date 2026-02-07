@@ -8,9 +8,15 @@
   </p>
   <p align="center">
     <a href="#-quick-start"><img src="https://img.shields.io/badge/Get_Started-blue?style=for-the-badge" alt="Get Started"></a>
+    <a href="https://boparaiamrit.github.io/skills-by-amrit/"><img src="https://img.shields.io/badge/Website-7c3aed?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Website"></a>
     <a href="https://www.npmjs.com/package/skills-by-amrit"><img src="https://img.shields.io/npm/v/skills-by-amrit?style=for-the-badge&color=red" alt="NPM Version"></a>
     <a href="https://github.com/boparaiamrit/skills-by-amrit/blob/main/LICENSE"><img src="https://img.shields.io/github/license/boparaiamrit/skills-by-amrit?style=for-the-badge" alt="License"></a>
     <a href="https://github.com/boparaiamrit/skills-by-amrit/stargazers"><img src="https://img.shields.io/github/stars/boparaiamrit/skills-by-amrit?style=for-the-badge&color=gold" alt="Stars"></a>
+  </p>
+  <p align="center">
+    <a href="https://github.com/boparaiamrit"><img src="https://img.shields.io/badge/GitHub-boparaiamrit-181717?style=flat-square&logo=github" alt="GitHub"></a>
+    <a href="https://x.com/boparaiamrit"><img src="https://img.shields.io/badge/X-@boparaiamrit-000000?style=flat-square&logo=x" alt="X/Twitter"></a>
+    <a href="https://github.com/boparaiamrit/skills-by-amrit/wiki"><img src="https://img.shields.io/badge/Wiki-Documentation-0969da?style=flat-square&logo=github" alt="Wiki"></a>
   </p>
 </p>
 
@@ -77,8 +83,8 @@ Skills by Amrit works with **30+ AI coding agents**. Each agent gets assets inst
 | 🟣 | **Claude Code** | `.claude/skills/` | `.claude/commands/` | — | — |
 | 🔵 | **Cursor** | `.cursor/skills/` | — | — | `.cursor/rules/` |
 | 🟢 | **Antigravity (Gemini)** | `.agent/skills/` | — | `.agent/workflows/` | — |
-| 🟡 | **Gemini CLI** | `.agents/skills/` | — | — | — |
-| ⚫ | **GitHub Copilot** | `.agents/skills/` | — | — | — |
+| 🟡 | **Gemini CLI** | `.gemini/skills/` | — | — | — |
+| ⚫ | **GitHub Copilot** | `.github/skills/` | — | — | — |
 | 🟠 | **Windsurf** | `.windsurf/skills/` | — | — | — |
 | 🔴 | **Cline** | `.cline/skills/` | — | — | — |
 | 🟤 | **Roo** | `.roo/skills/` | — | — | — |
@@ -516,6 +522,8 @@ npx skills-by-amrit help
 
 | Document | Description |
 |:---|:---|
+| [🌐 Website](https://boparaiamrit.github.io/skills-by-amrit/) | Beautiful documentation site with full asset catalog |
+| [📖 Wiki](https://github.com/boparaiamrit/skills-by-amrit/wiki) | Comprehensive GitHub Wiki with guides and reference |
 | [Agent Teams & Memory](docs/AGENT-TEAMS-AND-MEMORY.md) | Comprehensive guide to the team coordination and persistent memory systems |
 | [Competitive Analysis](docs/COMPETITIVE_ANALYSIS.md) | Analysis of GSD, Claude Code, Cursor, and Antigravity frameworks |
 | [Contributing](CONTRIBUTING.md) | How to contribute to this project |
@@ -606,14 +614,29 @@ node dist/cli.js list
 
 ---
 
-## 📄 License
+## � Acknowledgments
 
-[MIT](LICENSE) © [Amritpal Singh](https://github.com/boparaiamrit)
+This project stands on the shoulders of giants. Huge thanks to these projects that inspired and influenced the design of Skills by Amrit:
+
+| Project | Author | Contribution |
+|:---|:---|:---|
+| [**Superpowers**](https://github.com/obra/superpowers) | Jesse Vincent ([@obra](https://github.com/obra)) | Pioneered the agentic skills framework concept — composable skills, TDD-first workflows, and subagent-driven development. The foundation we all build on. |
+| [**GSD (Get Shit Done)**](https://github.com/glittercowboy/get-shit-done) | [@glittercowboy](https://github.com/glittercowboy) | Spec-driven development with context rot prevention, parallel agent spawning, and executable plans. Showed how to keep AI agents focused and productive. |
+| [**Agent Skills Standard**](https://docs.anthropic.com/en/docs/agents/agent-skills) | Anthropic | The open standard for packaging and sharing AI agent capabilities via `SKILL.md` files. |
+| [**skills.sh**](https://skills.sh) | Community | The agent skills directory and CLI that makes skill discovery and installation universal. |
+
+---
+
+## �📄 License
+
+[MIT](LICENSE) © [Amritpal Singh Boparai](https://github.com/boparaiamrit)
 
 ---
 
 <p align="center">
-  <strong>Built with ❤️ by <a href="https://github.com/boparaiamrit">Amrit</a></strong>
+  <strong>Built with ❤️ by <a href="https://github.com/boparaiamrit">Amritpal Singh Boparai</a></strong>
   <br>
   <sub>Making AI agents think like staff engineers, one skill at a time.</sub>
+  <br><br>
+  <a href="https://github.com/boparaiamrit">🐙 GitHub</a> · <a href="https://x.com/boparaiamrit">🐦 X/Twitter</a> · <a href="https://boparaiamrit.github.io/skills-by-amrit/">🌐 Website</a>
 </p>

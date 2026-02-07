@@ -12,6 +12,17 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+  <style>
+    .agent-logo { width: 32px; height: 32px; border-radius: 8px; object-fit: contain; margin-bottom: 12px; filter: brightness(0) invert(1); transition: filter 0.3s; }
+    .card:hover .agent-logo { filter: brightness(1) invert(0); }
+    .agent-logo.color { filter: none; }
+    .agent-logo-text { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; margin-bottom: 12px; background: var(--bg-glass); border: 1px solid var(--border); }
+    .social-links { display: flex; gap: 16px; justify-content: center; margin-top: 16px; }
+    .social-links a { display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+    .social-links a:hover { color: var(--accent-1); }
+    .social-links img { width: 18px; height: 18px; filter: brightness(0) invert(0.6); transition: filter 0.2s; }
+    .social-links a:hover img { filter: brightness(0) invert(0.8); }
+  </style>
 </head>
 <body>
   <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
@@ -94,14 +105,18 @@
       <section class="section" id="agents">
         <div class="section-header"><h2>🤖 34 Supported Agents</h2><p>Install once, use everywhere. Skills by Amrit works with every major AI coding agent.</p></div>
         <div class="cards">
-          <div class="card"><span class="card-icon">🟣</span><h3>Claude Code</h3><p>Full support — skills, commands, agents, rules</p><span class="card-tag tag-core">Full Support</span></div>
-          <div class="card"><span class="card-icon">🔵</span><h3>Cursor</h3><p>Skills + .mdc cursor rules</p><span class="card-tag tag-core">Full Support</span></div>
-          <div class="card"><span class="card-icon">🟢</span><h3>Antigravity (Gemini)</h3><p>Skills + turbo workflows</p><span class="card-tag tag-core">Full Support</span></div>
-          <div class="card"><span class="card-icon">🟡</span><h3>Gemini CLI</h3><p>Skills installation</p><span class="card-tag tag-audit">Skills</span></div>
-          <div class="card"><span class="card-icon">⚫</span><h3>GitHub Copilot</h3><p>Skills installation</p><span class="card-tag tag-audit">Skills</span></div>
-          <div class="card"><span class="card-icon">🟠</span><h3>Windsurf</h3><p>Skills installation</p><span class="card-tag tag-audit">Skills</span></div>
-          <div class="card"><span class="card-icon">🔴</span><h3>Cline / Roo / Kilo</h3><p>Skills installation</p><span class="card-tag tag-audit">Skills</span></div>
-          <div class="card"><span class="card-icon">⚪</span><h3>+27 more agents</h3><p>Codex, Amp, Augment, Continue, Goose, Trae, Junie, Kode, Qoder, and many more</p><span class="card-tag tag-audit">Skills</span></div>
+          <div class="card"><img src="https://cdn.simpleicons.org/anthropic/d97757" class="agent-logo color" alt="Claude Code"><h3>Claude Code</h3><p>Full support — skills, commands, agents, rules</p><span class="card-tag tag-core">Full Support</span></div>
+          <div class="card"><img src="https://cdn.simpleicons.org/cursor/00d4ff" class="agent-logo color" alt="Cursor"><h3>Cursor</h3><p>Skills + .mdc cursor rules</p><span class="card-tag tag-core">Full Support</span></div>
+          <div class="card"><img src="https://cdn.simpleicons.org/googlegemini/8E75B2" class="agent-logo color" alt="Antigravity"><h3>Antigravity (Gemini)</h3><p>Skills + turbo workflows</p><span class="card-tag tag-core">Full Support</span></div>
+          <div class="card"><img src="https://cdn.simpleicons.org/googlegemini/4285F4" class="agent-logo color" alt="Gemini CLI"><h3>Gemini CLI</h3><p>Skills via <code>.gemini/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
+          <div class="card"><img src="https://cdn.simpleicons.org/githubcopilot/ffffff" class="agent-logo" alt="GitHub Copilot"><h3>GitHub Copilot</h3><p>Skills via <code>.github/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
+          <div class="card"><img src="https://cdn.simpleicons.org/codeium/09B6A2" class="agent-logo color" alt="Windsurf"><h3>Windsurf</h3><p>Skills via <code>.windsurf/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
+          <div class="card"><img src="https://cdn.simpleicons.org/openai/ffffff" class="agent-logo" alt="OpenAI Codex"><h3>OpenAI Codex</h3><p>Skills via <code>.agents/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
+          <div class="card"><div class="agent-logo-text">C</div><h3>Cline</h3><p>Skills via <code>.cline/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
+          <div class="card"><div class="agent-logo-text">R</div><h3>Roo Code</h3><p>Skills via <code>.roo/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
+          <div class="card"><div class="agent-logo-text">K</div><h3>Kilo Code</h3><p>Skills via <code>.kilocode/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
+          <div class="card"><div class="agent-logo-text">A</div><h3>Amp</h3><p>Skills via <code>.agents/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
+          <div class="card"><div class="agent-logo-text">+</div><h3>+23 more agents</h3><p>Augment, Continue, Goose, Trae, Junie, Kode, Qoder, Crush, Droid, and more</p><span class="card-tag tag-audit">Skills</span></div>
         </div>
       </section>
 
@@ -337,10 +352,14 @@
         </table>
       </section>
 
-      <!-- Footer -->
       <footer class="footer">
-        <p>Built with <span class="footer-heart">❤️</span> by <a href="https://github.com/boparaiamrit">Amrit</a></p>
+        <p>Built with <span class="footer-heart">❤️</span> by <a href="https://github.com/boparaiamrit">Amritpal Singh Boparai</a></p>
         <p style="margin-top: 8px; font-size: 0.8rem;">Making AI agents think like staff engineers, one skill at a time.</p>
+        <div class="social-links">
+          <a href="https://github.com/boparaiamrit" target="_blank"><img src="https://cdn.simpleicons.org/github/ffffff" alt="GitHub"> boparaiamrit</a>
+          <a href="https://x.com/boparaiamrit" target="_blank"><img src="https://cdn.simpleicons.org/x/ffffff" alt="X/Twitter"> @boparaiamrit</a>
+          <a href="https://www.npmjs.com/package/skills-by-amrit" target="_blank"><img src="https://cdn.simpleicons.org/npm/CB3837" alt="npm"> skills-by-amrit</a>
+        </div>
         <p style="margin-top: 16px; font-size: 0.75rem;">
           <a href="https://github.com/boparaiamrit/skills-by-amrit">GitHub</a> ·
           <a href="https://www.npmjs.com/package/skills-by-amrit">npm</a> ·

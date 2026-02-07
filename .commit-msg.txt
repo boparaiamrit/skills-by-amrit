@@ -1,0 +1,11 @@
+docs: update documentation with real logos, social links, and attribution
+
+- Replace colored circle emojis with real SVG logos from Simple Icons CDN
+  for Claude Code, Cursor, Gemini, GitHub Copilot, Windsurf, OpenAI Codex
+- Add social links (GitHub, X/Twitter, npm) to website footer and README
+- Add website and wiki badge links to README header
+- Fix GitHub Copilot directory path: .agents/skills -> .github/skills
+- Fix Gemini CLI directory path: .agents/skills -> .gemini/skills
+- Add Acknowledgments section crediting Superpowers (obra) and GSD (glittercowboy)
+- Update author name to full: Amritpal Singh Boparai
+- Fix CSS background-clip compatibility warnings
