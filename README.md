@@ -4,7 +4,7 @@
     <strong>The ultimate AI agent skills framework — 26 skills · 22 commands · 26 workflows · 7 agents · 10 cursor rules</strong>
   </p>
   <p align="center">
-    Make your AI coding assistant think like a staff engineer.
+    Make your AI coding assistant think like a staff engineer. 🇮🇳
   </p>
   <p align="center">
     <a href="#-quick-start"><img src="https://img.shields.io/badge/Get_Started-blue?style=for-the-badge" alt="Get Started"></a>
@@ -17,6 +17,7 @@
     <a href="https://github.com/boparaiamrit"><img src="https://img.shields.io/badge/GitHub-boparaiamrit-181717?style=flat-square&logo=github" alt="GitHub"></a>
     <a href="https://x.com/boparaiamrit"><img src="https://img.shields.io/badge/X-@boparaiamrit-000000?style=flat-square&logo=x" alt="X/Twitter"></a>
     <a href="https://github.com/boparaiamrit/skills-by-amrit/wiki"><img src="https://img.shields.io/badge/Wiki-Documentation-0969da?style=flat-square&logo=github" alt="Wiki"></a>
+    <a href="https://github.com/sponsors/boparaiamrit"><img src="https://img.shields.io/badge/Sponsor-❤️-ea4aaa?style=flat-square" alt="Sponsor"></a>
   </p>
 </p>
 
@@ -639,4 +640,6 @@ This project stands on the shoulders of giants. Huge thanks to these projects th
   <sub>Making AI agents think like staff engineers, one skill at a time.</sub>
   <br><br>
   <a href="https://github.com/boparaiamrit">🐙 GitHub</a> · <a href="https://x.com/boparaiamrit">🐦 X/Twitter</a> · <a href="https://boparaiamrit.github.io/skills-by-amrit/">🌐 Website</a>
+  <br><br>
+  🇮🇳
 </p>
