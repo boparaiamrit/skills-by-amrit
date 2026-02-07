@@ -1,0 +1,55 @@
+---
+description: "Anti-hallucination protocol — prevents fabrication of APIs, paths, configs, and logic."
+globs: ["*.ts", "*.tsx", "*.js", "*.jsx", "*.py", "*.go", "*.rs"]
+alwaysApply: true
+---
+
+# Anti-Hallucination Protocol
+
+## MANDATORY: Verify Before Using
+
+Before referencing ANY of the following, you MUST verify they exist by reading the actual files:
+
+### File Paths
+- ❌ NEVER assume a file exists at a path
+- ✅ ALWAYS read/search for the file first
+- ✅ Use `find`, `grep`, or file reading tools to locate files
+
+### API Endpoints
+- ❌ NEVER guess URL patterns, request schemas, or response shapes
+- ✅ ALWAYS read the route handler or API documentation
+- ✅ Verify parameter names, types, and optionality from source
+
+### Database Schemas
+- ❌ NEVER assume column names, types, or relationships
+- ✅ ALWAYS read the schema definition (Prisma schema, migrations, or model files)
+- ✅ Check for constraints, defaults, and nullable fields
+
+### Package APIs
+- ❌ NEVER guess function signatures, import paths, or constructor arguments
+- ✅ ALWAYS check the actual installed version's API
+- ✅ Read `node_modules/[package]/index.d.ts` or package documentation
+
+### Environment Variables
+- ❌ NEVER assume `process.env.SOMETHING` exists
+- ✅ ALWAYS check `.env.example`, `.env.local`, or configuration files
+- ✅ Provide fallback values for optional env vars
+
+### Configuration
+- ❌ NEVER assume config key names or structures
+- ✅ ALWAYS read the config file (next.config, tsconfig, etc.)
+
+## Verification Workflow
+
+1. **Before writing any code**, identify all external references (files, APIs, packages, configs)
+2. **Read each reference** to verify it exists and confirm its interface
+3. **Only then** write code that uses the verified references
+4. **If unsure**, ask the user rather than guessing
+
+## When You Discover You Were Wrong
+
+If you realize mid-implementation that an assumption was incorrect:
+1. STOP immediately
+2. State what assumption was wrong
+3. Correct it before continuing
+4. Do NOT build more on a wrong foundation

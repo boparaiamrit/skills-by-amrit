@@ -1,0 +1,49 @@
+---
+description: "Planning and implementation workflow — use when implementing features or making significant changes."
+globs: []
+alwaysApply: false
+---
+
+# Planning & Implementation Workflow
+
+When implementing a feature or making a significant change, follow this structured workflow:
+
+## Phase 1: Research (Before Writing Code)
+1. **Map the affected area** — Find all files related to the change
+2. **Understand patterns** — How does existing code handle similar cases?
+3. **Identify dependencies** — What imports/exports are involved?
+4. **Check tests** — What existing tests cover this area?
+5. **Read recent history** — What changed recently? (`git log --oneline -15`)
+
+## Phase 2: Plan
+1. **List all files** that need to be created or modified
+2. **Define the changes** for each file (specific, not vague)
+3. **Identify edge cases** — Null values, empty arrays, max values, concurrent access
+4. **Estimate risk** — What could go wrong?
+5. **Define verification** — How will we know this works?
+
+## Phase 3: Implement
+1. **One file at a time** — Complete each file before moving to the next
+2. **Match patterns** — Follow existing codebase conventions
+3. **Verify incrementally** — Check that each change compiles
+4. **Write tests alongside code** — Don't save all tests for the end
+
+## Phase 4: Verify
+1. **Build passes** — `npm run build`
+2. **All tests pass** — `npm test` (not just new tests)
+3. **Lint passes** — `npm run lint`
+4. **Types pass** — `npx tsc --noEmit`
+5. **No regressions** — Existing features still work
+
+## Phase 5: Review
+1. **Self-review the diff** — Read your own changes critically
+2. **Check for code smells** — God functions, duplicate logic, magic numbers
+3. **Verify completeness** — Did you address ALL requirements?
+4. **Check security** — Input validation, auth checks, data exposure
+
+## Project State
+If a `.planning/` directory exists:
+- Read `STATE.md` for current context
+- Update `STATE.md` after completing work
+- Save plans to `.planning/plans/`
+- Save research to `.planning/research/`

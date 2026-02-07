@@ -1,0 +1,39 @@
+---
+description: "Security rules — apply when working with authentication, authorization, user input, or sensitive data."
+globs: ["**/auth/**", "**/api/**", "**/middleware/**", "**/routes/**"]
+alwaysApply: false
+---
+
+# Security Rules
+
+## Input Validation
+- Validate ALL user input at the boundary (API handler, form submission)
+- Use schema validation libraries (Zod, Joi, Yup) — not manual checks
+- Reject invalid input early with clear error messages
+- Never trust client-side validation alone
+
+## Authentication & Authorization
+- Every endpoint must have explicit auth requirements
+- Use middleware for auth checks — don't inline auth logic
+- Check authorization (permissions), not just authentication (identity)
+- Use secure session management with proper expiration
+
+## Data Security
+- Never log sensitive data (passwords, tokens, PII)
+- Hash passwords with bcrypt or argon2 (NEVER MD5 or SHA1)
+- Use parameterized queries — NEVER string concatenation for SQL
+- Sanitize output to prevent XSS (escape HTML, use framework defaults)
+- Set proper CORS headers (never use wildcard `*` in production)
+
+## Configuration Security
+- Never commit `.env` files (only `.env.example`)
+- Store secrets in environment variables, not source code
+- Use different credentials for dev/staging/production
+- Rotate API keys and secrets periodically
+- Disable debug mode in production
+
+## Error Handling
+- Never expose stack traces to end users
+- Log full error details server-side
+- Return generic error messages to clients
+- Implement rate limiting on authentication endpoints

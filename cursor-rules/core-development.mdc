@@ -1,0 +1,55 @@
+---
+description: "Core development rules — always apply these principles to all code generation and modification."
+globs: ["*.ts", "*.tsx", "*.js", "*.jsx", "*.py"]
+alwaysApply: true
+---
+
+# Core Development Rules
+
+## Code Quality Standards
+
+### ALWAYS
+- **Type safety** — Use proper types. No `any` in TypeScript without explicit justification. Use type hints in Python.
+- **Error handling** — Handle all error paths explicitly. No empty catch blocks. No silent failures.
+- **Logging** — Use the project's logging framework. Never use `console.log` for production code (use `logger.info`, `logger.error`, etc.).
+- **Configuration** — Externalize all configuration values. No hardcoded API keys, URLs, ports, or magic numbers.
+- **Functions** — Keep functions under 50 lines. Each function does ONE thing (Single Responsibility).
+- **Naming** — Use descriptive, self-documenting names. Avoid abbreviations. Match existing codebase conventions.
+- **Comments** — Comment the WHY, not the WHAT. Code should be self-explanatory for the "what."
+- **DRY** — Don't Repeat Yourself. If you write the same logic twice, extract it.
+
+### NEVER
+- Leave `console.log` debugging statements in production code
+- Use `any` type without a comment explaining why
+- Catch errors silently: `catch(e) {}`
+- Hardcode values that should be configurable
+- Skip input validation on user-facing endpoints
+- Copy-paste code blocks (extract shared logic)
+- Leave TODO/FIXME without an associated issue number
+- Introduce new dependencies without justification
+
+## Architecture Principles (SOLID)
+
+1. **Single Responsibility** — Each class/module has one reason to change
+2. **Open/Closed** — Open for extension, closed for modification (use interfaces/abstract classes)
+3. **Liskov Substitution** — Subtypes must be substitutable for their base types
+4. **Interface Segregation** — Many specific interfaces over one general-purpose
+5. **Dependency Inversion** — Depend on abstractions, not concretions
+
+## Testing Requirements
+
+- Every new feature needs tests covering happy path AND error paths
+- Tests must be independent (no shared mutable state between tests)
+- Test names describe the behavior: `should return empty array when no items match`
+- Mock external dependencies, not internal logic
+- Test coverage should not decrease with new changes
+
+## Git Commit Standards
+
+Follow Conventional Commits:
+```
+<type>(<scope>): <imperative description>
+
+<body — explain WHAT and WHY, not HOW>
+```
+Types: feat, fix, refactor, docs, test, chore, perf, ci, style

@@ -1,0 +1,41 @@
+---
+description: "Database rules — apply when working with database schemas, queries, migrations, or ORM models."
+globs: ["**/prisma/**", "**/drizzle/**", "**/migrations/**", "**/models/**", "**/schema/**", "**/*.sql"]
+alwaysApply: false
+---
+
+# Database Rules
+
+## Schema Design
+- Use proper normalization (at least 3NF for transactional data)
+- Add constraints: NOT NULL, UNIQUE, FOREIGN KEY, CHECK
+- Every table needs: `id` (primary key), `created_at`, `updated_at`
+- Use appropriate data types (don't store currency as float, use decimal)
+- Name tables in snake_case plural, columns in snake_case singular
+
+## Indexing
+- Index all foreign key columns
+- Index columns used in WHERE, ORDER BY, and JOIN clauses
+- Use composite indexes for multi-column queries (most selective column first)
+- Don't over-index — each index slows down writes
+
+## Queries
+- ALWAYS use parameterized queries — never string concatenation
+- Use pagination for list queries (LIMIT + OFFSET or cursor-based)
+- Avoid N+1 queries — use JOIN or eager loading
+- Use transactions for multi-step operations
+- Set reasonable timeouts on all queries
+
+## Migrations
+- Every schema change goes through a migration file
+- Migrations must be reversible (include down/rollback)
+- Test migrations on a copy before running on production
+- Never modify a migration that's already been deployed
+- Backfill data in a separate migration from schema changes
+
+## Performance
+- Use EXPLAIN ANALYZE on complex queries
+- Monitor slow query logs
+- Consider read replicas for heavy read workloads
+- Use connection pooling
+- Cache frequently-accessed, rarely-changing data

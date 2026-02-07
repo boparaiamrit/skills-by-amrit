@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills by Amrit — The Ultimate AI Agent Skills Framework</title>
+  <meta name="description" content="26 skills, 22 commands, 26 workflows, 7 agents, 10 cursor rules. Persistent memory & agent teams for ANY AI coding assistant.">
+  <meta name="keywords" content="AI coding assistant, skills framework, Claude Code, Cursor, Antigravity, agent teams, persistent memory">
+  <meta property="og:title" content="Skills by Amrit — The Ultimate AI Agent Skills Framework">
+  <meta property="og:description" content="Make your AI coding assistant think like a staff engineer. 96 assets across 34 supported agents.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+</head>
+<body>
+  <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <h1>🧠 Skills by Amrit</h1>
+        <p>AI Agent Framework</p>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">Getting Started</div>
+        <a href="#hero" class="nav-link active"><span class="nav-icon">🏠</span> Overview</a>
+        <a href="#install" class="nav-link"><span class="nav-icon">🚀</span> Installation</a>
+        <a href="#agents" class="nav-link"><span class="nav-icon">🤖</span> Supported Agents</a>
+        <div class="nav-section">Assets</div>
+        <a href="#skills" class="nav-link"><span class="nav-icon">🧠</span> Skills (26)</a>
+        <a href="#commands" class="nav-link"><span class="nav-icon">⚡</span> Commands (22)</a>
+        <a href="#workflows" class="nav-link"><span class="nav-icon">🔄</span> Workflows (26)</a>
+        <a href="#agent-defs" class="nav-link"><span class="nav-icon">🎭</span> Agent Defs (7)</a>
+        <a href="#rules" class="nav-link"><span class="nav-icon">🎯</span> Rules (15)</a>
+        <div class="nav-section">✨ New in v3</div>
+        <a href="#memory" class="nav-link"><span class="nav-icon">💾</span> Persistent Memory</a>
+        <a href="#teams" class="nav-link"><span class="nav-icon">🤝</span> Agent Teams</a>
+        <div class="nav-section">Links</div>
+        <a href="https://github.com/boparaiamrit/skills-by-amrit" class="nav-link" target="_blank"><span class="nav-icon">📦</span> GitHub</a>
+        <a href="https://www.npmjs.com/package/skills-by-amrit" class="nav-link" target="_blank"><span class="nav-icon">📋</span> npm</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Hero -->
+      <section class="hero" id="hero">
+        <div class="hero-badge">✨ v3.0.0 — Agent Intelligence Release</div>
+        <h1>Make your AI think like a <span>Staff Engineer</span></h1>
+        <p class="hero-sub">The ultimate skills framework for AI coding assistants. 96 assets across 6 categories. Works with 34 agents including Claude Code, Cursor, Antigravity, and more.</p>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-num">26</div><div class="stat-label">Skills</div></div>
+          <div class="stat"><div class="stat-num">22</div><div class="stat-label">Commands</div></div>
+          <div class="stat"><div class="stat-num">26</div><div class="stat-label">Workflows</div></div>
+          <div class="stat"><div class="stat-num">7</div><div class="stat-label">Agents</div></div>
+          <div class="stat"><div class="stat-num">15</div><div class="stat-label">Rules</div></div>
+          <div class="stat"><div class="stat-num">34</div><div class="stat-label">Supported</div></div>
+        </div>
+        <div class="hero-cta">
+          <a href="#install" class="btn btn-primary">Get Started →</a>
+          <a href="https://github.com/boparaiamrit/skills-by-amrit" class="btn btn-secondary" target="_blank">⭐ GitHub</a>
+        </div>
+      </section>
+
+      <!-- Installation -->
+      <section class="section" id="install">
+        <div class="section-header"><h2>🚀 Installation</h2><p>One command. Auto-detects your agents. Installs 96 assets to the right directories.</p></div>
+        <div class="code-block"><span class="label">Terminal</span><span class="comment"># Install everything (auto-detect agents)</span>
+<span class="cmd">npx skills-by-amrit add</span>
+
+<span class="comment"># Install to specific agent</span>
+<span class="cmd">npx skills-by-amrit add --agent claude-code</span>
+<span class="cmd">npx skills-by-amrit add --agent cursor</span>
+<span class="cmd">npx skills-by-amrit add --agent antigravity</span>
+
+<span class="comment"># Install specific skills</span>
+<span class="cmd">npx skills-by-amrit add persistent-memory agent-team-coordination</span>
+
+<span class="comment"># See everything available</span>
+<span class="cmd">npx skills-by-amrit list</span></div>
+        <table>
+          <thead><tr><th>Agent</th><th>Skills</th><th>Commands</th><th>Workflows</th><th>Rules</th></tr></thead>
+          <tbody>
+            <tr><td>🟣 Claude Code</td><td><code>.claude/skills/</code></td><td><code>.claude/commands/</code></td><td>—</td><td>CLAUDE.md</td></tr>
+            <tr><td>🔵 Cursor</td><td><code>.cursor/skills/</code></td><td>—</td><td>—</td><td><code>.cursor/rules/</code></td></tr>
+            <tr><td>🟢 Antigravity</td><td><code>.agent/skills/</code></td><td>—</td><td><code>.agent/workflows/</code></td><td>—</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Supported Agents -->
+      <section class="section" id="agents">
+        <div class="section-header"><h2>🤖 34 Supported Agents</h2><p>Install once, use everywhere. Skills by Amrit works with every major AI coding agent.</p></div>
+        <div class="cards">
+          <div class="card"><span class="card-icon">🟣</span><h3>Claude Code</h3><p>Full support — skills, commands, agents, rules</p><span class="card-tag tag-core">Full Support</span></div>
+          <div class="card"><span class="card-icon">🔵</span><h3>Cursor</h3><p>Skills + .mdc cursor rules</p><span class="card-tag tag-core">Full Support</span></div>
+          <div class="card"><span class="card-icon">🟢</span><h3>Antigravity (Gemini)</h3><p>Skills + turbo workflows</p><span class="card-tag tag-core">Full Support</span></div>
+          <div class="card"><span class="card-icon">🟡</span><h3>Gemini CLI</h3><p>Skills installation</p><span class="card-tag tag-audit">Skills</span></div>
+          <div class="card"><span class="card-icon">⚫</span><h3>GitHub Copilot</h3><p>Skills installation</p><span class="card-tag tag-audit">Skills</span></div>
+          <div class="card"><span class="card-icon">🟠</span><h3>Windsurf</h3><p>Skills installation</p><span class="card-tag tag-audit">Skills</span></div>
+          <div class="card"><span class="card-icon">🔴</span><h3>Cline / Roo / Kilo</h3><p>Skills installation</p><span class="card-tag tag-audit">Skills</span></div>
+          <div class="card"><span class="card-icon">⚪</span><h3>+27 more agents</h3><p>Codex, Amp, Augment, Continue, Goose, Trae, Junie, Kode, Qoder, and many more</p><span class="card-tag tag-audit">Skills</span></div>
+        </div>
+      </section>
+
+      <!-- Skills -->
+      <section class="section" id="skills">
+        <div class="section-header"><h2>🧠 26 Skills</h2><p>Deep instructional documents that teach AI agents HOW to think about engineering tasks.</p></div>
+        <div class="cards">
+          <div class="card"><span class="card-icon">💡</span><h3>brainstorming</h3><p>Creative ideation — mind maps, structured exploration, divergent thinking</p><span class="card-tag tag-core">Core</span></div>
+          <div class="card"><span class="card-icon">📝</span><h3>writing-plans</h3><p>Task decomposition — dependency-aware plans with effort estimates</p><span class="card-tag tag-core">Core</span></div>
+          <div class="card"><span class="card-icon">⚙️</span><h3>executing-plans</h3><p>Wave-based execution with checkpoints and inline verification</p><span class="card-tag tag-core">Core</span></div>
+          <div class="card"><span class="card-icon">🧪</span><h3>test-driven-development</h3><p>Red-green-refactor cycle, test architecture, coverage strategies</p><span class="card-tag tag-core">Core</span></div>
+          <div class="card"><span class="card-icon">🐛</span><h3>systematic-debugging</h3><p>Hypothesis-driven investigation with evidence chains</p><span class="card-tag tag-core">Core</span></div>
+          <div class="card"><span class="card-icon">🔍</span><h3>code-review</h3><p>Multi-dimensional review with severity-based feedback</p><span class="card-tag tag-core">Core</span></div>
+          <div class="card"><span class="card-icon">✅</span><h3>verification-before-completion</h3><p>Quality gates — automated checks and compliance verification</p><span class="card-tag tag-core">Core</span></div>
+          <div class="card"><span class="card-icon">📦</span><h3>git-workflow</h3><p>Conventional commits, branching, PR workflows</p><span class="card-tag tag-core">Core</span></div>
+          <div class="card"><span class="card-icon">🏛️</span><h3>architecture-audit</h3><p>SOLID compliance, coupling, dependency direction</p><span class="card-tag tag-audit">Audit</span></div>
+          <div class="card"><span class="card-icon">🔒</span><h3>security-audit</h3><p>OWASP top 10, auth flows, secrets management</p><span class="card-tag tag-audit">Audit</span></div>
+          <div class="card"><span class="card-icon">⚡</span><h3>performance-audit</h3><p>N+1 queries, bundle sizes, bottlenecks, caching</p><span class="card-tag tag-audit">Audit</span></div>
+          <div class="card"><span class="card-icon">🗄️</span><h3>database-audit</h3><p>Schema design, indexing, query optimization</p><span class="card-tag tag-audit">Audit</span></div>
+          <div class="card"><span class="card-icon">🎨</span><h3>frontend-audit</h3><p>Component architecture, state management, rendering</p><span class="card-tag tag-audit">Audit</span></div>
+          <div class="card"><span class="card-icon">🌐</span><h3>api-design-audit</h3><p>REST/GraphQL conventions, versioning, pagination</p><span class="card-tag tag-audit">Audit</span></div>
+          <div class="card"><span class="card-icon">📊</span><h3>observability-audit</h3><p>Logging, metrics, tracing, alerting</p><span class="card-tag tag-audit">Audit</span></div>
+          <div class="card"><span class="card-icon">♿</span><h3>accessibility-audit</h3><p>WCAG, keyboard navigation, screen reader support</p><span class="card-tag tag-audit">Audit</span></div>
+          <div class="card"><span class="card-icon">🔄</span><h3>ci-cd-audit</h3><p>Build times, test reliability, deployment safety</p><span class="card-tag tag-audit">Audit</span></div>
+          <div class="card"><span class="card-icon">📦</span><h3>dependency-audit</h3><p>Vulnerability scanning, license compliance, bundle impact</p><span class="card-tag tag-audit">Audit</span></div>
+          <div class="card"><span class="card-icon">♻️</span><h3>refactoring-safely</h3><p>Incremental transformation with test coverage</p><span class="card-tag tag-core">Evolution</span></div>
+          <div class="card"><span class="card-icon">📖</span><h3>writing-documentation</h3><p>API docs, architecture diagrams, READMEs</p><span class="card-tag tag-core">Evolution</span></div>
+          <div class="card"><span class="card-icon">🗺️</span><h3>codebase-mapping</h3><p>Module boundaries, dependency graphs, health metrics</p><span class="card-tag tag-core">Evolution</span></div>
+          <div class="card"><span class="card-icon">🚨</span><h3>incident-response</h3><p>Triage, root cause analysis, post-mortems</p><span class="card-tag tag-core">Evolution</span></div>
+          <div class="card" style="border-color: rgba(124,58,237,0.3);"><span class="card-icon">💾</span><h3>persistent-memory</h3><p>Automated session memory — captures decisions and context. Zero infrastructure.</p><span class="card-tag tag-new">✨ New</span></div>
+          <div class="card" style="border-color: rgba(124,58,237,0.3);"><span class="card-icon">🤝</span><h3>agent-team-coordination</h3><p>Multi-role team coordination with sequential role-switching.</p><span class="card-tag tag-new">✨ New</span></div>
+          <div class="card"><span class="card-icon">📘</span><h3>using-skills</h3><p>How to use and combine skills effectively</p><span class="card-tag tag-core">Meta</span></div>
+          <div class="card"><span class="card-icon">✍️</span><h3>writing-skills</h3><p>How to create new skills for the framework</p><span class="card-tag tag-core">Meta</span></div>
+        </div>
+      </section>
+
+      <!-- Commands -->
+      <section class="section" id="commands">
+        <div class="section-header"><h2>⚡ 22 Commands</h2><p>Claude Code slash commands for the complete project lifecycle.</p></div>
+        <table>
+          <thead><tr><th>Command</th><th>Description</th><th>Category</th></tr></thead>
+          <tbody>
+            <tr><td><code>/init-project</code></td><td>Initialize project with .planning/ structure</td><td>Lifecycle</td></tr>
+            <tr><td><code>/plan</code></td><td>Create detailed implementation plans</td><td>Lifecycle</td></tr>
+            <tr><td><code>/execute</code></td><td>Execute plans with wave-based steps</td><td>Lifecycle</td></tr>
+            <tr><td><code>/verify</code></td><td>Validate implementation against plans</td><td>Lifecycle</td></tr>
+            <tr><td><code>/progress</code></td><td>Display project status and completion</td><td>Lifecycle</td></tr>
+            <tr><td><code>/research</code></td><td>Deep research with structured reports</td><td>Research</td></tr>
+            <tr><td><code>/doc</code></td><td>Generate documentation</td><td>Research</td></tr>
+            <tr><td><code>/explain</code></td><td>Explain code, architecture, concepts</td><td>Research</td></tr>
+            <tr><td><code>/review</code></td><td>Structured code review</td><td>Quality</td></tr>
+            <tr><td><code>/test</code></td><td>Generate and run tests</td><td>Quality</td></tr>
+            <tr><td><code>/debug</code></td><td>Scientific debugging</td><td>Quality</td></tr>
+            <tr><td><code>/fix-issue</code></td><td>Diagnose and fix issues</td><td>Quality</td></tr>
+            <tr><td><code>/refactor</code></td><td>Safe incremental refactoring</td><td>Quality</td></tr>
+            <tr><td><code>/migrate</code></td><td>Database/code migrations</td><td>Operations</td></tr>
+            <tr><td><code>/performance</code></td><td>Performance profiling</td><td>Operations</td></tr>
+            <tr><td><code>/security-scan</code></td><td>Comprehensive security scan</td><td>Operations</td></tr>
+            <tr><td><code>/deploy-check</code></td><td>Pre-deployment validation</td><td>Operations</td></tr>
+            <tr><td><code>/audit</code></td><td>Full codebase audit</td><td>Operations</td></tr>
+            <tr><td><code>/quick</code></td><td>Quick task execution</td><td>Workflow</td></tr>
+            <tr><td><code>/commit</code></td><td>Conventional commit creation</td><td>Workflow</td></tr>
+            <tr><td style="color: var(--accent-1);"><code>/memory</code></td><td>Persistent memory management ✨</td><td>Agent Intel</td></tr>
+            <tr><td style="color: var(--accent-1);"><code>/team</code></td><td>Agent team coordination ✨</td><td>Agent Intel</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Workflows -->
+      <section class="section" id="workflows">
+        <div class="section-header"><h2>🔄 26 Workflows</h2><p>Antigravity step-by-step execution scripts with turbo-mode auto-execution.</p></div>
+        <table>
+          <thead><tr><th>Workflow</th><th>Turbo</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>/init-project</code></td><td>✅</td><td>Initialize project with .planning/ structure</td></tr>
+            <tr><td><code>/plan-feature</code></td><td>—</td><td>Plan feature with research and task decomposition</td></tr>
+            <tr><td><code>/execute</code></td><td>✅</td><td>Execute plans wave-by-wave with checkpoints</td></tr>
+            <tr><td><code>/verify</code></td><td>✅</td><td>Validate implementation against plan</td></tr>
+            <tr><td><code>/progress</code></td><td>✅</td><td>Display project progress</td></tr>
+            <tr><td><code>/quick</code></td><td>✅</td><td>Quick task execution</td></tr>
+            <tr><td><code>/research</code></td><td>—</td><td>Deep research with structured reports</td></tr>
+            <tr><td><code>/doc</code></td><td>—</td><td>Generate documentation</td></tr>
+            <tr><td><code>/explain</code></td><td>—</td><td>Code explanation</td></tr>
+            <tr><td><code>/codebase-map</code></td><td>✅</td><td>Codebase analysis and mapping</td></tr>
+            <tr><td><code>/review</code></td><td>—</td><td>Structured code review</td></tr>
+            <tr><td><code>/test</code></td><td>✅</td><td>Test generation and execution</td></tr>
+            <tr><td><code>/debug</code></td><td>—</td><td>Scientific debugging</td></tr>
+            <tr><td><code>/fix-issue</code></td><td>—</td><td>Issue diagnosis and fix</td></tr>
+            <tr><td><code>/refactor</code></td><td>—</td><td>Safe refactoring</td></tr>
+            <tr><td><code>/audit</code></td><td>✅</td><td>Full codebase audit</td></tr>
+            <tr><td><code>/security-scan</code></td><td>✅</td><td>Security scanning</td></tr>
+            <tr><td><code>/performance</code></td><td>✅</td><td>Performance profiling</td></tr>
+            <tr><td><code>/migrate</code></td><td>—</td><td>Database/code migration</td></tr>
+            <tr><td><code>/deploy-check</code></td><td>✅</td><td>Deployment validation</td></tr>
+            <tr><td><code>/deps-update</code></td><td>✅</td><td>Dependency updates</td></tr>
+            <tr><td><code>/incident-response</code></td><td>—</td><td>Incident triage and response</td></tr>
+            <tr><td><code>/commit</code></td><td>✅</td><td>Conventional commit creation</td></tr>
+            <tr><td><code>/release</code></td><td>—</td><td>Release preparation</td></tr>
+            <tr><td style="color: var(--accent-1);"><code>/memory-sync</code></td><td>✅</td><td>Persistent memory sync ✨</td></tr>
+            <tr><td style="color: var(--accent-1);"><code>/team-session</code></td><td>✅</td><td>Multi-role team sessions ✨</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Agent Definitions -->
+      <section class="section" id="agent-defs">
+        <div class="section-header"><h2>🎭 7 Specialist Agents</h2><p>Claude Code agent definitions — each a focused specialist with protocols and anti-patterns.</p></div>
+        <div class="cards">
+          <div class="card"><span class="card-icon">🔬</span><h3>Researcher</h3><p>Deep codebase and domain research. Exhaustive search with source attribution and evidence-based findings.</p></div>
+          <div class="card"><span class="card-icon">📋</span><h3>Planner</h3><p>Task decomposition and planning. Dependency-aware plans with effort estimates and risk assessments.</p></div>
+          <div class="card"><span class="card-icon">⚙️</span><h3>Executor</h3><p>Plan execution with quality gates. Wave-ordered implementation with checkpoints and fail-fast behavior.</p></div>
+          <div class="card"><span class="card-icon">🔍</span><h3>Reviewer</h3><p>Structured code review. Multi-dimensional analysis with severity-based constructive feedback.</p></div>
+          <div class="card"><span class="card-icon">🐛</span><h3>Debugger</h3><p>Scientific debugging. Hypothesis-driven investigation with evidence chains and root cause focus.</p></div>
+          <div class="card"><span class="card-icon">✅</span><h3>Verifier</h3><p>Work verification and gap analysis. Criteria-driven validation with fix plan generation.</p></div>
+          <div class="card"><span class="card-icon">🗺️</span><h3>Mapper</h3><p>Codebase mapping and analysis. Module boundaries, dependency graphs, and health metrics.</p></div>
+        </div>
+      </section>
+
+      <!-- Rules -->
+      <section class="section" id="rules">
+        <div class="section-header"><h2>🎯 15 Rules</h2><p>10 Cursor .mdc rules + 5 universal agent rules.</p></div>
+        <table>
+          <thead><tr><th>Rule</th><th>Type</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td>🏗️ core-development</td><td>.mdc</td><td>SOLID, DRY, error handling, testing, commit conventions</td></tr>
+            <tr><td>🚫 anti-hallucination</td><td>.mdc + rule</td><td>Verification-first — never fabricate APIs, paths, configs</td></tr>
+            <tr><td>📋 planning-workflow</td><td>.mdc</td><td>Structured planning: research → design → decompose</td></tr>
+            <tr><td>🐛 debugging-protocol</td><td>.mdc</td><td>Scientific debugging methodology</td></tr>
+            <tr><td>🔒 security</td><td>.mdc</td><td>Auth, input validation, secrets management</td></tr>
+            <tr><td>🗄️ database</td><td>.mdc</td><td>Schema design, indexing, query optimization</td></tr>
+            <tr><td>🧪 testing</td><td>.mdc</td><td>Coverage requirements, fixture patterns</td></tr>
+            <tr><td>🔍 code-review</td><td>.mdc</td><td>Multi-dimensional review checklist</td></tr>
+            <tr><td>🏗️ core-principles</td><td>rule</td><td>SOLID, DRY, KISS, YAGNI, clean architecture</td></tr>
+            <tr><td>⚖️ severity-framework</td><td>rule</td><td>Issue severity classification system</td></tr>
+            <tr><td style="color: var(--accent-1);">💾 memory-protocol</td><td>.mdc + rule</td><td>Auto session memory read/write ✨</td></tr>
+            <tr><td style="color: var(--accent-1);">🤝 team-protocol</td><td>.mdc + rule</td><td>Sequential role-switching coordination ✨</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Persistent Memory -->
+      <section class="section" id="memory">
+        <div class="section-header"><h2>💾 Persistent Memory System <span style="color: var(--accent-1);">✨ NEW</span></h2><p>Every AI session starts from scratch. Not anymore. Zero-infrastructure session memory for ANY agent.</p></div>
+        <div class="diagram">
+<span class="highlight">SESSION START</span>                           <span class="highlight">SESSION END</span>
+┌────────────────────┐                  ┌────────────────────┐
+│ 1. Read MEMORY.md  │                  │ 8. Create session  │
+│ 2. Read LATEST.md  │───<span class="accent"> work </span>───▶    │    log              │
+│ 3. Full context!   │                  │ 9. Write handoff   │
+└────────────────────┘                  │ 10. Update memory  │
+                                        └────────────────────┘
+
+<span class="warn">.planning/</span>
+├── <span class="accent">MEMORY.md</span>              ← 🧠 Project brain (~300 lines)
+├── sessions/               ← 📝 Session logs
+├── decisions/DECISIONS.md  ← 📋 Decision log (append-only)
+├── context/
+│   ├── architecture.md     ← 🏗️ Architecture decisions
+│   ├── patterns.md         ← 🔄 Established patterns
+│   ├── gotchas.md          ← ⚠️ Known issues
+│   └── tech-debt.md        ← 🔧 Technical debt
+└── handoffs/<span class="accent">LATEST.md</span>      ← 📤 Last session's handoff</div>
+        <div class="comparison">
+          <div class="comp-card theirs">
+            <h4>❌ claude-mem</h4>
+            <div class="comp-item">⚠️ Requires SQLite + ChromaDB + Bun</div>
+            <div class="comp-item">⚠️ Claude Code only</div>
+            <div class="comp-item">⚠️ Plugin + worker service setup</div>
+            <div class="comp-item">⚠️ Not git-native</div>
+            <div class="comp-item">⚠️ Variable token cost</div>
+          </div>
+          <div class="comp-card ours">
+            <h4>✅ Skills by Amrit</h4>
+            <div class="comp-item">✅ Zero infrastructure</div>
+            <div class="comp-item">✅ ANY agent (34 supported)</div>
+            <div class="comp-item">✅ 4 lines in GEMINI.md</div>
+            <div class="comp-item">✅ Git-native (markdown files)</div>
+            <div class="comp-item">✅ ~1,650 tokens flat</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Agent Teams -->
+      <section class="section" id="teams">
+        <div class="section-header"><h2>🤝 Agent Team Coordination <span style="color: var(--accent-1);">✨ NEW</span></h2><p>Claude Code-style team dynamics for ANY agent. Sequential role-switching with shared blackboard.</p></div>
+        <div class="diagram">
+┌────────────────────────────────────────────────┐
+│              Single Agent Session               │
+│                                                 │
+│  Phase 1: <span class="highlight">🔬 Researcher</span>                       │
+│     → Research, evidence, findings              │
+│     → Write handoff document                    │
+│                                                 │
+│  Phase 2: <span class="highlight">📐 Architect</span>                        │
+│     → Read research, design solution            │
+│     → Write handoff document                    │
+│                                                 │
+│  Phase 3: <span class="highlight">📋 Planner</span>                          │
+│     → Read design, create tasks                 │
+│     → Write handoff document                    │
+│                                                 │
+│  Phase 4: <span class="highlight">⚙️ Executor</span>                         │
+│     → Read plan, implement tasks                │
+│     → Write handoff document                    │
+│                                                 │
+│  Phase 5: <span class="highlight">🔍 Reviewer</span>                         │
+│     → Read ALL handoffs, review code            │
+│     → Write review report                       │
+└────────────────────────────────────────────────┘</div>
+        <div class="comparison">
+          <div class="comp-card theirs">
+            <h4>❌ Claude Code Agent Teams</h4>
+            <div class="comp-item">⚠️ Requires tmux + iTerm</div>
+            <div class="comp-item">⚠️ Claude Code only</div>
+            <div class="comp-item">⚠️ Possible file conflicts (parallel)</div>
+            <div class="comp-item">⚠️ Possible context loss (parallel)</div>
+          </div>
+          <div class="comp-card ours">
+            <h4>✅ Skills by Amrit</h4>
+            <div class="comp-item">✅ Zero infrastructure</div>
+            <div class="comp-item">✅ ANY agent (34 supported)</div>
+            <div class="comp-item">✅ No file conflicts (sequential)</div>
+            <div class="comp-item">✅ No context loss (sequential)</div>
+          </div>
+        </div>
+        <table>
+          <thead><tr><th>Preset</th><th>Roles</th><th>Best For</th></tr></thead>
+          <tbody>
+            <tr><td>⚡ Quick</td><td>Researcher → Executor → Reviewer</td><td>Small features</td></tr>
+            <tr><td>🏗️ Full</td><td>Researcher → Architect → Planner → Executor → Reviewer</td><td>Complex features</td></tr>
+            <tr><td>🐛 Debug</td><td>Investigator → Fixer → Verifier</td><td>Bug hunting</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <p>Built with <span class="footer-heart">❤️</span> by <a href="https://github.com/boparaiamrit">Amrit</a></p>
+        <p style="margin-top: 8px; font-size: 0.8rem;">Making AI agents think like staff engineers, one skill at a time.</p>
+        <p style="margin-top: 16px; font-size: 0.75rem;">
+          <a href="https://github.com/boparaiamrit/skills-by-amrit">GitHub</a> ·
+          <a href="https://www.npmjs.com/package/skills-by-amrit">npm</a> ·
+          <a href="https://github.com/boparaiamrit/skills-by-amrit/blob/main/LICENSE">MIT License</a>
+        </p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Mobile sidebar toggle
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('show');
+    }
+
+    // Active nav link on scroll
+    const sections = document.querySelectorAll('section[id], .hero[id]');
+    const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+      });
+    });
+
+    // Fade-in on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.card, .stat, .comp-card').forEach(el => {
+      el.classList.add('fade-in');
+      observer.observe(el);
+    });
+
+    // Close sidebar on nav click (mobile)
+    navLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 1024) toggleSidebar();
+      });
+    });
+  </script>
+</body>
+</html>

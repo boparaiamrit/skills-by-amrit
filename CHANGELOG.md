@@ -2,73 +2,112 @@
 
 All notable changes to this project will be documented in this file.
 
-## [2.0.0] - 2025-02-07
+## [3.0.0] — 2026-02-08 — Agent Intelligence Release 🧠
 
-### 🔄 Complete Rewrite
+### 🆕 New Skills
+- **persistent-memory** — Automated session memory for ANY agent. Captures decisions, context, and learnings across sessions using file-based protocols. Zero infrastructure — no hooks, no databases, no external services. Inspired by claude-mem.
+- **agent-team-coordination** — Multi-role team coordination for ANY agent. Sequential role-switching (Researcher → Architect → Planner → Executor → Reviewer) with shared blackboard and handoff documents. Brings Claude Code Agent Teams to Antigravity, Cursor, and more.
 
-Complete rewrite of the skills library from the ground up.
+### 🆕 New Commands (22 total)
+- `/memory` — Persistent memory management (init, read, write, compress, status)
+- `/team` — Agent team coordination (start, resume, next, board, status)
+- `/init-project` — Initialize project with `.planning/` structure
+- `/plan` — Create detailed implementation plans
+- `/execute` — Execute plans with wave-based steps
+- `/verify` — Validate implementations against plans
+- `/progress` — Display project status
+- `/research` — Deep research with structured reports
+- `/doc` — Generate documentation
+- `/explain` — Explain code, architecture, concepts
+- `/review` — Structured code review
+- `/test` — Generate and run tests
+- `/debug` — Scientific debugging
+- `/fix-issue` — Diagnose and fix issues
+- `/refactor` — Safe refactoring
+- `/migrate` — Database/code migrations
+- `/performance` — Performance profiling
+- `/security-scan` — Security scanning
+- `/deploy-check` — Deployment validation
+- `/audit` — Codebase audit
+- `/quick` — Quick task execution
+- `/commit` — Conventional commit creation
 
-### Added — Foundation
-- `CLAUDE.md` — System prompt and skill activation table
-- `rules/core-principles.md` — Three iron laws, code quality, communication standards
-- `rules/anti-hallucination.md` — Evidence-based behavior enforcement
-- `rules/severity-framework.md` — Standardized severity classification
+### 🆕 New Workflows (26 total)
+- `/memory-sync` — Persistent memory synchronization
+- `/team-session` — Multi-role team coordination
+- Plus 24 more workflows covering the full project lifecycle
 
-### Added — Core Development Skills (8)
-- `skills/brainstorming/SKILL.md` — Collaborative design before implementation
-- `skills/writing-plans/SKILL.md` — Detailed implementation plans with exact code
-- `skills/executing-plans/SKILL.md` — Task-by-task execution with verification
-- `skills/test-driven-development/SKILL.md` — RED-GREEN-REFACTOR with iron law
-- `skills/systematic-debugging/SKILL.md` — Four-phase root cause investigation
-- `skills/code-review/SKILL.md` — Systematic review covering all dimensions
-- `skills/verification-before-completion/SKILL.md` — Evidence before claims
-- `skills/git-workflow/SKILL.md` — Atomic commits, branching, clean history
+### 🆕 New Agents (7)
+- 🔬 **researcher** — Deep codebase and domain research
+- 📋 **planner** — Task decomposition and planning
+- ⚙️ **executor** — Plan execution with quality gates
+- 🔍 **reviewer** — Structured code review
+- 🐛 **debugger** — Scientific debugging
+- ✅ **verifier** — Work verification and gap analysis
+- 🗺️ **mapper** — Codebase mapping and analysis
 
-### Added — Audit Skills (10)
-- `skills/architecture-audit/SKILL.md` — Structure, patterns, coupling, cohesion
-- `skills/security-audit/SKILL.md` — Auth, injection, data exposure, infrastructure
-- `skills/performance-audit/SKILL.md` — N+1 queries, indexes, caching, frontend
-- `skills/database-audit/SKILL.md` — Schema, migrations, constraints, data types
-- `skills/frontend-audit/SKILL.md` — Components, state, design system, error states
-- `skills/api-design-audit/SKILL.md` — REST conventions, contracts, pagination
-- `skills/dependency-audit/SKILL.md` — Security, health, licenses, necessity
-- `skills/observability-audit/SKILL.md` — Logging, metrics, health checks, tracing
-- `skills/accessibility-audit/SKILL.md` — WCAG, keyboard, screen reader, contrast
-- `skills/ci-cd-audit/SKILL.md` — Pipelines, deployment safety, rollback
+### 🆕 New Cursor Rules (10 total)
+- `memory-protocol.mdc` — Auto-read/write session memory
+- `team-protocol.mdc` — Team coordination protocol
+- `core-development.mdc` — SOLID, DRY, error handling
+- `anti-hallucination.mdc` — Verification-first protocol
+- `planning-workflow.mdc` — Structured planning
+- `debugging-protocol.mdc` — Scientific debugging
+- `security.mdc` — Security best practices
+- `database.mdc` — Database standards
+- `testing.mdc` — Test standards
+- `code-review.mdc` — Review checklist
 
-### Added — Evolution Skills (4)
-- `skills/refactoring-safely/SKILL.md` — Test-backed structural changes
-- `skills/writing-documentation/SKILL.md` — READMEs, API docs, architecture
-- `skills/codebase-mapping/SKILL.md` — Systematic understanding before changes
-- `skills/incident-response/SKILL.md` — Triage, mitigate, fix, post-mortem
+### 🆕 New Rules (5 total)
+- `memory-protocol.md` — Memory instructions for GEMINI.md
+- `team-protocol.md` — Team instructions for GEMINI.md
+- `core-principles.md` — Foundational engineering principles
+- `anti-hallucination.md` — Anti-fabrication protocol
+- `severity-framework.md` — Issue severity classification
 
-### Added — Meta Skills (2)
-- `skills/writing-skills/SKILL.md` — How to create new skills
-- `skills/using-skills/SKILL.md` — How to discover and compose skills
+### 📖 New Documentation
+- Exhaustive README with complete asset catalog
+- GitHub Wiki with 12 documentation pages
+- AGENT-TEAMS-AND-MEMORY.md — Deep dive on v3 features
+- COMPETITIVE_ANALYSIS.md — Framework comparison
 
-### Added — Project Infrastructure
-- `LICENSE` — MIT License
-- `CONTRIBUTING.md` — Contribution guidelines
-- `CHANGELOG.md` — This file
+### ⚡ CLI Enhancements
+- Install commands, workflows, agents, and cursor rules alongside skills
+- Agent-aware directory mapping (each asset to the right agent directory)
+- Comprehensive `list` command showing all asset types
+- Preserve existing CLAUDE.md content when appending
 
-### Removed
-- All previous `agents/` directory (replaced by composable skills)
-- All previous `rules/` files (replaced by framework-agnostic rules)
-- All previous `workflows/` directory (replaced by skills)
-- All previous `commands/` directory
-- All previous `templates/` directory
-- Old `skills/` directory
+### 📊 By the Numbers
+- 26 skills (+2 new)
+- 22 commands (all new)
+- 26 workflows (all new)
+- 7 agents (all new)
+- 10 cursor rules (all new)
+- 5 rules (+2 new)
+- **96 total assets**
 
-### Philosophy Changes
-- **Framework-agnostic:** No longer Laravel-specific. Works with any stack
-- **Skill-based:** Replaced rigid agent pipeline with composable skills
-- **Iron laws:** Every skill has a non-negotiable rule
-- **Rationalization prevention:** Skills include tables of common excuses
-- **Evidence-based:** Verification required before any completion claims
+---
 
-## [1.0.0] - 2025-01-15
+## [2.0.0] — 2026-02-06
 
-### Initial Release
-- Laravel-focused auditing agents
-- Framework-specific rules and workflows
-- CLI for installation
+### Added
+- Support for 30+ AI coding agents
+- Interactive agent selection during installation
+- Skill categories (Core, Auditing, Evolution, Meta)
+- Global installation support
+- Auto-detection of installed agents
+
+### Changed
+- Complete CLI rewrite in TypeScript
+- Improved installation output and summaries
+
+---
+
+## [1.0.0] — 2026-02-04
+
+### Added
+- Initial release
+- 24 core skills for the full SDLC
+- Claude Code integration
+- Basic CLI with `add`, `list`, `agents`, `help` commands
+- MIT License

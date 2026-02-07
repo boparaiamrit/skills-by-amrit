@@ -1,0 +1,75 @@
+---
+description: Agent team coordination protocol — sequential role-switching with shared blackboard for complex features
+globs: *
+---
+
+# Agent Team Coordination Protocol
+
+## Concept
+
+For complex tasks, switch between specialist roles sequentially:
+- 🔬 **Researcher** → Deep analysis and evidence gathering
+- 📐 **Architect** → Solution design and pattern selection
+- 📋 **Planner** → Task decomposition and wave planning
+- ⚙️ **Executor** → Implementation with verification
+- 🔍 **Reviewer** → Quality assurance and feedback
+
+## When to Activate
+
+Activate team coordination when:
+- Task involves multiple systems or modules
+- Task requires research before implementation
+- Task is complex enough to benefit from structured phases
+- User explicitly requests a team approach
+
+## Protocol
+
+### Starting a Team
+1. Assess task complexity
+2. Choose preset: Quick (3 roles) | Full (5 roles) | Debug (3 roles)
+3. Create `.planning/team/` with `config.json` and `BOARD.md`
+4. Begin Phase 1
+
+### Role Execution
+Each role:
+1. Reads the previous role's handoff from `.planning/team/handoffs/`
+2. Performs its specific function
+3. Writes its outputs
+4. Creates a handoff document for the next role
+5. Updates the task board
+
+### Role Switching
+Announce role switches explicitly:
+```
+━━━ Phase 2: 📐 Architect Role ━━━
+Reading research handoff...
+```
+
+### Task Board
+Maintain `.planning/team/BOARD.md`:
+- List all tasks with status (todo/in-progress/done/blocked)
+- Track dependencies
+- Show progress percentage
+
+## File Structure
+
+```
+.planning/team/
+├── config.json          # Team definition
+├── BOARD.md             # Task board
+├── tasks/               # Individual task files
+│   └── NNN-name.md
+├── handoffs/            # Role transition documents
+│   └── phase-N-role.md
+└── reviews/             # Review feedback
+    └── review-NNN.md
+```
+
+## Rules
+
+- ALWAYS write a handoff document before switching roles
+- ALWAYS update the task board when task status changes
+- ALWAYS read ALL previous handoffs in the reviewer role
+- NEVER skip the research phase for complex tasks
+- NEVER implement without a written plan
+- RESPECT task dependencies (wave order)

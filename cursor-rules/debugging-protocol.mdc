@@ -1,0 +1,43 @@
+---
+description: "Debugging protocol — use when investigating bugs or unexpected behavior."
+globs: []
+alwaysApply: false
+---
+
+# Debugging Protocol
+
+When debugging an issue, follow the scientific method:
+
+## Step 1: Reproduce
+- Understand the expected vs actual behavior
+- Identify exact error messages and stack traces
+- Determine when the issue started (check `git log`)
+
+## Step 2: Hypothesize
+- Form 3-5 ranked hypotheses based on symptoms
+- For each: rationale, test to prove/disprove, evidence needed
+- Start with the most likely hypothesis
+
+## Step 3: Investigate
+- **Search** for error messages in the codebase
+- **Trace** the execution path from entry to failure
+- **Check recent changes**: `git diff HEAD~5`
+- **Read** related files completely (don't skim)
+- **Check tests** — are tests passing incorrectly?
+
+## Step 4: Fix
+- Apply the **minimal correct fix** — fewest lines changed
+- Do NOT refactor while debugging
+- Add a comment explaining WHY if the fix is non-obvious
+- Write a regression test that would have caught this bug
+
+## Step 5: Verify
+- Run the full test suite (not just the new test)
+- Check for ripple effects — did the fix break anything else?
+- Verify the original symptom is resolved
+
+## NEVER
+- Fix symptoms without understanding root cause
+- Apply multiple changes at once to "see what sticks"
+- Skip writing a regression test
+- Expand scope during debugging (note other issues, fix them separately)

@@ -1,0 +1,46 @@
+---
+description: "Testing rules — apply when writing or modifying test files."
+globs: ["**/*.test.*", "**/*.spec.*", "**/test/**", "**/tests/**", "**/__tests__/**"]
+alwaysApply: false
+---
+
+# Testing Rules
+
+## Test Structure
+- Use descriptive test names: `should return empty array when no items match filter`
+- One assertion per test (or closely related assertions)
+- Follow Arrange-Act-Assert (AAA) pattern
+- Group related tests with `describe` blocks by feature/behavior
+
+## Test Coverage
+- Every new feature needs tests for:
+  - **Happy path** — Normal expected behavior
+  - **Error paths** — What happens when things go wrong
+  - **Edge cases** — Null/undefined, empty arrays, max values, concurrent access
+  - **Boundary conditions** — Min/max values, exactly at limits
+
+## Test Independence
+- Tests must run in any order
+- Tests must not share mutable state
+- Each test sets up its own data (use setUp/beforeEach)
+- Clean up after tests (use tearDown/afterEach)
+
+## Mocking
+- Mock external dependencies (APIs, databases, file system)
+- Don't mock internal implementation details
+- Prefer dependency injection over monkey-patching
+- Verify mock interactions when behavior matters
+
+## Anti-Patterns (AVOID)
+- Testing implementation instead of behavior
+- Brittle tests that break on refactoring
+- Tests that depend on execution order
+- Over-mocking (mocking the thing you're testing)
+- Snapshot tests for dynamic content
+- Ignoring test failures ("it's flaky")
+
+## Test Quality
+- Tests ARE documentation — they show how code is intended to be used
+- If a test is hard to write, the code may need refactoring
+- Test coverage should never decrease with new changes
+- Run the full test suite before committing

@@ -44,7 +44,14 @@ interface AgentConfig {
   displayName: string;
   localDir: string;
   globalDir: string;
+  commandsDir?: string;
+  workflowsDir?: string;
+  agentsDir?: string;
+  rulesDir?: string;
 }
+
+// Asset types that can be installed
+type AssetType = "skills" | "commands" | "workflows" | "agents" | "cursor-rules";
 
 const AGENTS: AgentConfig[] = [
   {
@@ -52,12 +59,15 @@ const AGENTS: AgentConfig[] = [
     displayName: "Claude Code",
     localDir: ".claude/skills",
     globalDir: join(HOME, ".claude", "skills"),
+    commandsDir: ".claude/commands",
+    agentsDir: ".claude/agents",
   },
   {
     name: "cursor",
     displayName: "Cursor",
     localDir: ".cursor/skills",
     globalDir: join(HOME, ".cursor", "skills"),
+    rulesDir: ".cursor/rules",
   },
   {
     name: "windsurf",
@@ -70,6 +80,7 @@ const AGENTS: AgentConfig[] = [
     displayName: "Antigravity (Gemini)",
     localDir: ".agent/skills",
     globalDir: join(HOME, ".gemini", "antigravity", "skills"),
+    workflowsDir: ".agent/workflows",
   },
   {
     name: "gemini-cli",
@@ -282,6 +293,10 @@ const SKILL_CATEGORIES: Record<string, string[]> = {
     "codebase-mapping",
     "incident-response",
   ],
+  "Agent Intelligence": [
+    "persistent-memory",
+    "agent-team-coordination",
+  ],
   Meta: ["writing-skills", "using-skills"],
 };
 
@@ -312,6 +327,20 @@ function getAllSkillNames(): string[] {
   return readdirSync(dir).filter((n) =>
     existsSync(join(dir, n, "SKILL.md"))
   );
+}
+
+function getAllAssetNames(assetDir: string, ext?: string): string[] {
+  const dir = join(PACKAGE_ROOT, assetDir);
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((f) => !ext || f.endsWith(ext))
+    .map((f) => f.replace(/\.[^.]+$/, ""));
+}
+
+function getAssetFiles(assetDir: string, ext?: string): string[] {
+  const dir = join(PACKAGE_ROOT, assetDir);
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir).filter((f) => !ext || f.endsWith(ext));
 }
 
 function getSkillDescription(name: string): string {
@@ -436,6 +465,14 @@ async function selectAgents(
 
 // ─── Installation ────────────────────────────────────────────────────────────
 
+interface InstallResult {
+  skills: number;
+  commands: number;
+  workflows: number;
+  agents: number;
+  rules: number;
+}
+
 function installSkillsToAgent(
   agent: AgentConfig,
   skillNames: string[],
@@ -459,6 +496,115 @@ function installSkillsToAgent(
   }
 
   return installed;
+}
+
+function installCommandsToAgent(
+  agent: AgentConfig,
+  projectDir: string
+): number {
+  if (!agent.commandsDir) return 0;
+
+  const srcDir = join(PACKAGE_ROOT, "commands");
+  if (!existsSync(srcDir)) return 0;
+
+  const targetDir = join(projectDir, agent.commandsDir);
+  ensureDir(targetDir);
+
+  let installed = 0;
+  const commandFiles = readdirSync(srcDir).filter(
+    (f) => f.endsWith(".md") && !statSync(join(srcDir, f)).isDirectory()
+  );
+
+  for (const file of commandFiles) {
+    copyFileSync(join(srcDir, file), join(targetDir, file));
+    installed++;
+  }
+
+  return installed;
+}
+
+function installWorkflowsToAgent(
+  agent: AgentConfig,
+  projectDir: string
+): number {
+  if (!agent.workflowsDir) return 0;
+
+  const srcDir = join(PACKAGE_ROOT, "workflows");
+  if (!existsSync(srcDir)) return 0;
+
+  const targetDir = join(projectDir, agent.workflowsDir);
+  ensureDir(targetDir);
+
+  let installed = 0;
+  const workflowFiles = readdirSync(srcDir).filter((f) => f.endsWith(".md"));
+
+  for (const file of workflowFiles) {
+    copyFileSync(join(srcDir, file), join(targetDir, file));
+    installed++;
+  }
+
+  return installed;
+}
+
+function installAgentDefsToAgent(
+  agent: AgentConfig,
+  projectDir: string
+): number {
+  if (!agent.agentsDir) return 0;
+
+  const srcDir = join(PACKAGE_ROOT, "agents");
+  if (!existsSync(srcDir)) return 0;
+
+  const targetDir = join(projectDir, agent.agentsDir);
+  ensureDir(targetDir);
+
+  let installed = 0;
+  const agentFiles = readdirSync(srcDir).filter((f) => f.endsWith(".md"));
+
+  for (const file of agentFiles) {
+    copyFileSync(join(srcDir, file), join(targetDir, file));
+    installed++;
+  }
+
+  return installed;
+}
+
+function installCursorRulesToAgent(
+  agent: AgentConfig,
+  projectDir: string
+): number {
+  if (!agent.rulesDir) return 0;
+
+  const srcDir = join(PACKAGE_ROOT, "cursor-rules");
+  if (!existsSync(srcDir)) return 0;
+
+  const targetDir = join(projectDir, agent.rulesDir);
+  ensureDir(targetDir);
+
+  let installed = 0;
+  const ruleFiles = readdirSync(srcDir).filter((f) => f.endsWith(".mdc"));
+
+  for (const file of ruleFiles) {
+    copyFileSync(join(srcDir, file), join(targetDir, file));
+    installed++;
+  }
+
+  return installed;
+}
+
+function installAllAssetsToAgent(
+  agent: AgentConfig,
+  skillNames: string[],
+  projectDir: string,
+  isGlobal: boolean
+): InstallResult {
+  return {
+    skills: installSkillsToAgent(agent, skillNames, projectDir, isGlobal),
+    commands: isGlobal ? 0 : installCommandsToAgent(agent, projectDir),
+    workflows: isGlobal ? 0 : installWorkflowsToAgent(agent, projectDir),
+    agents: isGlobal ? 0 : installAgentDefsToAgent(agent, projectDir),
+    rules: isGlobal ? 0 : installCursorRulesToAgent(agent, projectDir),
+  };
 }
 
 function installRulesAndClaude(
@@ -564,17 +710,31 @@ async function cmdAdd(args: string[]): Promise<void> {
   log("");
 
   // Install to each agent
-  let totalInstalled = 0;
+  const totals: InstallResult = { skills: 0, commands: 0, workflows: 0, agents: 0, rules: 0 };
   for (const agent of targetAgents) {
-    const count = installSkillsToAgent(agent, toInstall, projectDir, flags.global);
+    const result = installAllAssetsToAgent(agent, toInstall, projectDir, flags.global);
     installRulesAndClaude(agent, projectDir, flags.global);
-    totalInstalled += count;
+
+    totals.skills += result.skills;
+    totals.commands += result.commands;
+    totals.workflows += result.workflows;
+    totals.agents += result.agents;
+    totals.rules += result.rules;
 
     const targetPath = flags.global
       ? agent.globalDir
       : join(projectDir, agent.localDir);
+
+    const parts: string[] = [];
+    if (result.skills > 0) parts.push(`${result.skills} skills`);
+    if (result.commands > 0) parts.push(`${result.commands} commands`);
+    if (result.workflows > 0) parts.push(`${result.workflows} workflows`);
+    if (result.agents > 0) parts.push(`${result.agents} agents`);
+    if (result.rules > 0) parts.push(`${result.rules} rules`);
+
+    const summary = parts.length > 0 ? parts.join(", ") : `${result.skills} skills`;
     logOk(
-      `${C.bold}${agent.displayName}${C.reset} ${C.dim}→ ${count} skills → ${targetPath}${C.reset}`
+      `${C.bold}${agent.displayName}${C.reset} ${C.dim}→ ${summary} → ${targetPath}${C.reset}`
     );
   }
 
@@ -604,9 +764,22 @@ async function cmdAdd(args: string[]): Promise<void> {
 
   log("");
   logHeader("✅ Installation Complete");
+
+  const totalAssets = totals.skills + totals.commands + totals.workflows + totals.agents + totals.rules;
   log(
-    `   ${C.dim}${totalInstalled} skills installed to ${targetAgents.length} agent(s)${C.reset}`
+    `   ${C.dim}${totalAssets} assets installed to ${targetAgents.length} agent(s)${C.reset}`
   );
+
+  const breakdown: string[] = [];
+  if (totals.skills > 0) breakdown.push(`${totals.skills} skills`);
+  if (totals.commands > 0) breakdown.push(`${totals.commands} commands`);
+  if (totals.workflows > 0) breakdown.push(`${totals.workflows} workflows`);
+  if (totals.agents > 0) breakdown.push(`${totals.agents} agent definitions`);
+  if (totals.rules > 0) breakdown.push(`${totals.rules} cursor rules`);
+  if (breakdown.length > 0) {
+    log(`   ${C.dim}${breakdown.join(" · ")}${C.reset}`);
+  }
+
   log(
     `   ${C.dim}${flags.global ? "Global" : "Local"} scope${C.reset}`
   );
@@ -614,8 +787,10 @@ async function cmdAdd(args: string[]): Promise<void> {
 }
 
 function cmdList(): void {
-  logHeader("🧠 Skills by Amrit — Available Skills\n");
+  logHeader("🧠 Skills by Amrit — Available Assets\n");
 
+  // Skills
+  log(`${C.bold}${C.magenta}━━━ Skills ━━━${C.reset}\n`);
   for (const [category, skills] of Object.entries(SKILL_CATEGORIES)) {
     log(`${C.bold}${C.blue}${category}${C.reset} ${C.dim}(${skills.length})${C.reset}`);
     for (const skill of skills) {
@@ -627,8 +802,48 @@ function cmdList(): void {
     log("");
   }
 
+  // Commands
+  const commands = getAssetFiles("commands", ".md");
+  if (commands.length > 0) {
+    log(`${C.bold}${C.magenta}━━━ Commands ━━━${C.reset} ${C.dim}(installed to Claude Code .claude/commands/)${C.reset}\n`);
+    for (const cmd of commands) {
+      log(`  ${C.cyan}/${cmd.replace(".md", "")}${C.reset}`);
+    }
+    log("");
+  }
+
+  // Workflows
+  const workflows = getAssetFiles("workflows", ".md");
+  if (workflows.length > 0) {
+    log(`${C.bold}${C.magenta}━━━ Workflows ━━━${C.reset} ${C.dim}(installed to Antigravity .agent/workflows/)${C.reset}\n`);
+    for (const wf of workflows) {
+      log(`  ${C.cyan}/${wf.replace(".md", "")}${C.reset}`);
+    }
+    log("");
+  }
+
+  // Agents
+  const agents = getAssetFiles("agents", ".md");
+  if (agents.length > 0) {
+    log(`${C.bold}${C.magenta}━━━ Agent Definitions ━━━${C.reset} ${C.dim}(installed to Claude Code .claude/agents/)${C.reset}\n`);
+    for (const ag of agents) {
+      log(`  ${C.cyan}${ag.replace(".md", "")}${C.reset}`);
+    }
+    log("");
+  }
+
+  // Cursor Rules
+  const rules = getAssetFiles("cursor-rules", ".mdc");
+  if (rules.length > 0) {
+    log(`${C.bold}${C.magenta}━━━ Cursor Rules ━━━${C.reset} ${C.dim}(installed to Cursor .cursor/rules/)${C.reset}\n`);
+    for (const rule of rules) {
+      log(`  ${C.cyan}${rule.replace(".mdc", "")}${C.reset}`);
+    }
+    log("");
+  }
+
   log(
-    `${C.dim}Total: ${getAllSkillNames().length} skills${C.reset}`
+    `${C.dim}Total: ${getAllSkillNames().length} skills · ${commands.length} commands · ${workflows.length} workflows · ${agents.length} agents · ${rules.length} rules${C.reset}`
   );
   log("");
 }
