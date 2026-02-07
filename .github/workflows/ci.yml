@@ -75,8 +75,8 @@ jobs:
 
       - name: Verify skill count
         run: |
-          SKILL_COUNT=$(node dist/cli.js list 2>&1 | grep "Total:" | grep -oP '\d+')
-          if [ "$SKILL_COUNT" != "24" ]; then
+          SKILL_COUNT=$(find skills -name "SKILL.md" | wc -l)
+          if [ "$SKILL_COUNT" -ne 24 ]; then
             echo "Expected 24 skills, got $SKILL_COUNT"
             exit 1
           fi
