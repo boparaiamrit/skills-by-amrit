@@ -17,3 +17,6 @@ dist/
 # Logs
 *.log
 npm-debug.log*
+.commit-msg.txt
+*.png
+!docs/**/*.png
