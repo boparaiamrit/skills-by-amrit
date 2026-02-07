@@ -1,0 +1,67 @@
+{
+  "name": "skills-by-amrit",
+  "version": "2.0.0",
+  "description": "An agentic skills framework that makes AI coding assistants think like senior staff engineers. 24 composable skills for the full SDLC.",
+  "author": {
+    "name": "Amritpal Singh",
+    "email": "boparaiamrit@gmail.com",
+    "url": "https://github.com/boparaiamrit"
+  },
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "skills-by-amrit": "./dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "skills",
+    "rules",
+    "CLAUDE.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "ai",
+    "skills",
+    "agents",
+    "cursor",
+    "claude",
+    "copilot",
+    "windsurf",
+    "gemini",
+    "antigravity",
+    "coding-assistant",
+    "code-review",
+    "tdd",
+    "debugging",
+    "security-audit",
+    "performance",
+    "best-practices",
+    "agentic",
+    "llm",
+    "developer-tools"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/boparaiamrit/skills-by-amrit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/boparaiamrit/skills-by-amrit/issues"
+  },
+  "homepage": "https://github.com/boparaiamrit/skills-by-amrit#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "prepublishOnly": "npm run build",
+    "release:patch": "npm version patch && npm publish && git push --follow-tags",
+    "release:minor": "npm version minor && npm publish && git push --follow-tags",
+    "release:major": "npm version major && npm publish && git push --follow-tags"
+  },
+  "devDependencies": {
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0"
+  }
+}

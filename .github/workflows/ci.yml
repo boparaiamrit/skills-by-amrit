@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Test CLI help
+        run: node dist/cli.js help
+
+      - name: Test CLI list
+        run: node dist/cli.js list
+
+      - name: Test CLI agents
+        run: node dist/cli.js agents
+
+      - name: Test CLI version
+        run: node dist/cli.js --version
+
+      - name: Test install to Claude Code
+        run: |
+          mkdir -p /tmp/test-claude
+          cd /tmp/test-claude
+          node $GITHUB_WORKSPACE/dist/cli.js add --all -a claude-code -y
+          test -d .claude/skills/systematic-debugging
+          test -f .claude/skills/systematic-debugging/SKILL.md
+          test -d .claude/skills/_rules
+          echo "✓ Claude Code install verified"
+
+      - name: Test install to Cursor
+        run: |
+          mkdir -p /tmp/test-cursor
+          cd /tmp/test-cursor
+          node $GITHUB_WORKSPACE/dist/cli.js add systematic-debugging -a cursor -y
+          test -f .cursor/skills/systematic-debugging/SKILL.md
+          echo "✓ Cursor install verified"
+
+      - name: Test install to multiple agents
+        run: |
+          mkdir -p /tmp/test-multi
+          cd /tmp/test-multi
+          node $GITHUB_WORKSPACE/dist/cli.js add test-driven-development -a claude-code -a cursor -a windsurf -y
+          test -f .claude/skills/test-driven-development/SKILL.md
+          test -f .cursor/skills/test-driven-development/SKILL.md
+          test -f .windsurf/skills/test-driven-development/SKILL.md
+          echo "✓ Multi-agent install verified"
+
+      - name: Test global install
+        run: |
+          node dist/cli.js add systematic-debugging -g -a claude-code -y
+          test -f ~/.claude/skills/systematic-debugging/SKILL.md
+          echo "✓ Global install verified"
+
+      - name: Verify skill count
+        run: |
+          SKILL_COUNT=$(node dist/cli.js list 2>&1 | grep "Total:" | grep -oP '\d+')
+          if [ "$SKILL_COUNT" != "24" ]; then
+            echo "Expected 24 skills, got $SKILL_COUNT"
+            exit 1
+          fi
+          echo "✓ Skill count verified: $SKILL_COUNT"
