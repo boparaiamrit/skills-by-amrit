@@ -76,8 +76,8 @@ jobs:
       - name: Verify skill count
         run: |
           SKILL_COUNT=$(find skills -name "SKILL.md" | wc -l)
-          if [ "$SKILL_COUNT" -ne 24 ]; then
-            echo "Expected 24 skills, got $SKILL_COUNT"
+          if [ "$SKILL_COUNT" -ne 26 ]; then
+            echo "Expected 26 skills, got $SKILL_COUNT"
             exit 1
           fi
           echo "✓ Skill count verified: $SKILL_COUNT"
