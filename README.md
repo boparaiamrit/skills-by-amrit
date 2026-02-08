@@ -81,40 +81,40 @@ Skills by Amrit works with **30+ AI coding agents**. Each agent gets assets inst
 
 | | Agent | Skills | Commands | Workflows | Rules |
 |:---:|:---|:---:|:---:|:---:|:---:|
-| <img src="https://www.google.com/s2/favicons?domain=anthropic.com&sz=16" width="16"> | **Claude Code** | `.claude/skills/` | `.claude/commands/` | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=cursor.com&sz=16" width="16"> | **Cursor** | `.cursor/skills/` | — | — | `.cursor/rules/` |
-| <img src="https://www.google.com/s2/favicons?domain=gemini.google.com&sz=16" width="16"> | **Antigravity (Gemini)** | `.agent/skills/` | — | `.agent/workflows/` | — |
-| <img src="https://www.google.com/s2/favicons?domain=gemini.google.com&sz=16" width="16"> | **Gemini CLI** | `.gemini/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=github.com&sz=16" width="16"> | **GitHub Copilot** | `.github/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=windsurf.com&sz=16" width="16"> | **Windsurf** | `.windsurf/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=cline.bot&sz=16" width="16"> | **Cline** | `.cline/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=roocode.com&sz=16" width="16"> | **Roo** | `.roo/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=openai.com&sz=16" width="16"> | **Codex** | `.agents/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=sourcegraph.com&sz=16" width="16"> | **Amp** | `.agents/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=kilocode.ai&sz=16" width="16"> | **Kilo Code** | `.kilocode/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=augmentcode.com&sz=16" width="16"> | **Augment** | `.augment/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=continue.dev&sz=16" width="16"> | **Continue** | `.continue/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=block.github.io&sz=16" width="16"> | **Goose** | `.goose/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=opencode.ai&sz=16" width="16"> | **OpenCode** | `.agents/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=trae.ai&sz=16" width="16"> | **Trae** | `.trae/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=jetbrains.com&sz=16" width="16"> | **Junie** | `.junie/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=github.com&sz=16" width="16"> | **OpenClaw** | `skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=all-hands.dev&sz=16" width="16"> | **OpenHands** | `.openhands/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=github.com&sz=16" width="16"> | **Kode** | `.kode/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=github.com&sz=16" width="16"> | **Qoder** | `.qoder/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=github.com&sz=16" width="16"> | **Mux** | `.mux/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=zencoder.ai&sz=16" width="16"> | **Zencoder** | `.zencoder/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=github.com&sz=16" width="16"> | **Crush** | `.crush/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=github.com&sz=16" width="16"> | **Droid** | `.factory/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=github.com&sz=16" width="16"> | **Command Code** | `.commandcode/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=github.com&sz=16" width="16"> | **CodeBuddy** | `.codebuddy/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=mistral.ai&sz=16" width="16"> | **Mistral Vibe** | `.vibe/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=qwen.ai&sz=16" width="16"> | **Qwen Code** | `.qwen/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=pi.ai&sz=16" width="16"> | **Pi** | `.pi/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=replit.com&sz=16" width="16"> | **Replit** | `.agents/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=kiro.dev&sz=16" width="16"> | **Kiro CLI** | `.kiro/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=github.com&sz=16" width="16"> | **iFlow CLI** | `.iflow/skills/` | — | — | — |
-| <img src="https://www.google.com/s2/favicons?domain=kimi.ai&sz=16" width="16"> | **Kimi CLI** | `.agents/skills/` | — | — | — |
+| <img src="logos/anthropic-com.png" width="16"> | **Claude Code** | `.claude/skills/` | `.claude/commands/` | — | — |
+| <img src="logos/cursor-com.png" width="16"> | **Cursor** | `.cursor/skills/` | — | — | `.cursor/rules/` |
+| <img src="logos/gemini-google-com.png" width="16"> | **Antigravity (Gemini)** | `.agent/skills/` | — | `.agent/workflows/` | — |
+| <img src="logos/gemini-google-com.png" width="16"> | **Gemini CLI** | `.gemini/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="16"> | **GitHub Copilot** | `.github/skills/` | — | — | — |
+| <img src="logos/windsurf-com.png" width="16"> | **Windsurf** | `.windsurf/skills/` | — | — | — |
+| <img src="logos/cline-bot.png" width="16"> | **Cline** | `.cline/skills/` | — | — | — |
+| <img src="logos/roocode-com.png" width="16"> | **Roo** | `.roo/skills/` | — | — | — |
+| <img src="logos/openai-com.png" width="16"> | **Codex** | `.agents/skills/` | — | — | — |
+| <img src="logos/sourcegraph-com.png" width="16"> | **Amp** | `.agents/skills/` | — | — | — |
+| <img src="logos/kilocode-ai.png" width="16"> | **Kilo Code** | `.kilocode/skills/` | — | — | — |
+| <img src="logos/augmentcode-com.png" width="16"> | **Augment** | `.augment/skills/` | — | — | — |
+| <img src="logos/continue-dev.png" width="16"> | **Continue** | `.continue/skills/` | — | — | — |
+| <img src="logos/block-github-io.png" width="16"> | **Goose** | `.goose/skills/` | — | — | — |
+| <img src="logos/opencode-ai.png" width="16"> | **OpenCode** | `.agents/skills/` | — | — | — |
+| <img src="logos/trae-ai.png" width="16"> | **Trae** | `.trae/skills/` | — | — | — |
+| <img src="logos/jetbrains-com.png" width="16"> | **Junie** | `.junie/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="16"> | **OpenClaw** | `skills/` | — | — | — |
+| <img src="logos/all-hands-dev.png" width="16"> | **OpenHands** | `.openhands/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="16"> | **Kode** | `.kode/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="16"> | **Qoder** | `.qoder/skills/` | — | — | — |
+| <img src="logos/zencoder-ai.png" width="16"> | **Mux** | `.mux/skills/` | — | — | — |
+| <img src="logos/zencoder-ai.png" width="16"> | **Zencoder** | `.zencoder/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="16"> | **Crush** | `.crush/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="16"> | **Droid** | `.factory/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="16"> | **Command Code** | `.commandcode/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="16"> | **CodeBuddy** | `.codebuddy/skills/` | — | — | — |
+| <img src="logos/mistral-ai.png" width="16"> | **Mistral Vibe** | `.vibe/skills/` | — | — | — |
+| <img src="logos/qwen-ai.png" width="16"> | **Qwen Code** | `.qwen/skills/` | — | — | — |
+| <img src="logos/pi-ai.png" width="16"> | **Pi** | `.pi/skills/` | — | — | — |
+| <img src="logos/replit-com.png" width="16"> | **Replit** | `.agents/skills/` | — | — | — |
+| <img src="logos/kiro-dev.png" width="16"> | **Kiro CLI** | `.kiro/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="16"> | **iFlow CLI** | `.iflow/skills/` | — | — | — |
+| <img src="logos/kimi-ai.png" width="16"> | **Kimi CLI** | `.agents/skills/` | — | — | — |
 
 ---
 
@@ -615,20 +615,20 @@ node dist/cli.js list
 
 ---
 
-## � Acknowledgments
+## 🙏 Acknowledgments
 
 This project stands on the shoulders of giants. Huge thanks to these projects that inspired and influenced the design of Skills by Amrit:
 
-| Project | Author | Contribution |
-|:---|:---|:---|
-| [**Superpowers**](https://github.com/obra/superpowers) | Jesse Vincent ([@obra](https://github.com/obra)) | Pioneered the agentic skills framework concept — composable skills, TDD-first workflows, and subagent-driven development. The foundation we all build on. |
-| [**GSD (Get Shit Done)**](https://github.com/glittercowboy/get-shit-done) | [@glittercowboy](https://github.com/glittercowboy) | Spec-driven development with context rot prevention, parallel agent spawning, and executable plans. Showed how to keep AI agents focused and productive. |
-| [**Agent Skills Standard**](https://docs.anthropic.com/en/docs/agents/agent-skills) | Anthropic | The open standard for packaging and sharing AI agent capabilities via `SKILL.md` files. |
-| [**skills.sh**](https://skills.sh) | Community | The agent skills directory and CLI that makes skill discovery and installation universal. |
+| | Project | Author | Contribution |
+|:---:|:---|:---|:---|
+| <img src="logos/github-com.png" width="24"> | [**Superpowers**](https://github.com/obra/superpowers) | Jesse Vincent ([@obra](https://github.com/obra)) | Pioneered the agentic skills framework concept — composable skills, TDD-first workflows, and subagent-driven development. The foundation we all build on. |
+| <img src="logos/github-com.png" width="24"> | [**GSD (Get Shit Done)**](https://github.com/glittercowboy/get-shit-done) | [@glittercowboy](https://github.com/glittercowboy) | Spec-driven development with context rot prevention, parallel agent spawning, and executable plans. Showed how to keep AI agents focused and productive. |
+| <img src="logos/anthropic-com.png" width="24"> | [**Agent Skills Standard**](https://docs.anthropic.com/en/docs/agents/agent-skills) | Anthropic | The open standard for packaging and sharing AI agent capabilities via `SKILL.md` files. |
+| <img src="logos/skills-sh.png" width="24"> | [**skills.sh**](https://skills.sh) | Community | The agent skills directory and CLI that makes skill discovery and installation universal. |
 
 ---
 
-## �📄 License
+## 📄 License
 
 [MIT](LICENSE) © [Amritpal Singh Boparai](https://github.com/boparaiamrit)
 
