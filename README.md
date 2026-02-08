@@ -27,11 +27,11 @@
 
 **Skills by Amrit** is a comprehensive, agent-agnostic skills framework that transforms AI coding assistants into senior staff engineers. Install once, use everywhere — across **34+ supported agents** including Antigravity, Cursor, Claude Code, Gemini CLI, Windsurf, Copilot, and more.
 
-### 🏆 v3.0.0 Highlights
+### 🏆 v3.1.0 Highlights
 
 | What's New | Count | Description |
 |:---|:---:|:---|
-| 🧠 **Skills** | 29 | Deep instructional skills for the full SDLC |
+| 🧠 **Skills** | 29 | All enhanced to 10/10 quality standard |
 | ⚡ **Commands** | 25 | Claude Code slash commands for project lifecycle |
 | 🔄 **Workflows** | 29 | Antigravity workflows with turbo-mode steps |
 | 🤖 **Agents** | 7 | Specialist agent definitions (researcher, executor, etc.) |
@@ -39,6 +39,7 @@
 | 📏 **Rules** | 5 | Universal rules for GEMINI.md/CLAUDE.md |
 | 🤝 **Agent Teams** | ✅ | Claude Code-style team coordination — for ANY agent |
 | 💾 **Persistent Memory** | ✅ | Like claude-mem — zero infrastructure, ANY agent |
+| 🔧 **CLI** | ✅ | New `update`, `status` commands + smart entry point management |
 
 ---
 
@@ -516,11 +517,20 @@ npx skills-by-amrit add --global
 # Install specific skills
 npx skills-by-amrit add persistent-memory code-review
 
+# Update all skills to latest version
+npx skills-by-amrit update
+
+# Show installation status and version
+npx skills-by-amrit status
+
 # List all available assets
 npx skills-by-amrit list
 
 # Show supported agents
 npx skills-by-amrit agents
+
+# Non-interactive install (CI/CD friendly)
+npx skills-by-amrit add --all -y -a '*'
 
 # Show help
 npx skills-by-amrit help
@@ -530,10 +540,24 @@ npx skills-by-amrit help
 
 | Flag | Description |
 |:---|:---|
-| `--agent <name>` | Install to a specific agent |
-| `--global` | Install globally instead of locally |
+| `-a, --agent <name>` | Install to a specific agent (use `'*'` for all) |
+| `-g, --global` | Install globally (user home) instead of project |
 | `--all` | Install all available skills |
+| `-y, --yes` | Non-interactive mode (auto-accept) |
 | `--help` | Show help text |
+
+### Install Behavior
+
+| Asset | Local Install | Global Install (`-g`) |
+|:---|:---|:---|
+| **Skills** | Copied to agent dir. Re-running updates existing. | Copied to global agent dir. |
+| **Commands** | Copied to `.claude/commands/` | ❌ Skipped |
+| **Workflows** | Copied to `.agent/workflows/` | ❌ Skipped |
+| **Agent Defs** | Copied to `.claude/agents/` | ❌ Skipped |
+| **Cursor Rules** | Copied to `.cursor/rules/` | ❌ Skipped |
+| **CLAUDE.md** | Appends activation section (preserves your content). Updates on re-install. | ❌ Skipped |
+| **GEMINI.md** | Appends activation section (preserves your content). Updates on re-install. | ❌ Skipped |
+| **Memory** | Never installed (created at runtime per-project). | ❌ Never installed |
 
 ### What Gets Installed Where
 
@@ -555,6 +579,7 @@ npx skills-by-amrit help
 | [📖 Wiki](https://github.com/boparaiamrit/skills-by-amrit/wiki) | Comprehensive GitHub Wiki with guides and reference |
 | [Agent Teams & Memory](docs/AGENT-TEAMS-AND-MEMORY.md) | Comprehensive guide to the team coordination and persistent memory systems |
 | [Competitive Analysis](docs/COMPETITIVE_ANALYSIS.md) | Analysis of GSD, Claude Code, Cursor, and Antigravity frameworks |
+| [Audit Report](docs/AUDIT-REPORT.md) | Comprehensive 10/10 quality audit of all 29 skills |
 | [Contributing](CONTRIBUTING.md) | How to contribute to this project |
 | [Changelog](CHANGELOG.md) | Version history and release notes |
 
@@ -562,20 +587,38 @@ npx skills-by-amrit help
 
 ## 🔄 Version History
 
+### v3.1.0 — Quality & CLI Overhaul 🔧
+
+**Skills Enhancement:**
+- All 29 skills enhanced to 10/10 quality standard
+- Added Anti-Shortcut Rules, Common Rationalizations, Iron Questions to every skill
+- Added When NOT to Use sections for clear activation boundaries
+- Standardized output formats, red flags, and integration sections
+
+**CLI Overhaul:**
+- **New:** `update` / `upgrade` command — updates all skills and refreshes entry point files
+- **New:** `status` command — shows installed version, agents, update availability
+- **New:** `.skills-by-amrit.json` manifest for version tracking
+- **Fix:** CLAUDE.md/GEMINI.md now uses `<!-- START/END -->` markers — re-installs update the section instead of skipping
+- **Fix:** Only appends a minimal activation section with correct per-agent paths (previously appended entire package file)
+- **Fix:** Global installs correctly skip entry point files, commands, workflows, and agents
+- **Fix:** Skills output now shows new vs updated counts
+- **Note:** Memory/planning is never installed by CLI — always created at runtime per-project
+
 ### v3.0.0 — Agent Intelligence Release 🧠
 
 **New Skills:**
 - 💾 `persistent-memory` — Zero-infrastructure session memory for ANY agent
 - 🤝 `agent-team-coordination` — Claude Code-style teams for ANY agent
 
-**New Commands (22 total):**
+**New Commands (25 total):**
 - `/memory` — Memory management (init, read, write, compress, status)
 - `/team` — Team coordination (start, resume, next, board, status)
 - `/init-project`, `/execute`, `/verify`, `/research`, `/progress`
 - `/quick`, `/migrate`, `/performance`, `/security-scan`, `/doc`, `/explain`, `/fix-issue`
 - `/deploy-check`, `/audit`, `/refactor`, `/test`, `/review`, `/debug`, `/commit`, `/plan`
 
-**New Workflows (26 total):**
+**New Workflows (29 total):**
 - `/memory-sync` — Persistent memory synchronization
 - `/team-session` — Multi-role team sessions
 - Plus 24 more workflows for the full project lifecycle

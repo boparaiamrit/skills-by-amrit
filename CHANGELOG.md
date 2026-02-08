@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.1.0] — 2026-02-08 — Quality & CLI Overhaul 🔧
+
+### 🧠 Skills Enhancement
+- All 29 skills enhanced to **10/10 quality standard**
+- Added **Anti-Shortcut Rules** to every skill — prevents common bypasses
+- Added **Common Rationalizations** with rebuttals — addresses excuses for cutting corners
+- Added **Iron Questions** to every skill — requires evidence-based answers
+- Added **When NOT to Use** sections — clear activation boundaries
+- Standardized output formats, red flags, and integration sections across all skills
+- Enhanced meta-skills (`writing-skills`, `using-skills`) with comprehensive templates
+
+### 🔧 CLI Overhaul
+- **New command:** `update` / `upgrade` — updates all skills and refreshes CLAUDE.md/GEMINI.md sections
+- **New command:** `status` — shows installed version, agents, and update availability
+- **New flag:** `-y, --yes` — non-interactive mode for CI/CD
+- **New:** `.skills-by-amrit.json` manifest for version tracking at project root
+- **Fix:** CLAUDE.md/GEMINI.md now uses `<!-- START/END -->` markers — re-installs **update** the section instead of silently skipping
+- **Fix:** Only appends a **minimal activation section** with correct per-agent paths (previously appended the entire package file with wrong paths)
+- **Fix:** Global installs (`-g`) correctly skip entry point files, commands, workflows, and agents
+- **Fix:** Skills output now shows separate new vs updated counts
+- **Fix:** Entry point file results are deduplicated when multiple agents share GEMINI.md
+
+### 📝 Entry Point Behavior (CLAUDE.md / GEMINI.md)
+- **New file:** Creates with activation section wrapped in boundary markers
+- **Existing file, no markers:** Appends activation section (preserves your content)
+- **Existing file, has markers:** Replaces only the marked section (your content untouched)
+- **Global install:** Entry point files are never modified
+
+### 📊 Memory / Planning
+- `.planning/MEMORY.md` is **never** installed by the CLI — always created at runtime per-project by the AI agent
+- Confirmed: all `.planning/` files are project-local, never global
+
+### 📖 Documentation
+- Added `docs/AUDIT-REPORT.md` — comprehensive quality audit of all 29 skills
+
+---
+
 ## [3.0.0] — 2026-02-08 — Agent Intelligence Release 🧠
 
 ### 🆕 New Skills
