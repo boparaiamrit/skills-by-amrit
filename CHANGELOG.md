@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.2.0] — 2026-02-08 — Codebase Conformity 🎯
+
+### 🆕 New Skill
+- **codebase-conformity** — Enforces pattern uniformity across frontend and backend. Requires AI to observe existing code patterns before writing, match them exactly, and double-verify conformity. Prevents AI from "innovating" when it should conform to established conventions.
+
+### 📊 By the Numbers
+- 30 skills (+1 new)
+
+---
+
 ## [3.1.0] — 2026-02-08 — Quality & CLI Overhaul 🔧
 
 ### 🧠 Skills Enhancement

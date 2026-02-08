@@ -53,6 +53,7 @@ Skills activate automatically when their conditions are met. You MUST use the re
 | Deep audit | `brutal-exhaustive-audit` |
 | Cross-session memory | `persistent-memory` |
 | Complex multi-step task | `agent-team-coordination` |
+| Adding code to existing codebase | `codebase-conformity` |
 | Creating new skills | `writing-skills` |
 | Discovering skills | `using-skills` |
 
@@ -135,7 +136,7 @@ skills-by-amrit/
 │   ├── mapper.md
 │   └── ... (4 more)
 ├── cursor-rules/          ← Cursor IDE rules (10 rules)
-└── skills/                ← Composable skill library (29 skills)
+└── skills/                ← Composable skill library (30 skills)
     ├── brainstorming/
     ├── writing-plans/
     ├── executing-plans/
@@ -163,6 +164,7 @@ skills-by-amrit/
     ├── brutal-exhaustive-audit/
     ├── persistent-memory/
     ├── agent-team-coordination/
+    ├── codebase-conformity/
     ├── writing-skills/
     └── using-skills/
 ```

@@ -311,6 +311,7 @@ const SKILL_CATEGORIES: Record<string, string[]> = {
     "full-stack-api-integration",
     "product-completeness-audit",
     "brutal-exhaustive-audit",
+    "codebase-conformity",
   ],
   Meta: ["writing-skills", "using-skills"],
 };
@@ -471,6 +472,7 @@ Skills activate automatically when their conditions are met. You MUST use the re
 | Deep audit | \`brutal-exhaustive-audit\` |
 | Cross-session memory | \`persistent-memory\` |
 | Complex multi-step task | \`agent-team-coordination\` |
+| Adding code to existing codebase | \`codebase-conformity\` |
 | Creating new skills | \`writing-skills\` |
 | Discovering skills | \`using-skills\` |
 
