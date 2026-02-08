@@ -88,7 +88,53 @@ If `.planning/MEMORY.md` exists, read it at session start and update it at sessi
 
 ---
 
-## 🚨 Pre-Commit Checklist (CRITICAL)
+## � Release Process (Publishing to npm)
+
+**Versioning is NOT automatic.** You must manually run a command to publish.
+
+### When to Release
+
+Release when you've made meaningful changes worth publishing:
+- **Patch** (3.1.0 → 3.1.1): Bug fixes, typo corrections
+- **Minor** (3.1.0 → 3.2.0): New features, new skills, new commands
+- **Major** (3.1.0 → 4.0.0): Breaking changes
+
+### Release Commands
+
+```powershell
+# Bug fix release (3.1.0 → 3.1.1)
+npm run release:patch
+
+# New feature release (3.1.0 → 3.2.0)
+npm run release:minor
+
+# Breaking change release (3.1.0 → 4.0.0)
+npm run release:major
+```
+
+### What These Commands Do
+
+Each release command automatically:
+1. Bumps version in `package.json`
+2. Creates a git tag (e.g., `v3.2.0`)
+3. Runs `npm run build`
+4. Publishes to npm registry
+5. Pushes the tag to GitHub
+
+### Before Releasing
+
+1. Ensure all changes are committed and pushed
+2. Ensure CI pipeline passes
+3. Update CHANGELOG.md with release notes
+4. Verify git status is clean: `git status --short`
+
+### After Releasing
+
+Verify on npm: `npm view skills-by-amrit version`
+
+---
+
+## �🚨 Pre-Commit Checklist (CRITICAL)
 
 **Before ending any session that modifies the repository:**
 
