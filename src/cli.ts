@@ -297,6 +297,11 @@ const SKILL_CATEGORIES: Record<string, string[]> = {
     "persistent-memory",
     "agent-team-coordination",
   ],
+  "Integration & Completeness": [
+    "full-stack-api-integration",
+    "product-completeness-audit",
+    "brutal-exhaustive-audit",
+  ],
   Meta: ["writing-skills", "using-skills"],
 };
 

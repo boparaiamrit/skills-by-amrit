@@ -21,8 +21,3 @@ npm-debug.log*
 # Temp files
 .commit-msg.txt
 .git-log-temp.txt
-
-# Images (except docs)
-*.png
-!docs/**/*.png
-!logos/**/*.png

@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">🧠 Skills by Amrit</h1>
   <p align="center">
-    <strong>The ultimate AI agent skills framework — 26 skills · 22 commands · 26 workflows · 7 agents · 10 cursor rules</strong>
+    <strong>The ultimate AI agent skills framework — 29 skills · 25 commands · 29 workflows · 7 agents · 10 cursor rules</strong>
   </p>
   <p align="center">
     Make your AI coding assistant think like a staff engineer.
@@ -25,15 +25,15 @@
 
 ## 🌟 What is This?
 
-**Skills by Amrit** is a comprehensive, agent-agnostic skills framework that transforms AI coding assistants into senior staff engineers. Install once, use everywhere — across **30+ supported agents** including Antigravity, Cursor, Claude Code, Gemini CLI, Windsurf, Copilot, and more.
+**Skills by Amrit** is a comprehensive, agent-agnostic skills framework that transforms AI coding assistants into senior staff engineers. Install once, use everywhere — across **34+ supported agents** including Antigravity, Cursor, Claude Code, Gemini CLI, Windsurf, Copilot, and more.
 
 ### 🏆 v3.0.0 Highlights
 
 | What's New | Count | Description |
 |:---|:---:|:---|
-| 🧠 **Skills** | 26 | Deep instructional skills for the full SDLC |
-| ⚡ **Commands** | 22 | Claude Code slash commands for project lifecycle |
-| 🔄 **Workflows** | 26 | Antigravity workflows with turbo-mode steps |
+| 🧠 **Skills** | 29 | Deep instructional skills for the full SDLC |
+| ⚡ **Commands** | 25 | Claude Code slash commands for project lifecycle |
+| 🔄 **Workflows** | 29 | Antigravity workflows with turbo-mode steps |
 | 🤖 **Agents** | 7 | Specialist agent definitions (researcher, executor, etc.) |
 | 🎯 **Cursor Rules** | 10 | `.mdc` rules for Cursor AI behavior |
 | 📏 **Rules** | 5 | Universal rules for GEMINI.md/CLAUDE.md |
@@ -120,7 +120,7 @@ Skills by Amrit works with **30+ AI coding agents**. Each agent gets assets inst
 
 ## 📚 Complete Asset Catalog
 
-### 🧠 Skills (26)
+### 🧠 Skills (29)
 
 Skills are deep instructional documents that teach AI agents HOW to think about specific engineering tasks. Each skill contains principles, protocols, anti-patterns, and quality criteria.
 
@@ -168,16 +168,24 @@ Skills are deep instructional documents that teach AI agents HOW to think about 
 | 23 | 💾 **persistent-memory** | Automated session memory — captures decisions, context, and learnings across sessions via file-based protocols. Zero infrastructure, works in ANY agent. Inspired by [claude-mem](https://github.com/thedotmack/claude-mem). |
 | 24 | 🤝 **agent-team-coordination** | Multi-role team coordination — sequential role-switching (Researcher → Architect → Planner → Executor → Reviewer) with shared blackboard. Brings [Claude Code Agent Teams](https://code.claude.com/docs/en/agent-teams) to ANY agent. |
 
+#### 🔶 Integration & Completeness (3 skills) — ✨ NEW
+
+| # | Skill | Description |
+|:---:|:---|:---|
+| 25 | 🔗 **full-stack-api-integration** | End-to-end API integration — spec analysis, surface mapping, SOLID-compliant API layer design, systematic endpoint implementation, and integration testing |
+| 26 | 🏥 **product-completeness-audit** | Functional completeness verification — 5-level completeness spectrum, placeholder detection, broken flow identification, and API connection validation |
+| 27 | 🔬 **brutal-exhaustive-audit** | No-shortcuts 5-pass audit — build verification, route checking, data flow tracing, user flow testing, and edge case validation with anti-shortcut rules |
+
 #### 🔸 Meta (2 skills)
 
 | # | Skill | Description |
 |:---:|:---|:---|
-| 25 | 📘 **using-skills** | How to use and combine skills effectively in your workflow |
-| 26 | ✍️ **writing-skills** | How to create new skills — format, quality standards, and testing requirements |
+| 28 | 📘 **using-skills** | How to use and combine skills effectively in your workflow |
+| 29 | ✍️ **writing-skills** | How to create new skills — format, quality standards, and testing requirements |
 
 ---
 
-### ⚡ Commands (22)
+### ⚡ Commands (25)
 
 Commands are Claude Code slash commands (`.md` files installed to `.claude/commands/`). They provide structured workflows for common project tasks.
 
@@ -233,9 +241,17 @@ Commands are Claude Code slash commands (`.md` files installed to `.claude/comma
 | `/memory` | 💾 Persistent memory management — `init`, `read`, `write`, `compress`, `status` operations |
 | `/team` | 🤝 Multi-role team coordination — `start`, `resume`, `next`, `board`, `status` operations |
 
+#### 🔶 Integration & Auditing — ✨ NEW
+
+| Command | Description |
+|:---|:---|
+| `/integrate` | 🔗 Full-stack API integration from spec — surface mapping, SOLID architecture, endpoint implementation, and verification |
+| `/health-check` | 🏥 Product completeness audit — route inventory, placeholder detection, flow testing, and API connection checks |
+| `/deep-audit` | 🔬 Brutal exhaustive 5-pass audit — build, routes, data flow, user flows, and edge cases with anti-shortcut rules |
+
 ---
 
-### 🔄 Workflows (26)
+### 🔄 Workflows (29)
 
 Workflows are Antigravity step-by-step execution scripts (`.md` files installed to `.agent/workflows/`). Many include `// turbo` annotations for auto-execution.
 
@@ -267,6 +283,9 @@ Workflows are Antigravity step-by-step execution scripts (`.md` files installed 
 | `/incident-response` | 🚨 Incident triage and response |
 | `/memory-sync` | 💾 Memory read/write/compress operations — ✨ NEW |
 | `/team-session` | 🤝 Multi-role team coordination — ✨ NEW |
+| `/integrate-api` | 🔗 Full-stack API integration workflow — ✨ NEW |
+| `/product-health-check` | 🏥 Product completeness audit workflow — ✨ NEW |
+| `/deep-audit` | 🔬 Brutal exhaustive audit workflow — ✨ NEW |
 
 ---
 
@@ -428,20 +447,29 @@ Sequential role-switching with a shared blackboard. One agent, multiple speciali
 
 ```
 skills-by-amrit/
-├── 📂 skills/                   # 26 deep instructional skills
+├── 📂 skills/                   # 29 deep instructional skills
 │   ├── brainstorming/SKILL.md
 │   ├── persistent-memory/SKILL.md      ✨ NEW
 │   ├── agent-team-coordination/SKILL.md ✨ NEW
+│   ├── full-stack-api-integration/SKILL.md ✨ NEW
+│   ├── product-completeness-audit/SKILL.md ✨ NEW
+│   ├── brutal-exhaustive-audit/SKILL.md    ✨ NEW
 │   └── ... (24 more)
-├── 📂 commands/                 # 22 Claude Code slash commands
+├── 📂 commands/                 # 25 Claude Code slash commands
 │   ├── init-project.md
 │   ├── memory.md                        ✨ NEW
 │   ├── team.md                          ✨ NEW
+│   ├── integrate.md                     ✨ NEW
+│   ├── health-check.md                  ✨ NEW
+│   ├── deep-audit.md                    ✨ NEW
 │   └── ... (20 more)
-├── 📂 workflows/                # 26 Antigravity workflows
+├── 📂 workflows/                # 29 Antigravity workflows
 │   ├── init-project.md
 │   ├── memory-sync.md                   ✨ NEW
 │   ├── team-session.md                  ✨ NEW
+│   ├── integrate-api.md                 ✨ NEW
+│   ├── product-health-check.md          ✨ NEW
+│   ├── deep-audit.md                    ✨ NEW
 │   └── ... (24 more)
 ├── 📂 agents/                   # 7 specialist agent definitions
 │   ├── researcher.md
@@ -584,14 +612,14 @@ npx skills-by-amrit help
 
 | Metric | Count |
 |:---:|:---:|
-| 🧠 Skills | **26** |
-| ⚡ Commands | **22** |
-| 🔄 Workflows | **26** |
+| 🧠 Skills | **29** |
+| ⚡ Commands | **25** |
+| 🔄 Workflows | **29** |
 | 🤖 Agents | **7** |
 | 🎯 Cursor Rules | **10** |
 | 📏 Rules | **5** |
 | 🤖 Supported Agents | **34** |
-| 📄 Total Assets | **96** |
+| 📄 Total Assets | **105** |
 
 ---
 

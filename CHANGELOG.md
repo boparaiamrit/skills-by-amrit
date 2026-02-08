@@ -7,10 +7,16 @@ All notable changes to this project will be documented in this file.
 ### 🆕 New Skills
 - **persistent-memory** — Automated session memory for ANY agent. Captures decisions, context, and learnings across sessions using file-based protocols. Zero infrastructure — no hooks, no databases, no external services. Inspired by claude-mem.
 - **agent-team-coordination** — Multi-role team coordination for ANY agent. Sequential role-switching (Researcher → Architect → Planner → Executor → Reviewer) with shared blackboard and handoff documents. Brings Claude Code Agent Teams to Antigravity, Cursor, and more.
+- **full-stack-api-integration** — End-to-end API integration from spec to frontend. Spec analysis, surface mapping, SOLID-compliant API layer design, endpoint implementation, and integration testing.
+- **product-completeness-audit** — Functional completeness verification with 5-level spectrum. Placeholder detection, broken flow identification, and API connection validation.
+- **brutal-exhaustive-audit** — No-shortcuts 5-pass audit — build verification, route checking, data flow tracing, user flow testing, and edge case validation with strict anti-shortcut rules.
 
-### 🆕 New Commands (22 total)
+### 🆕 New Commands (25 total)
 - `/memory` — Persistent memory management (init, read, write, compress, status)
 - `/team` — Agent team coordination (start, resume, next, board, status)
+- `/integrate` — Full-stack API integration from spec
+- `/health-check` — Product completeness audit
+- `/deep-audit` — Brutal exhaustive 5-pass audit
 - `/init-project` — Initialize project with `.planning/` structure
 - `/plan` — Create detailed implementation plans
 - `/execute` — Execute plans with wave-based steps
@@ -32,9 +38,12 @@ All notable changes to this project will be documented in this file.
 - `/quick` — Quick task execution
 - `/commit` — Conventional commit creation
 
-### 🆕 New Workflows (26 total)
+### 🆕 New Workflows (29 total)
 - `/memory-sync` — Persistent memory synchronization
 - `/team-session` — Multi-role team coordination
+- `/integrate-api` — Full-stack API integration workflow
+- `/product-health-check` — Product completeness audit workflow
+- `/deep-audit` — Brutal exhaustive audit workflow
 - Plus 24 more workflows covering the full project lifecycle
 
 ### 🆕 New Agents (7)
@@ -78,13 +87,13 @@ All notable changes to this project will be documented in this file.
 - Preserve existing CLAUDE.md content when appending
 
 ### 📊 By the Numbers
-- 26 skills (+2 new)
-- 22 commands (all new)
-- 26 workflows (all new)
+- 29 skills (+5 new)
+- 25 commands (all new)
+- 29 workflows (all new)
 - 7 agents (all new)
 - 10 cursor rules (all new)
 - 5 rules (+2 new)
-- **96 total assets**
+- **105 total assets**
 
 ---
 
