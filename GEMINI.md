@@ -144,7 +144,51 @@ git status --short
 ```
 If files are modified/untracked, they MUST be committed.
 
-### 2. Verify Asset Counts Match
+### 2. 🚨 CRITICAL: Version Management (READ THIS)
+
+**THE PROBLEM:**
+Version is scattered across multiple files. If you bump version without syncing, npm, docs, and website will be out of sync.
+
+**THE SOLUTION:**
+`package.json` is the SINGLE source of truth. All other files are auto-synced.
+
+**NEVER MANUALLY EDIT VERSION IN:**
+- ❌ `package.json` (only via `npm version`)
+- ❌ `docs/index.html` (auto-synced)
+- ⚠️ `CHANGELOG.md` (you MUST add entry manually BEFORE bumping version)
+
+**CORRECT WORKFLOW:**
+
+```powershell
+# 1. Update CHANGELOG.md FIRST
+# Add new version section manually: ## [X.Y.Z] — YYYY-MM-DD
+
+# 2. Commit your changes (NOT the version bump yet)
+git add -A
+git commit -m "feat: your changes"
+git push
+
+# 3. Bump version — this auto-syncs everything
+npm run release:minor  # or release:patch, release:major
+
+# What happens automatically:
+# - package.json version bumped
+# - docs/index.html updated with new version
+# - Git tag created (vX.Y.Z)
+# - Published to npm
+# - Pushed to GitHub with tag
+```
+
+**IF YOU MESS UP:**
+```powershell
+# If you already bumped locally but didn't push:
+git tag -d vX.Y.Z  # Delete the tag
+git reset --hard HEAD~1  # Undo the version commit
+
+# Then follow the correct workflow above
+```
+
+### 3. Verify Asset Counts Match
 When adding/removing skills, commands, workflows, agents, or rules:
 ```powershell
 $skills = (Get-ChildItem -Path skills -Recurse -Filter "SKILL.md").Count

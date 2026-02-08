@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Sync version from package.json to all docs
+node scripts/sync-version.js
+
+# Add any files that were updated by sync-version
+git add -u
