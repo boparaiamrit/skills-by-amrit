@@ -43,6 +43,7 @@ COPY agents/ agents/
 COPY rules/ rules/
 COPY cursor-rules/ cursor-rules/
 COPY CLAUDE.md ./
+COPY GEMINI.md ./
 
 # Workspace mount point
 WORKDIR /workspace

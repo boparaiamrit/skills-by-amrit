@@ -358,7 +358,8 @@ function getSkillDescription(name: string): string {
 
 function copyDirRecursive(src: string, dest: string): number {
   let count = 0;
-  if (!existsSync(dest)) mkdirSync(dest, { recursive: true });
+  const isUpdate = existsSync(dest);
+  if (!isUpdate) mkdirSync(dest, { recursive: true });
   for (const entry of readdirSync(src)) {
     const s = join(src, entry);
     const d = join(dest, entry);
@@ -743,15 +744,16 @@ async function cmdAdd(args: string[]): Promise<void> {
     );
   }
 
-  // Also install CLAUDE.md to project root (not inside agent dirs)
+  // Also install CLAUDE.md and GEMINI.md to project root (not inside agent dirs)
   if (!flags.global) {
+    // CLAUDE.md — for Claude Code
     const claudeSrc = join(PACKAGE_ROOT, "CLAUDE.md");
     const claudeDest = join(projectDir, "CLAUDE.md");
-    if (existsSync(claudeSrc)) {
+    if (existsSync(claudeSrc) && targetAgents.some((a) => a.name === "claude-code")) {
       if (existsSync(claudeDest)) {
         const existing = readFileSync(claudeDest, "utf-8");
-        const incoming = readFileSync(claudeSrc, "utf-8");
         if (!existing.includes("Skills by Amrit")) {
+          const incoming = readFileSync(claudeSrc, "utf-8");
           writeFileSync(
             claudeDest,
             existing + "\n\n<!-- Skills by Amrit -->\n" + incoming
@@ -763,6 +765,28 @@ async function cmdAdd(args: string[]): Promise<void> {
       } else {
         copyFileSync(claudeSrc, claudeDest);
         logOk("CLAUDE.md created");
+      }
+    }
+
+    // GEMINI.md — for Antigravity / Gemini CLI
+    const geminiSrc = join(PACKAGE_ROOT, "GEMINI.md");
+    const geminiDest = join(projectDir, "GEMINI.md");
+    if (existsSync(geminiSrc) && targetAgents.some((a) => a.name === "antigravity" || a.name === "gemini-cli")) {
+      if (existsSync(geminiDest)) {
+        const existing = readFileSync(geminiDest, "utf-8");
+        if (!existing.includes("Skills by Amrit")) {
+          const incoming = readFileSync(geminiSrc, "utf-8");
+          writeFileSync(
+            geminiDest,
+            existing + "\n\n<!-- Skills by Amrit -->\n" + incoming
+          );
+          logInfo("GEMINI.md — appended (existing file preserved)");
+        } else {
+          logInfo("GEMINI.md — already contains Skills by Amrit");
+        }
+      } else {
+        copyFileSync(geminiSrc, geminiDest);
+        logOk("GEMINI.md created");
       }
     }
   }
