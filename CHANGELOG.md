@@ -2,15 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.2.0] — 2026-02-08 — Codebase Conformity 🎯
+## [3.2.0] — 2026-02-08 — Examples & Conformity 📚
 
 ### 🆕 New Skill
-- **codebase-conformity** — Enforces pattern uniformity across frontend and backend. Requires AI to observe existing code patterns before writing, match them exactly, and double-verify conformity. Prevents AI from "innovating" when it should conform to established conventions.
+- **codebase-conformity** — Enforces pattern uniformity across frontend and backend. Requires AI to observe existing code patterns before writing, match them exactly, and double-verify conformity.
+
+### 📚 Comprehensive Examples System
+- **106 usage examples** covering every skill, command, workflow, agent, and rule
+- **Interactive examples page** (`docs/examples.html`) with agent tabs (Antigravity, Claude Code, Cursor)
+- **Wiki examples** with organized sidebar navigation via `_Sidebar.md`
+- **Search & filter** functionality on examples page
+- **Copy-to-clipboard** for all code examples
+
+### 🌐 Website Improvements
+- **Logos fixed** — Copied logos to `docs/logos/` for GitHub Pages access
+- **Examples link** added to main navigation
+- **Agent-specific syntax** shown in all examples
+
+### 📖 Documentation
+- **GEMINI.md enhanced** with:
+  - 🚀 Release Process section (how to publish to npm)
+  - 🚨 Pre-Commit Checklist (prevent uncommitted changes)
+- **.github/GEMINI.md** — Maintainer guide for AI agents
 
 ### 📊 By the Numbers
 - 30 skills (+1 new)
+- 106 example files (100% coverage)
+- All assets now have usage examples
 
 ---
+
 
 ## [3.1.0] — 2026-02-08 — Quality & CLI Overhaul 🔧
 
