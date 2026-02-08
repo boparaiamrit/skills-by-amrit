@@ -6,6 +6,7 @@ docs
 logos
 *.md
 !CLAUDE.md
+!GEMINI.md
 .gitignore
 .commit-msg.txt
 fetch_logos.py
