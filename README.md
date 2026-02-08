@@ -81,40 +81,40 @@ Skills by Amrit works with **30+ AI coding agents**. Each agent gets assets inst
 
 | | Agent | Skills | Commands | Workflows | Rules |
 |:---:|:---|:---:|:---:|:---:|:---:|
-| <img src="logos/anthropic-com.png" width="24"> | **Claude Code** | `.claude/skills/` | `.claude/commands/` | — | — |
-| <img src="logos/cursor-com.png" width="24"> | **Cursor** | `.cursor/skills/` | — | — | `.cursor/rules/` |
-| <img src="logos/gemini-google-com.png" width="24"> | **Antigravity (Gemini)** | `.agent/skills/` | — | `.agent/workflows/` | — |
-| <img src="logos/gemini-google-com.png" width="24"> | **Gemini CLI** | `.gemini/skills/` | — | — | — |
-| <img src="logos/github-com.png" width="24"> | **GitHub Copilot** | `.github/skills/` | — | — | — |
-| <img src="logos/windsurf-com.png" width="24"> | **Windsurf** | `.windsurf/skills/` | — | — | — |
-| <img src="logos/cline-bot.png" width="24"> | **Cline** | `.cline/skills/` | — | — | — |
-| <img src="logos/roocode-com.png" width="24"> | **Roo** | `.roo/skills/` | — | — | — |
-| <img src="logos/openai-com.png" width="24"> | **Codex** | `.agents/skills/` | — | — | — |
-| <img src="logos/sourcegraph-com.png" width="24"> | **Amp** | `.agents/skills/` | — | — | — |
-| <img src="logos/kilocode-ai.png" width="24"> | **Kilo Code** | `.kilocode/skills/` | — | — | — |
-| <img src="logos/augmentcode-com.png" width="24"> | **Augment** | `.augment/skills/` | — | — | — |
-| <img src="logos/continue-dev.png" width="24"> | **Continue** | `.continue/skills/` | — | — | — |
-| <img src="logos/block-github-io.png" width="24"> | **Goose** | `.goose/skills/` | — | — | — |
-| <img src="logos/opencode-ai.png" width="24"> | **OpenCode** | `.agents/skills/` | — | — | — |
-| <img src="logos/trae-ai.png" width="24"> | **Trae** | `.trae/skills/` | — | — | — |
-| <img src="logos/jetbrains-com.png" width="24"> | **Junie** | `.junie/skills/` | — | — | — |
-| <img src="logos/github-com.png" width="24"> | **OpenClaw** | `skills/` | — | — | — |
-| <img src="logos/all-hands-dev.png" width="24"> | **OpenHands** | `.openhands/skills/` | — | — | — |
-| <img src="logos/github-com.png" width="24"> | **Kode** | `.kode/skills/` | — | — | — |
-| <img src="logos/github-com.png" width="24"> | **Qoder** | `.qoder/skills/` | — | — | — |
-| <img src="logos/zencoder-ai.png" width="24"> | **Mux** | `.mux/skills/` | — | — | — |
-| <img src="logos/zencoder-ai.png" width="24"> | **Zencoder** | `.zencoder/skills/` | — | — | — |
-| <img src="logos/github-com.png" width="24"> | **Crush** | `.crush/skills/` | — | — | — |
-| <img src="logos/github-com.png" width="24"> | **Droid** | `.factory/skills/` | — | — | — |
-| <img src="logos/github-com.png" width="24"> | **Command Code** | `.commandcode/skills/` | — | — | — |
-| <img src="logos/github-com.png" width="24"> | **CodeBuddy** | `.codebuddy/skills/` | — | — | — |
-| <img src="logos/mistral-ai.png" width="24"> | **Mistral Vibe** | `.vibe/skills/` | — | — | — |
-| <img src="logos/qwen-ai.png" width="24"> | **Qwen Code** | `.qwen/skills/` | — | — | — |
-| <img src="logos/pi-ai.png" width="24"> | **Pi** | `.pi/skills/` | — | — | — |
-| <img src="logos/replit-com.png" width="24"> | **Replit** | `.agents/skills/` | — | — | — |
-| <img src="logos/kiro-dev.png" width="24"> | **Kiro CLI** | `.kiro/skills/` | — | — | — |
-| <img src="logos/github-com.png" width="24"> | **iFlow CLI** | `.iflow/skills/` | — | — | — |
-| <img src="logos/kimi-ai.png" width="24"> | **Kimi CLI** | `.agents/skills/` | — | — | — |
+| <img src="logos/anthropic-com.png" width="48"> | **Claude Code** | `.claude/skills/` | `.claude/commands/` | — | — |
+| <img src="logos/cursor-com.png" width="48"> | **Cursor** | `.cursor/skills/` | — | — | `.cursor/rules/` |
+| <img src="logos/gemini-google-com.png" width="48"> | **Antigravity (Gemini)** | `.agent/skills/` | — | `.agent/workflows/` | — |
+| <img src="logos/gemini-google-com.png" width="48"> | **Gemini CLI** | `.gemini/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="48"> | **GitHub Copilot** | `.github/skills/` | — | — | — |
+| <img src="logos/windsurf-com.png" width="48"> | **Windsurf** | `.windsurf/skills/` | — | — | — |
+| <img src="logos/cline-bot.png" width="48"> | **Cline** | `.cline/skills/` | — | — | — |
+| <img src="logos/roocode-com.png" width="48"> | **Roo** | `.roo/skills/` | — | — | — |
+| <img src="logos/openai-com.png" width="48"> | **Codex** | `.agents/skills/` | — | — | — |
+| <img src="logos/sourcegraph-com.png" width="48"> | **Amp** | `.agents/skills/` | — | — | — |
+| <img src="logos/kilocode-ai.png" width="48"> | **Kilo Code** | `.kilocode/skills/` | — | — | — |
+| <img src="logos/augmentcode-com.png" width="48"> | **Augment** | `.augment/skills/` | — | — | — |
+| <img src="logos/continue-dev.png" width="48"> | **Continue** | `.continue/skills/` | — | — | — |
+| <img src="logos/block-github-io.png" width="48"> | **Goose** | `.goose/skills/` | — | — | — |
+| <img src="logos/opencode-ai.png" width="48"> | **OpenCode** | `.agents/skills/` | — | — | — |
+| <img src="logos/trae-ai.png" width="48"> | **Trae** | `.trae/skills/` | — | — | — |
+| <img src="logos/jetbrains-com.png" width="48"> | **Junie** | `.junie/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="48"> | **OpenClaw** | `skills/` | — | — | — |
+| <img src="logos/all-hands-dev.png" width="48"> | **OpenHands** | `.openhands/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="48"> | **Kode** | `.kode/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="48"> | **Qoder** | `.qoder/skills/` | — | — | — |
+| <img src="logos/zencoder-ai.png" width="48"> | **Mux** | `.mux/skills/` | — | — | — |
+| <img src="logos/zencoder-ai.png" width="48"> | **Zencoder** | `.zencoder/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="48"> | **Crush** | `.crush/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="48"> | **Droid** | `.factory/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="48"> | **Command Code** | `.commandcode/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="48"> | **CodeBuddy** | `.codebuddy/skills/` | — | — | — |
+| <img src="logos/mistral-ai.png" width="48"> | **Mistral Vibe** | `.vibe/skills/` | — | — | — |
+| <img src="logos/qwen-ai.png" width="48"> | **Qwen Code** | `.qwen/skills/` | — | — | — |
+| <img src="logos/pi-ai.png" width="48"> | **Pi** | `.pi/skills/` | — | — | — |
+| <img src="logos/replit-com.png" width="48"> | **Replit** | `.agents/skills/` | — | — | — |
+| <img src="logos/kiro-dev.png" width="48"> | **Kiro CLI** | `.kiro/skills/` | — | — | — |
+| <img src="logos/github-com.png" width="48"> | **iFlow CLI** | `.iflow/skills/` | — | — | — |
+| <img src="logos/kimi-ai.png" width="48"> | **Kimi CLI** | `.agents/skills/` | — | — | — |
 
 ---
 
