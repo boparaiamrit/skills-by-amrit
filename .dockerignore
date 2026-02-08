@@ -1,0 +1,12 @@
+node_modules
+dist
+.git
+.github
+docs
+logos
+*.md
+!CLAUDE.md
+.gitignore
+.commit-msg.txt
+fetch_logos.py
+fix_logos.py

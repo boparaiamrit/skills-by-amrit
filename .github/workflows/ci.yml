@@ -7,10 +7,13 @@ on:
     branches: [main]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  # ─── Cross-platform CLI tests ────────────────────────
+  test:
+    runs-on: ${{ matrix.os }}
     strategy:
+      fail-fast: false
       matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
         node-version: [18, 20, 22]
 
     steps:
@@ -27,6 +30,7 @@ jobs:
       - name: Build
         run: npm run build
 
+      # ── Core CLI commands ────────────────────────────
       - name: Test CLI help
         run: node dist/cli.js help
 
@@ -39,7 +43,9 @@ jobs:
       - name: Test CLI version
         run: node dist/cli.js --version
 
+      # ── Install tests (bash works on all 3 OS via Git Bash) ──
       - name: Test install to Claude Code
+        shell: bash
         run: |
           mkdir -p /tmp/test-claude
           cd /tmp/test-claude
@@ -50,6 +56,7 @@ jobs:
           echo "✓ Claude Code install verified"
 
       - name: Test install to Cursor
+        shell: bash
         run: |
           mkdir -p /tmp/test-cursor
           cd /tmp/test-cursor
@@ -57,7 +64,18 @@ jobs:
           test -f .cursor/skills/systematic-debugging/SKILL.md
           echo "✓ Cursor install verified"
 
+      - name: Test install to Antigravity
+        shell: bash
+        run: |
+          mkdir -p /tmp/test-antigravity
+          cd /tmp/test-antigravity
+          node $GITHUB_WORKSPACE/dist/cli.js add --all -a antigravity -y
+          test -d .agent/skills/systematic-debugging
+          test -f .agent/skills/systematic-debugging/SKILL.md
+          echo "✓ Antigravity install verified"
+
       - name: Test install to multiple agents
+        shell: bash
         run: |
           mkdir -p /tmp/test-multi
           cd /tmp/test-multi
@@ -67,13 +85,29 @@ jobs:
           test -f .windsurf/skills/test-driven-development/SKILL.md
           echo "✓ Multi-agent install verified"
 
+      - name: Test install new skills (v3)
+        shell: bash
+        run: |
+          mkdir -p /tmp/test-v3
+          cd /tmp/test-v3
+          node $GITHUB_WORKSPACE/dist/cli.js add persistent-memory agent-team-coordination full-stack-api-integration product-completeness-audit brutal-exhaustive-audit -a claude-code -y
+          test -f .claude/skills/persistent-memory/SKILL.md
+          test -f .claude/skills/agent-team-coordination/SKILL.md
+          test -f .claude/skills/full-stack-api-integration/SKILL.md
+          test -f .claude/skills/product-completeness-audit/SKILL.md
+          test -f .claude/skills/brutal-exhaustive-audit/SKILL.md
+          echo "✓ New v3 skills install verified"
+
       - name: Test global install
+        shell: bash
         run: |
           node dist/cli.js add systematic-debugging -g -a claude-code -y
           test -f ~/.claude/skills/systematic-debugging/SKILL.md
           echo "✓ Global install verified"
 
+      # ── Asset count verification ─────────────────────
       - name: Verify skill count
+        shell: bash
         run: |
           SKILL_COUNT=$(find skills -name "SKILL.md" | wc -l)
           EXPECTED=$(node -e "const d=require('./package.json').description; console.log(d.match(/(\d+) skills/)[1])")
@@ -83,3 +117,60 @@ jobs:
           fi
           echo "✓ Skill count verified: $SKILL_COUNT (matches package.json)"
 
+      - name: Verify command count
+        shell: bash
+        run: |
+          CMD_COUNT=$(find commands -name "*.md" | wc -l)
+          EXPECTED=$(node -e "const d=require('./package.json').description; console.log(d.match(/(\d+) commands/)[1])")
+          if [ "$CMD_COUNT" -ne "$EXPECTED" ]; then
+            echo "❌ Command count mismatch: found $CMD_COUNT, package.json declares $EXPECTED"
+            exit 1
+          fi
+          echo "✓ Command count verified: $CMD_COUNT (matches package.json)"
+
+      - name: Verify workflow count
+        shell: bash
+        run: |
+          WF_COUNT=$(find workflows -name "*.md" | wc -l)
+          EXPECTED=$(node -e "const d=require('./package.json').description; console.log(d.match(/(\d+) workflows/)[1])")
+          if [ "$WF_COUNT" -ne "$EXPECTED" ]; then
+            echo "❌ Workflow count mismatch: found $WF_COUNT, package.json declares $EXPECTED"
+            exit 1
+          fi
+          echo "✓ Workflow count verified: $WF_COUNT (matches package.json)"
+
+  # ─── Docker build & test (Linux only) ────────────────
+  docker:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t skills-by-amrit:test .
+
+      - name: Test Docker — help
+        run: docker run --rm skills-by-amrit:test help
+
+      - name: Test Docker — list
+        run: docker run --rm skills-by-amrit:test list
+
+      - name: Test Docker — agents
+        run: docker run --rm skills-by-amrit:test agents
+
+      - name: Test Docker — version
+        run: docker run --rm skills-by-amrit:test --version
+
+      - name: Test Docker — install to workspace
+        run: |
+          mkdir -p /tmp/docker-test
+          docker run --rm -v /tmp/docker-test:/workspace skills-by-amrit:test add --all -a claude-code -y
+          test -d /tmp/docker-test/.claude/skills/systematic-debugging
+          test -f /tmp/docker-test/.claude/skills/systematic-debugging/SKILL.md
+          echo "✓ Docker workspace install verified"
+
+      - name: Test Docker — skill count
+        run: |
+          SKILL_COUNT=$(docker run --rm --entrypoint sh skills-by-amrit:test -c "find /app/skills -name 'SKILL.md' | wc -l")
+          echo "✓ Docker image contains $SKILL_COUNT skills"
+          [ "$SKILL_COUNT" -gt 0 ] || exit 1
