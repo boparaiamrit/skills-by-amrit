@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">🧠 Skills by Amrit</h1>
   <p align="center">
-    <strong>The ultimate AI agent skills framework — 29 skills · 25 commands · 29 workflows · 7 agents · 10 cursor rules</strong>
+    <strong>The ultimate AI agent skills framework — 30 skills · 25 commands · 29 workflows · 7 agents · 10 cursor rules</strong>
   </p>
   <p align="center">
     Make your AI coding assistant think like a staff engineer.
@@ -31,7 +31,7 @@
 
 | What's New | Count | Description |
 |:---|:---:|:---|
-| 🧠 **Skills** | 29 | All enhanced to 10/10 quality standard |
+| 🧠 **Skills** | 30 | All enhanced to 10/10 quality standard |
 | ⚡ **Commands** | 25 | Claude Code slash commands for project lifecycle |
 | 🔄 **Workflows** | 29 | Antigravity workflows with turbo-mode steps |
 | 🤖 **Agents** | 7 | Specialist agent definitions (researcher, executor, etc.) |
@@ -121,7 +121,7 @@ Skills by Amrit works with **30+ AI coding agents**. Each agent gets assets inst
 
 ## 📚 Complete Asset Catalog
 
-### 🧠 Skills (29)
+### 🧠 Skills (30)
 
 Skills are deep instructional documents that teach AI agents HOW to think about specific engineering tasks. Each skill contains principles, protocols, anti-patterns, and quality criteria.
 
@@ -177,12 +177,13 @@ Skills are deep instructional documents that teach AI agents HOW to think about 
 | 26 | 🏥 **product-completeness-audit** | Functional completeness verification — 5-level completeness spectrum, placeholder detection, broken flow identification, and API connection validation |
 | 27 | 🔬 **brutal-exhaustive-audit** | No-shortcuts 5-pass audit — build verification, route checking, data flow tracing, user flow testing, and edge case validation with anti-shortcut rules |
 
-#### 🔸 Meta (2 skills)
+#### 🔸 Meta (3 skills)
 
 | # | Skill | Description |
 |:---:|:---|:---|
 | 28 | 📘 **using-skills** | How to use and combine skills effectively in your workflow |
 | 29 | ✍️ **writing-skills** | How to create new skills — format, quality standards, and testing requirements |
+| 30 | 🔄 **codebase-conformity** | Pattern uniformity enforcement — read existing patterns before writing, match them exactly, double-verify conformity before claiming done |
 
 ---
 
@@ -655,14 +656,14 @@ npx skills-by-amrit help
 
 | Metric | Count |
 |:---:|:---:|
-| 🧠 Skills | **29** |
+| 🧠 Skills | **30** |
 | ⚡ Commands | **25** |
 | 🔄 Workflows | **29** |
 | 🤖 Agents | **7** |
 | 🎯 Cursor Rules | **10** |
 | 📏 Rules | **5** |
 | 🤖 Supported Agents | **34** |
-| 📄 Total Assets | **105** |
+| 📄 Total Assets | **106** |
 
 ---
 

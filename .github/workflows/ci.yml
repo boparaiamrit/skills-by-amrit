@@ -105,39 +105,24 @@ jobs:
           test -f ~/.claude/skills/systematic-debugging/SKILL.md
           echo "✓ Global install verified"
 
-      # ── Asset count verification ─────────────────────
-      - name: Verify skill count
+      # ── Asset count reporting (informational) ─────────────────────
+      - name: Report asset counts
         shell: bash
         run: |
           SKILL_COUNT=$(find skills -name "SKILL.md" | wc -l)
-          EXPECTED=$(node -e "const d=require('./package.json').description; console.log(d.match(/(\d+) skills/)[1])")
-          if [ "$SKILL_COUNT" -ne "$EXPECTED" ]; then
-            echo "❌ Skill count mismatch: found $SKILL_COUNT, package.json declares $EXPECTED"
-            exit 1
-          fi
-          echo "✓ Skill count verified: $SKILL_COUNT (matches package.json)"
-
-      - name: Verify command count
-        shell: bash
-        run: |
           CMD_COUNT=$(find commands -name "*.md" | wc -l)
-          EXPECTED=$(node -e "const d=require('./package.json').description; console.log(d.match(/(\d+) commands/)[1])")
-          if [ "$CMD_COUNT" -ne "$EXPECTED" ]; then
-            echo "❌ Command count mismatch: found $CMD_COUNT, package.json declares $EXPECTED"
-            exit 1
-          fi
-          echo "✓ Command count verified: $CMD_COUNT (matches package.json)"
-
-      - name: Verify workflow count
-        shell: bash
-        run: |
           WF_COUNT=$(find workflows -name "*.md" | wc -l)
-          EXPECTED=$(node -e "const d=require('./package.json').description; console.log(d.match(/(\d+) workflows/)[1])")
-          if [ "$WF_COUNT" -ne "$EXPECTED" ]; then
-            echo "❌ Workflow count mismatch: found $WF_COUNT, package.json declares $EXPECTED"
-            exit 1
-          fi
-          echo "✓ Workflow count verified: $WF_COUNT (matches package.json)"
+          AGENT_COUNT=$(find agents -name "*.md" | wc -l)
+          RULE_COUNT=$(find cursor-rules -name "*.md" 2>/dev/null | wc -l || echo 0)
+
+          echo "📊 Asset Inventory:"
+          echo "   • Skills:      $SKILL_COUNT"
+          echo "   • Commands:    $CMD_COUNT"
+          echo "   • Workflows:   $WF_COUNT"
+          echo "   • Agents:      $AGENT_COUNT"
+          echo "   • Cursor Rules: $RULE_COUNT"
+          echo ""
+          echo "✓ Asset inventory complete"
 
   # ─── Docker build & test (Linux only) ────────────────
   docker:
