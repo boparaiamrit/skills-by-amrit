@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examples — Skills by Amrit</title>
+  <meta name="description" content="Comprehensive usage examples for Skills by Amrit. Learn how to use skills, commands, workflows, and agents in Antigravity and Claude Code.">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
+  <style>
+    /* Agent Tabs */
+    .agent-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+    }
+    .agent-tab {
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .agent-tab:hover {
+      color: var(--text);
+    }
+    .agent-tab.active {
+      color: var(--accent-1);
+      border-bottom-color: var(--accent-1);
+    }
+    .agent-tab img {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Category Pills */
+    .category-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .category-pill {
+      padding: 8px 16px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .category-pill:hover {
+      border-color: var(--accent-1);
+      color: var(--text);
+    }
+    .category-pill.active {
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      border-color: transparent;
+      color: white;
+    }
+
+    /* Example Cards */
+    .example-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .example-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.2s;
+    }
+    .example-card:hover {
+      border-color: var(--accent-1);
+      transform: translateY(-2px);
+    }
+    .example-card h4 {
+      margin: 0 0 8px 0;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .example-card .tag {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      background: rgba(124,58,237,0.2);
+      color: var(--accent-1);
+      border-radius: 10px;
+      font-weight: 500;
+    }
+    .example-card p {
+      margin: 0 0 12px 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .example-card pre {
+      margin: 0;
+      padding: 12px 16px;
+      background: var(--bg-dark);
+      border-radius: 8px;
+      font-size: 0.85rem;
+      overflow-x: auto;
+    }
+    .example-card code {
+      color: var(--accent-2);
+    }
+
+    /* Collapsible */
+    .collapsible {
+      cursor: pointer;
+    }
+    .collapsible::after {
+      content: ' ▸';
+      color: var(--text-muted);
+    }
+    .collapsible.open::after {
+      content: ' ▾';
+    }
+    .collapse-content {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .collapse-content.open {
+      display: block;
+    }
+
+    /* Copy button */
+    .copy-btn {
+      position: absolute;
+      right: 8px;
+      top: 8px;
+      padding: 4px 8px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.75rem;
+      opacity: 0;
+      transition: all 0.2s;
+    }
+    .example-card:hover .copy-btn {
+      opacity: 1;
+    }
+    .copy-btn:hover {
+      background: var(--accent-1);
+      color: white;
+    }
+    .pre-wrapper {
+      position: relative;
+    }
+
+    /* Search */
+    .search-box {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+    }
+    .search-box:focus {
+      outline: none;
+      border-color: var(--accent-1);
+    }
+    .search-box::placeholder {
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
+  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+  <div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <h1>🧠 Skills by Amrit</h1>
+        <p>Examples Library</p>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">Navigation</div>
+        <a href="index.html" class="nav-link"><span class="nav-icon">🏠</span> Home</a>
+        <a href="#examples" class="nav-link active"><span class="nav-icon">📚</span> Examples</a>
+        <div class="nav-section">Categories</div>
+        <a href="#skills" class="nav-link"><span class="nav-icon">🧠</span> Skills (30)</a>
+        <a href="#commands" class="nav-link"><span class="nav-icon">⚡</span> Commands (25)</a>
+        <a href="#workflows" class="nav-link"><span class="nav-icon">🔄</span> Workflows (29)</a>
+        <a href="#agents" class="nav-link"><span class="nav-icon">🎭</span> Agents (7)</a>
+        <a href="#rules" class="nav-link"><span class="nav-icon">🎯</span> Rules (15)</a>
+        <div class="nav-section">Resources</div>
+        <a href="wiki/Examples.md" class="nav-link" target="_blank"><span class="nav-icon">📖</span> Wiki</a>
+        <a href="https://github.com/boparaiamrit/skills-by-amrit" class="nav-link" target="_blank"><span class="nav-icon">📦</span> GitHub</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Hero -->
+      <section class="hero" id="examples" style="padding-bottom: 40px;">
+        <div class="hero-badge">📚 Comprehensive Examples</div>
+        <h1>Learn by <span>Example</span></h1>
+        <p class="hero-sub">Real-world usage examples for every skill, command, workflow, agent, and rule. Switch between agents to see platform-specific syntax.</p>
+      </section>
+
+      <!-- Agent Tabs -->
+      <section class="section" style="padding-top: 0;">
+        <div class="agent-tabs">
+          <button class="agent-tab active" data-agent="antigravity">
+            <img src="../logos/gemini-google-com.png" alt="Antigravity"> Antigravity
+          </button>
+          <button class="agent-tab" data-agent="claude">
+            <img src="../logos/anthropic-com.png" alt="Claude Code"> Claude Code
+          </button>
+          <button class="agent-tab" data-agent="cursor">
+            <img src="../logos/cursor-com.png" alt="Cursor"> Cursor
+          </button>
+        </div>
+
+        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Search examples... (e.g., debug, memory, review)">
+
+        <!-- Skills Examples -->
+        <div id="skills" class="category-section">
+          <div class="section-header"><h2>🧠 Skills Examples</h2><p>Deep instructional documents that teach AI agents HOW to think.</p></div>
+
+          <div class="category-pills">
+            <button class="category-pill active" data-category="all">All</button>
+            <button class="category-pill" data-category="core">Core</button>
+            <button class="category-pill" data-category="audit">Auditing</button>
+            <button class="category-pill" data-category="integration">Integration</button>
+            <button class="category-pill" data-category="evolution">Evolution</button>
+            <button class="category-pill" data-category="intelligence">Intelligence</button>
+          </div>
+
+          <div class="example-grid">
+            <!-- systematic-debugging -->
+            <div class="example-card" data-category="core" data-search="debug bug error fix investigate hypothesis">
+              <h4>🐛 systematic-debugging <span class="tag">Core</span></h4>
+              <p>Hypothesis-driven debugging with evidence chains and root cause focus.</p>
+
+              <div class="tab-content active" data-agent="antigravity">
+                <div class="pre-wrapper">
+                  <pre><code>Please use the systematic-debugging skill to investigate why
+API calls to /api/users are timing out after 30 seconds.</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <p style="margin-top: 12px; font-size: 0.85rem; color: var(--text-muted);">Or use the workflow: <code>/debug "API timeout after 30s"</code></p>
+              </div>
+
+              <div class="tab-content" data-agent="claude">
+                <div class="pre-wrapper">
+                  <pre><code>@/debug "API calls to /api/users timing out after 30 seconds"</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <p style="margin-top: 12px; font-size: 0.85rem; color: var(--text-muted);">Or spawn specialist: <code>Spawn debugger agent</code></p>
+              </div>
+
+              <div class="tab-content" data-agent="cursor">
+                <div class="pre-wrapper">
+                  <pre><code>Use the systematic-debugging skill from .cursor/skills/ to
+investigate why API calls are timing out.</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+
+              <h5 class="collapsible" onclick="toggleCollapse(this)">See full example</h5>
+              <div class="collapse-content">
+                <pre><code>## Hypothesis Log
+
+### H1: Database connection timeout
+- Rationale: Error message mentions "connection reset"
+- Test: Check connection pool metrics
+- Result: ❌ REJECTED — Pool shows healthy connections
+
+### H2: Network proxy timeout
+- Rationale: 30s exactly matches proxy config
+- Test: Check nginx timeout settings
+- Result: ✅ CONFIRMED — proxy_read_timeout set to 30s
+
+## Fix Applied
+nginx.conf:42 — Changed proxy_read_timeout to 120s</code></pre>
+              </div>
+            </div>
+
+            <!-- codebase-conformity -->
+            <div class="example-card" data-category="integration" data-search="conform pattern style convention match existing code">
+              <h4>🎯 codebase-conformity <span class="tag">Integration</span></h4>
+              <p>Enforces pattern uniformity when adding code to existing codebases.</p>
+
+              <div class="tab-content active" data-agent="antigravity">
+                <div class="pre-wrapper">
+                  <pre><code>I need to add a new API endpoint for /api/reports.
+Please use codebase-conformity to match existing patterns.</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+
+              <div class="tab-content" data-agent="claude">
+                <div class="pre-wrapper">
+                  <pre><code>Add a new ReportCard component following existing component patterns.
+Use codebase-conformity to ensure I match the existing style.</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+
+              <div class="tab-content" data-agent="cursor">
+                <div class="pre-wrapper">
+                  <pre><code>Add endpoint for /api/reports matching existing API patterns.
+@codebase-conformity</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- persistent-memory -->
+            <div class="example-card" data-category="intelligence" data-search="memory session context remember">
+              <h4>💾 persistent-memory <span class="tag">Intelligence</span></h4>
+              <p>Cross-session memory that persists decisions and context.</p>
+
+              <div class="tab-content active" data-agent="antigravity">
+                <div class="pre-wrapper">
+                  <pre><code>/memory-sync</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <p style="margin-top: 12px; font-size: 0.85rem; color: var(--text-muted);">Auto-activates on session start/end via GEMINI.md</p>
+              </div>
+
+              <div class="tab-content" data-agent="claude">
+                <div class="pre-wrapper">
+                  <pre><code>@/memory status</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <p style="margin-top: 12px; font-size: 0.85rem; color: var(--text-muted);">Or: <code>@/memory save</code>, <code>@/memory restore</code></p>
+              </div>
+
+              <div class="tab-content" data-agent="cursor">
+                <div class="pre-wrapper">
+                  <pre><code>Read .planning/MEMORY.md and .planning/handoffs/LATEST.md
+to understand project context from previous sessions.</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- agent-team-coordination -->
+            <div class="example-card" data-category="intelligence" data-search="team multi agent role">
+              <h4>🤝 agent-team-coordination <span class="tag">Intelligence</span></h4>
+              <p>Multi-role team coordination with sequential role-switching.</p>
+
+              <div class="tab-content active" data-agent="antigravity">
+                <div class="pre-wrapper">
+                  <pre><code>/team-session full "Implement user authentication with OAuth"</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <p style="margin-top: 12px; font-size: 0.85rem; color: var(--text-muted);">Presets: <code>quick</code>, <code>full</code>, <code>debug</code></p>
+              </div>
+
+              <div class="tab-content" data-agent="claude">
+                <div class="pre-wrapper">
+                  <pre><code>@/team start full "Implement user authentication with OAuth"</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+
+              <div class="tab-content" data-agent="cursor">
+                <div class="pre-wrapper">
+                  <pre><code>Use agent-team-coordination skill to implement OAuth with:
+Researcher → Architect → Planner → Executor → Reviewer</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- code-review -->
+            <div class="example-card" data-category="core" data-search="review pr pull request feedback">
+              <h4>🔍 code-review <span class="tag">Core</span></h4>
+              <p>Multi-dimensional code review with severity-based feedback.</p>
+
+              <div class="tab-content active" data-agent="antigravity">
+                <div class="pre-wrapper">
+                  <pre><code>/review src/features/auth/</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+
+              <div class="tab-content" data-agent="claude">
+                <div class="pre-wrapper">
+                  <pre><code>@/review src/features/auth/</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+
+              <div class="tab-content" data-agent="cursor">
+                <div class="pre-wrapper">
+                  <pre><code>Review the auth feature code using .cursor/skills/code-review</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- brutal-exhaustive-audit -->
+            <div class="example-card" data-category="audit" data-search="audit exhaustive deep thorough complete">
+              <h4>🔬 brutal-exhaustive-audit <span class="tag">Audit</span></h4>
+              <p>No-shortcuts 5-pass audit covering build, routes, data flow, user flows, edge cases.</p>
+
+              <div class="tab-content active" data-agent="antigravity">
+                <div class="pre-wrapper">
+                  <pre><code>/deep-audit</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+
+              <div class="tab-content" data-agent="claude">
+                <div class="pre-wrapper">
+                  <pre><code>@/deep-audit</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+
+              <div class="tab-content" data-agent="cursor">
+                <div class="pre-wrapper">
+                  <pre><code>Run brutal-exhaustive-audit skill on this codebase.
+No shortcuts, verify everything.</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- security-audit -->
+            <div class="example-card" data-category="audit" data-search="security owasp vulnerability auth">
+              <h4>🔒 security-audit <span class="tag">Audit</span></h4>
+              <p>OWASP top 10, auth flows, secrets management, XSS/CSRF prevention.</p>
+
+              <div class="tab-content active" data-agent="antigravity">
+                <div class="pre-wrapper">
+                  <pre><code>/security-scan</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+
+              <div class="tab-content" data-agent="claude">
+                <div class="pre-wrapper">
+                  <pre><code>@/security-scan</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+
+              <div class="tab-content" data-agent="cursor">
+                <div class="pre-wrapper">
+                  <pre><code>Run security-audit skill. Check for OWASP top 10 vulnerabilities.</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- refactoring-safely -->
+            <div class="example-card" data-category="evolution" data-search="refactor clean improve restructure">
+              <h4>♻️ refactoring-safely <span class="tag">Evolution</span></h4>
+              <p>Incremental transformation with test coverage and safe rollback.</p>
+
+              <div class="tab-content active" data-agent="antigravity">
+                <div class="pre-wrapper">
+                  <pre><code>/refactor src/legacy/user-service.ts</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+
+              <div class="tab-content" data-agent="claude">
+                <div class="pre-wrapper">
+                  <pre><code>@/refactor src/legacy/user-service.ts</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+
+              <div class="tab-content" data-agent="cursor">
+                <div class="pre-wrapper">
+                  <pre><code>Safely refactor user-service.ts using refactoring-safely skill.
+Ensure tests pass after each change.</code></pre>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Commands Section -->
+        <div id="commands" class="category-section" style="margin-top: 48px;">
+          <div class="section-header"><h2>⚡ Commands Examples</h2><p>Claude Code slash commands for the complete project lifecycle.</p></div>
+
+          <div class="example-grid">
+            <div class="example-card" data-search="plan feature task">
+              <h4>📋 /plan</h4>
+              <p>Create detailed implementation plans with task decomposition.</p>
+              <div class="tab-content active" data-agent="antigravity">
+                <pre><code>/plan-feature "Add user notification preferences"</code></pre>
+              </div>
+              <div class="tab-content" data-agent="claude">
+                <pre><code>@/plan "Add user notification preferences"</code></pre>
+              </div>
+              <div class="tab-content" data-agent="cursor">
+                <pre><code>Create a plan for adding notification preferences using writing-plans skill</code></pre>
+              </div>
+            </div>
+
+            <div class="example-card" data-search="execute implement build">
+              <h4>⚙️ /execute</h4>
+              <p>Execute plans wave-by-wave with checkpoints.</p>
+              <div class="tab-content active" data-agent="antigravity">
+                <pre><code>/execute .planning/plans/notifications.md</code></pre>
+              </div>
+              <div class="tab-content" data-agent="claude">
+                <pre><code>@/execute .planning/plans/notifications.md</code></pre>
+              </div>
+              <div class="tab-content" data-agent="cursor">
+                <pre><code>Execute the plan in .planning/plans/notifications.md</code></pre>
+              </div>
+            </div>
+
+            <div class="example-card" data-search="commit git message conventional">
+              <h4>📝 /commit</h4>
+              <p>Create conventional commits with proper formatting.</p>
+              <div class="tab-content active" data-agent="antigravity">
+                <pre><code>/commit</code></pre>
+              </div>
+              <div class="tab-content" data-agent="claude">
+                <pre><code>@/commit</code></pre>
+              </div>
+              <div class="tab-content" data-agent="cursor">
+                <pre><code>Create a conventional commit for the current changes</code></pre>
+              </div>
+            </div>
+
+            <div class="example-card" data-search="test unit integration coverage">
+              <h4>🧪 /test</h4>
+              <p>Generate and run tests for code.</p>
+              <div class="tab-content active" data-agent="antigravity">
+                <pre><code>/test src/services/auth.ts</code></pre>
+              </div>
+              <div class="tab-content" data-agent="claude">
+                <pre><code>@/test src/services/auth.ts</code></pre>
+              </div>
+              <div class="tab-content" data-agent="cursor">
+                <pre><code>Generate tests for src/services/auth.ts</code></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Reference -->
+        <div id="quick-ref" class="category-section" style="margin-top: 48px;">
+          <div class="section-header"><h2>⚡ Quick Reference</h2><p>Common patterns at a glance.</p></div>
+
+          <table>
+            <thead>
+              <tr><th>Task</th><th>Antigravity</th><th>Claude Code</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Debug an issue</td><td><code>/debug "error message"</code></td><td><code>@/debug "error message"</code></td></tr>
+              <tr><td>Plan a feature</td><td><code>/plan-feature "description"</code></td><td><code>@/plan "description"</code></td></tr>
+              <tr><td>Execute a plan</td><td><code>/execute plan.md</code></td><td><code>@/execute plan.md</code></td></tr>
+              <tr><td>Code review</td><td><code>/review src/</code></td><td><code>@/review src/</code></td></tr>
+              <tr><td>Security scan</td><td><code>/security-scan</code></td><td><code>@/security-scan</code></td></tr>
+              <tr><td>Full audit</td><td><code>/deep-audit</code></td><td><code>@/deep-audit</code></td></tr>
+              <tr><td>Team session</td><td><code>/team-session full</code></td><td><code>@/team start full</code></td></tr>
+              <tr><td>Memory sync</td><td><code>/memory-sync</code></td><td><code>@/memory status</code></td></tr>
+              <tr><td>Generate tests</td><td><code>/test src/</code></td><td><code>@/test src/</code></td></tr>
+              <tr><td>Create commit</td><td><code>/commit</code></td><td><code>@/commit</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+      <footer class="footer">
+        <p>Built with <span class="footer-heart">❤️</span> by <a href="https://github.com/boparaiamrit">Amritpal Singh Boparai</a></p>
+        <p style="margin-top: 8px; font-size: 0.8rem;">Making AI agents think like staff engineers, one skill at a time.</p>
+        <p style="margin-top: 16px; font-size: 0.75rem;">
+          <a href="index.html">Home</a> ·
+          <a href="wiki/Examples.md">Wiki Examples</a> ·
+          <a href="https://github.com/boparaiamrit/skills-by-amrit">GitHub</a>
+        </p>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Agent tab switching
+    const agentTabs = document.querySelectorAll('.agent-tab');
+    agentTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const agent = tab.dataset.agent;
+
+        // Update active tab
+        agentTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+
+        // Update visible content
+        document.querySelectorAll('.tab-content').forEach(content => {
+          content.classList.remove('active');
+          if (content.dataset.agent === agent) {
+            content.classList.add('active');
+          }
+        });
+      });
+    });
+
+    // Category filtering
+    const categoryPills = document.querySelectorAll('.category-pill');
+    categoryPills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const category = pill.dataset.category;
+
+        // Update active pill
+        categoryPills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+
+        // Filter cards
+        document.querySelectorAll('.example-card[data-category]').forEach(card => {
+          if (category === 'all' || card.dataset.category === category) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Search functionality
+    const searchBox = document.getElementById('searchBox');
+    searchBox.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      document.querySelectorAll('.example-card').forEach(card => {
+        const searchText = card.dataset.search || '';
+        const title = card.querySelector('h4').textContent.toLowerCase();
+        const desc = card.querySelector('p').textContent.toLowerCase();
+        const matches = searchText.includes(query) || title.includes(query) || desc.includes(query);
+        card.style.display = matches ? 'block' : 'none';
+      });
+    });
+
+    // Collapsible sections
+    function toggleCollapse(el) {
+      el.classList.toggle('open');
+      el.nextElementSibling.classList.toggle('open');
+    }
+
+    // Copy to clipboard
+    function copyCode(btn) {
+      const code = btn.previousElementSibling.textContent;
+      navigator.clipboard.writeText(code);
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 1500);
+    }
+
+    // Mobile sidebar toggle
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('overlay').classList.toggle('show');
+    }
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (window.innerWidth <= 1024) toggleSidebar();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
