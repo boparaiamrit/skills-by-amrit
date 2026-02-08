@@ -85,3 +85,55 @@ Workflows are installed in `.agent/workflows/`. Use `/workflow-name` to execute 
 ## Persistent Memory
 
 If `.planning/MEMORY.md` exists, read it at session start and update it at session end. This provides cross-session context.
+
+---
+
+## 🚨 Pre-Commit Checklist (CRITICAL)
+
+**Before ending any session that modifies the repository:**
+
+### 1. Check for Uncommitted Changes
+```powershell
+git status --short
+```
+If files are modified/untracked, they MUST be committed.
+
+### 2. Verify Asset Counts Match
+When adding/removing skills, commands, workflows, agents, or rules:
+```powershell
+$skills = (Get-ChildItem -Path skills -Recurse -Filter "SKILL.md").Count
+$commands = (Get-ChildItem -Path commands -Filter "*.md").Count
+$workflows = (Get-ChildItem -Path workflows -Filter "*.md").Count
+$agents = (Get-ChildItem -Path agents -Filter "*.md").Count
+$rules = (Get-ChildItem -Path cursor-rules -Filter "*.md").Count
+
+Write-Host "Skills: $skills | Commands: $commands | Workflows: $workflows | Agents: $agents | Rules: $rules"
+```
+
+Update these files if counts changed:
+- `package.json` (description field)
+- `README.md` (metrics table)
+- `docs/index.html` (meta description)
+- `CHANGELOG.md` (for new skills)
+
+### 3. Commit ALL Modified Files
+```powershell
+git add -A
+git status  # Verify everything is staged
+```
+
+### 4. Use Temp File for Commit Message
+```powershell
+# Create commit message file
+Set-Content -Path ".commit-msg.txt" -Value "your message"
+git commit -F .commit-msg.txt
+Remove-Item .commit-msg.txt
+```
+
+### 5. Push Immediately
+```powershell
+git push
+```
+
+**⚠️ NEVER end a session with uncommitted changes!**
+
