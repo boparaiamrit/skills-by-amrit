@@ -16,7 +16,7 @@ You have a library of composable skills installed in `.agent/skills/`. Before an
 
 ## Core Principles
 
-Read and internalize `.agent/skills/_rules/SKILL.md` before any work.
+Read and internalize `rules/core-principles.md` before any work.
 
 **The three non-negotiables:**
 1. **Evidence before claims** — Never say "done" without verification
@@ -51,10 +51,14 @@ Skills activate automatically when their conditions are met. You MUST use the re
 | API integration | `full-stack-api-integration` |
 | Completeness check | `product-completeness-audit` |
 | Deep audit | `brutal-exhaustive-audit` |
+| Cross-session memory | `persistent-memory` |
+| Complex multi-step task | `agent-team-coordination` |
+| Creating new skills | `writing-skills` |
+| Discovering skills | `using-skills` |
 
 ## Anti-Hallucination Protocol
 
-Read `.agent/skills/_rules/SKILL.md`. Summary:
+Read `rules/anti-hallucination.md`. Summary:
 
 1. **Never fabricate** — If you don't know, say so
 2. **Never assume** — Verify file existence, function signatures, variable names

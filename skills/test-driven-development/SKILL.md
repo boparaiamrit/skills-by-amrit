@@ -45,6 +45,53 @@ Implement fresh from tests. Period.
 
 Thinking "skip TDD just this once"? Stop. That's rationalization.
 
+## When NOT to Use
+
+- Writing documentation (use `writing-documentation`)
+- Configuration changes with no behavioral impact
+- Evaluating approaches (use `brainstorming` first, then TDD the chosen approach)
+- CSS-only styling changes (visual verification, not testable behavior)
+
+## Anti-Shortcut Rules
+
+```
+YOU CANNOT:
+- Write production code first "to understand the problem" — the test IS how you understand it
+- Write multiple tests before any implementation — one test, one implementation cycle
+- Skip the RED phase — if you didn't see it fail, you don't know what it tests
+- Accept a test that passes without implementation — the test is wrong
+- Modify a test to make it pass — the implementation must satisfy the test
+- Refactor while tests are RED — GREEN first, then refactor
+- Write tests that test implementation details — test BEHAVIOR
+- Skip the REFACTOR phase — "it works" is not the end, "it's clean" is
+```
+
+## Common Rationalizations
+
+| Excuse | Reality |
+|--------|---------|
+| "I'll write tests after" | You won't. And if you do, they'll test your implementation, not requirements |
+| "It's too simple to test" | If it's too simple to test, it's too simple to get wrong. So write the test |
+| "Tests slow me down" | Tests slow you down NOW. Bugs slow you down MORE later |
+| "I need to see the code first" | TDD IS how you see the code — one test at a time |
+| "The framework handles this" | Does it? Prove it with a test |
+| "It works, I checked manually" | Manual checking doesn't prevent regressions |
+| "I'll just write a few tests at the end" | Post-hoc tests verify implementation, not behavior. They're testing the code you wrote, not the code you need |
+| "This test is too hard to write" | If it's too hard to test, the design is wrong. Simplify the interface |
+
+## Iron Questions
+
+```
+1. Have I written the test BEFORE any production code?
+2. Did I watch the test FAIL? (not just "error" — fail for the RIGHT reason)
+3. Is this test testing BEHAVIOR, not implementation details?
+4. Is the test name a specification? ("should reject email without @")
+5. Would this test still pass after a refactor of the implementation?
+6. Am I writing the MINIMUM code to pass this one test?
+7. Did I resist the urge to add "extra" code that no test requires?
+8. After refactoring, do all tests still pass?
+```
+
 ## Red-Green-Refactor
 
 ### RED — Write Failing Test
@@ -103,14 +150,29 @@ Next behavior, next test, next cycle.
 
 ## Good Tests
 
-| Quality | Characteristic |
-|---------|---------------|
-| **Fast** | Each test < 100ms. Slow tests get skipped |
-| **Isolated** | No test depends on another test's state |
-| **Deterministic** | Same result every time. No flaky tests |
-| **Specific** | Tests one behavior. Fails for one reason |
-| **Readable** | Test name is the specification |
-| **Complete** | Covers happy path AND error paths |
+| Quality | Characteristic | Example |
+|---------|---------------|---------|
+| **Fast** | Each test < 100ms | Mock external services, use in-memory DBs |
+| **Isolated** | No test depends on another test's state | Clean setup/teardown per test |
+| **Deterministic** | Same result every time | No time-dependent logic, no randomness |
+| **Specific** | Tests one behavior. Fails for one reason | One assertion per test path |
+| **Readable** | Test name is the specification | `should_return_404_when_user_not_found` |
+| **Complete** | Covers happy path AND error paths | Test success, failure, and edge cases |
+
+## Test Structure (AAA Pattern)
+
+```python
+def test_should_reject_email_without_at_symbol():
+    # Arrange — set up the context
+    email = "invalidemail.com"
+
+    # Act — perform the action
+    result = validate_email(email)
+
+    # Assert — verify the outcome
+    assert result.valid is False
+    assert result.error == "Email must contain @ symbol"
+```
 
 ## Testing Anti-Patterns
 
@@ -124,17 +186,8 @@ Next behavior, next test, next cycle.
 | Snapshot abuse | Meaningless diffs, auto-updated | Targeted assertions instead |
 | "Arrange, Assert" (skip Act) | Test doesn't test anything | Always have explicit action |
 | Giant test functions | Can't tell what failed | One assertion per test path |
-
-## Common Rationalizations
-
-| Excuse | Reality |
-|--------|---------|
-| "I'll write tests after" | You won't. And if you do, they'll test your implementation, not requirements |
-| "It's too simple to test" | If it's too simple to test, it's too simple to get wrong. So write the test |
-| "Tests slow me down" | Tests slow you down NOW. Bugs slow you down MORE later |
-| "I need to see the code first" | TDD IS how you see the code — one test at a time |
-| "The framework handles this" | Does it? Prove it with a test |
-| "It works, I checked manually" | Manual checking doesn't prevent regressions |
+| Testing private methods | Couples tests to implementation | Test through the public interface |
+| Overly specific assertions | Fragile tests | Assert what matters, ignore what doesn't |
 
 ## Bug Fix Protocol
 
@@ -159,9 +212,11 @@ When fixing a bug:
 - Skipped RED phase → You don't know what you're testing
 - 10+ tests in one file with no implementation → Over-planning, start implementing
 - Implementation is "close enough" → Either it passes or it doesn't
+- Testing private methods / internal state → Test behavior through public API
 
 ## Integration
 
 - **During:** `executing-plans` uses TDD for each task
 - **After:** `verification-before-completion` confirms all tests pass
 - **Review:** `code-review` checks TDD compliance
+- **Plans:** `writing-plans` includes test code in every task

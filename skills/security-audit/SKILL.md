@@ -27,6 +27,54 @@ NO DEPLOY WITHOUT SECURITY REVIEW. NO USER INPUT WITHOUT VALIDATION.
 - After dependency updates
 - When implementing authentication/authorization
 
+## When NOT to Use
+
+- Active security breach in progress (use `incident-response` to contain, then this skill)
+- Purely visual/UI changes with no data flow (use `frontend-audit`)
+- Performance investigation only (use `performance-audit`)
+
+## Anti-Shortcut Rules
+
+```
+YOU CANNOT:
+- Say "auth is handled" without tracing EVERY endpoint — one unprotected endpoint = breach
+- Say "input is validated" without testing malicious input — test with: ', ", <, >, --, NULL, ${}, {{}}
+- Assume the framework handles security — frameworks have defaults, defaults get overridden
+- Skip authorization checks because "authentication is in place" — auth ≠ authz
+- Trust client-side validation alone — server-side validation is mandatory
+- Say "we use HTTPS" without checking HSTS, certificate pinning, and redirect behavior
+- Skip dependency security because "we use popular packages" — popularity ≠ security
+- Mark a finding as "Low" because exploitation seems unlikely — severity = impact × exploitability
+```
+
+## Common Rationalizations (Don't Accept These)
+
+| Rationalization | Reality |
+|----------------|---------|
+| "We're behind a firewall" | Firewalls don't prevent insider threats or lateral movement |
+| "Nobody would try that" | Automated scanners try everything. Constantly. |
+| "The framework handles security" | Frameworks handle defaults. Your code handles everything else. |
+| "It's an internal tool" | Internal tools get attacked through compromised accounts |
+| "We'll add security later" | Security retrofit costs 10x more than building it in |
+| "This endpoint isn't sensitive" | Every endpoint is an attack surface |
+| "We obscure the URL" | Security through obscurity is not security |
+| "Only admins use this" | Admin accounts get compromised too |
+
+## Iron Questions
+
+```
+1. Can I access this endpoint WITHOUT authentication? (test it — don't read the code)
+2. Can user A access user B's data by changing an ID in the URL? (IDOR test)
+3. What happens if I send a SQL string as input? (injection test)
+4. What happens if I send <script>alert(1)</script> as input? (XSS test)
+5. Are there secrets in the source code or git history? (grep for keys, passwords, tokens)
+6. Does the error response reveal internal details? (stack traces, SQL queries, file paths)
+7. Can I escalate my privileges? (change role in request, access admin endpoints)
+8. Are all dependencies free of known CVEs? (run audit tool)
+9. Is sensitive data encrypted at rest and in transit?
+10. What happens if a token is stolen? (scope, expiry, revocation)
+```
+
 ## The Audit Process
 
 ### Phase 1: Authentication
@@ -36,6 +84,7 @@ NO DEPLOY WITHOUT SECURITY REVIEW. NO USER INPUT WITHOUT VALIDATION.
 2. WHERE is auth checked? (middleware, per-route, manual)
 3. WHAT happens when auth fails? (redirect, 401, error page)
 4. ARE there endpoints without auth that should have it?
+5. TEST: Send requests without auth token — what happens?
 ```
 
 **Checklist:**
@@ -47,10 +96,11 @@ NO DEPLOY WITHOUT SECURITY REVIEW. NO USER INPUT WITHOUT VALIDATION.
 | Rate limiting on login endpoint | |
 | Account lockout after failed attempts | |
 | Session invalidation on password change | |
-| JWT tokens have reasonable expiry | |
+| JWT tokens have reasonable expiry (< 1 hour for access) | |
 | Refresh tokens properly rotated | |
 | Remember-me tokens properly scoped | |
 | Multi-factor authentication available (for sensitive apps) | |
+| Auth tokens not stored in localStorage (use httpOnly cookies) | |
 
 ### Phase 2: Authorization
 
@@ -59,6 +109,7 @@ NO DEPLOY WITHOUT SECURITY REVIEW. NO USER INPUT WITHOUT VALIDATION.
 2. ARE role checks consistent across all endpoints?
 3. CAN users escalate their own privileges?
 4. ARE there admin pages accessible without admin check?
+5. TEST each endpoint with different role tokens
 ```
 
 **Test patterns:**
@@ -88,6 +139,17 @@ GET /api/debug/logs          # Should this be exposed?
 6. Header injection — Is user input in HTTP headers?
 ```
 
+**Detection patterns:**
+
+| Attack | Code to Search For | Vulnerable Pattern |
+|--------|-------------------|-------------------|
+| SQL Injection | `query(`, `raw(`, `execute(` | String concatenation with user input |
+| XSS | `innerHTML`, `dangerouslySetInnerHTML`, `v-html` | Unescaped user content in HTML |
+| Command Injection | `exec(`, `system(`, `spawn(` | User input in shell commands |
+| Path Traversal | `readFile(`, `open(`, `join(` | User input in file paths without sanitization |
+| Template Injection | `render_template_string(`, `eval(` | User input in template expressions |
+| SSRF | `fetch(`, `request(`, `axios(` | User-controlled URLs in server requests |
+
 **Framework-specific checks:**
 
 | Framework | Injection Risk | Check |
@@ -107,6 +169,7 @@ GET /api/debug/logs          # Should this be exposed?
 3. CHECK logs — do they contain PII, tokens, or passwords?
 4. CHECK source code — are secrets committed?
 5. CHECK environment — are secrets properly managed?
+6. CHECK git history — were secrets ever committed (even if removed)?
 ```
 
 **Common leaks:**
@@ -119,6 +182,8 @@ GET /api/debug/logs          # Should this be exposed?
 | Internal IPs/hostnames | API responses, headers |
 | User emails in URLs | URL patterns, logs |
 | Tokens in URL params | Should be in headers/cookies |
+| Passwords in logs | Log sanitization filters |
+| PII in error tracking | Sentry/Datadog config |
 
 ### Phase 5: Dependency Security
 
@@ -128,6 +193,7 @@ GET /api/debug/logs          # Should this be exposed?
 3. IDENTIFY end-of-life dependencies
 4. CHECK for typosquatting (similar package names)
 5. REVIEW dependency permissions (file access, network, etc.)
+6. CHECK for supply chain risks (maintainer account compromises)
 ```
 
 ### Phase 6: Infrastructure
@@ -172,6 +238,9 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 ### 🟡 Medium — Schedule Fix
 [...]
 
+### 🟢 Low — Improvement Opportunity
+[...]
+
 ## Coverage Matrix
 
 | Area | Status | Notes |
@@ -190,15 +259,19 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 ## Red Flags — Escalate Immediately
 
 - Plaintext passwords anywhere
-- API keys/secrets in source code
+- API keys/secrets in source code or git history
 - Admin endpoints without authentication
 - Raw SQL with string concatenation from user input
 - `eval()` or `exec()` with user input
 - CORS set to `*` in production
 - No rate limiting on auth endpoints
+- JWT tokens with no expiry
+- Sensitive data in URL parameters
+- No HTTPS enforcement
 
 ## Integration
 
 - **Part of:** Full codebase audit with `architecture-audit`
 - **Requires:** `dependency-audit` for package-level checks
 - **Triggers:** `incident-response` if active vulnerabilities found
+- **After:** `writing-plans` for remediation work

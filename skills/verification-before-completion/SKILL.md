@@ -21,6 +21,65 @@ NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 
 If you haven't run the verification command *in this response*, you cannot claim it passes.
 
+## When to Use
+
+**Always — before ANY of these claims:**
+- "Tests pass"
+- "Build succeeds"
+- "Bug is fixed"
+- "Feature is complete"
+- "Linter is clean"
+- "Type-safe"
+- "No regressions"
+- "It works"
+- "Done"
+
+## When NOT to Use
+
+This skill has no exceptions. If you're about to claim something is done, use this skill.
+
+## Anti-Shortcut Rules
+
+```
+YOU CANNOT:
+- Say "should work" — run it and show the output
+- Say "tests pass" without test output in this response — stale evidence is not evidence
+- Say "build succeeds" because "linter passed" — they're different things
+- Trust a sub-agent's success claim — verify independently
+- Use "looks good" as verification — what command proves it?
+- Claim "done" based on mental reasoning — evidence is output, not thought
+- Skip full test suite because "only this file changed" — regressions are unexpected
+- Express satisfaction ("Great!", "Perfect!") before verification — verify, then celebrate
+```
+
+## Common Rationalizations (Don't Accept These)
+
+| Excuse | Reality |
+|--------|---------|
+| "Should work now" | RUN the verification |
+| "I'm confident" | Confidence ≠ evidence |
+| "Just this once" | No exceptions |
+| "Linter passed" | Linter ≠ compiler ≠ tests |
+| "Agent said success" | Verify independently |
+| "I'm tired" | Exhaustion ≠ excuse |
+| "Partial check is enough" | Partial proves nothing |
+| "Different words, so rule doesn't apply" | Spirit over letter |
+| "I checked mentally" | Mental checks aren't evidence |
+| "It's a trivial change" | Trivial changes cause most outages |
+
+## Iron Questions
+
+```
+1. What COMMAND proves this claim? (name the exact command)
+2. Have I run that command in THIS response? (not earlier, not "just now")
+3. Does the output ACTUALLY confirm the claim? (read the output — don't skim)
+4. Did I check the EXIT CODE? (0 = success, not always)
+5. Are there any WARNINGS I'm ignoring? (warnings often become errors)
+6. Did I run the FULL relevant suite? (not just one test)
+7. Am I claiming more than the evidence shows? ("tests pass" vs "these 3 tests pass")
+8. Would I bet money on this claim based on this evidence? (if not, gather more)
+```
+
 ## The Gate Function
 
 ```
@@ -41,15 +100,50 @@ Skip any step = lying, not verifying.
 
 | Claim | Requires | Not Sufficient |
 |-------|----------|----------------|
-| "Tests pass" | Test output: 0 failures | Previous run, "should pass" |
+| "Tests pass" | Test output: 0 failures, all pass | Previous run, "should pass" |
 | "Build succeeds" | Build output: exit 0 | "Linter passed" |
-| "Linter clean" | Linter output: 0 errors | Partial check |
-| "Bug fixed" | Reproduction test passes | "Code changed" |
+| "Linter clean" | Linter output: 0 errors, 0 warnings | Partial check |
+| "Bug fixed" | Reproduction test passes + no regressions | "Code changed" |
 | "Type-safe" | Type checker output: 0 errors | "No red squiggles" |
-| "Feature complete" | Line-by-line requirement check | "Tests pass" |
+| "Feature complete" | Line-by-line requirement check + all tests | "Tests pass" |
 | "No regressions" | Full suite green | Targeted tests only |
 | "Agent completed" | VCS diff of actual changes | Agent's "success" claim |
-| "Deployed" | Health check returns 200 | Deploy command exit |
+| "Deployed" | Health check returns 200 + metrics stable | Deploy command exit 0 |
+| "Performance improved" | Before/after benchmarks | "Feels faster" |
+| "Security fixed" | Vulnerability scan passes | "Patched the code" |
+
+## Patterns
+
+### Tests
+```
+✅ [Run test command] → [Output shows: 34/34 pass] → "All 34 tests pass"
+❌ "Should pass now"
+❌ "Tests look correct"
+```
+
+### Regression Test (TDD Red-Green)
+```
+✅ Write test → Run (FAIL) → Fix → Run (PASS) → Revert fix → Run (FAIL) → Restore → Run (PASS)
+❌ "I wrote a regression test" (without red-green cycle)
+```
+
+### Build
+```
+✅ [Run build] → [Output shows: exit 0, no errors] → "Build passes"
+❌ "Linter passed, so build should be fine"
+```
+
+### Requirements
+```
+✅ Re-read plan → Create checklist → Verify each item with evidence → Report gaps or completion
+❌ "Tests pass, so feature is complete"
+```
+
+### Deployment
+```
+✅ Deploy → Health check → Metrics stable for 15min → Error rate baseline →  "Deployed successfully"
+❌ "Deploy command succeeded"
+```
 
 ## Red Flags — STOP
 
@@ -64,54 +158,10 @@ You are about to violate this rule if:
 - Tired and wanting to be done
 - **ANY wording implying success without having run verification**
 
-## Rationalization Prevention
-
-| Excuse | Reality |
-|--------|---------|
-| "Should work now" | RUN the verification |
-| "I'm confident" | Confidence ≠ evidence |
-| "Just this once" | No exceptions |
-| "Linter passed" | Linter ≠ compiler ≠ tests |
-| "Agent said success" | Verify independently |
-| "I'm tired" | Exhaustion ≠ excuse |
-| "Partial check is enough" | Partial proves nothing |
-| "Different words, so rule doesn't apply" | Spirit over letter |
-| "I checked mentally" | Mental checks aren't evidence |
-
-## Patterns
-
-### Tests
-
-```
-✅ [Run test command] → [Output shows: 34/34 pass] → "All 34 tests pass"
-❌ "Should pass now"
-❌ "Tests look correct"
-```
-
-### Regression Test (TDD Red-Green)
-
-```
-✅ Write test → Run (FAIL) → Fix → Run (PASS) → Revert fix → Run (FAIL) → Restore → Run (PASS)
-❌ "I wrote a regression test" (without red-green cycle)
-```
-
-### Build
-
-```
-✅ [Run build] → [Output shows: exit 0, no errors] → "Build passes"
-❌ "Linter passed, so build should be fine"
-```
-
-### Requirements
-
-```
-✅ Re-read plan → Create checklist → Verify each item → Report gaps or completion
-❌ "Tests pass, so feature is complete"
-```
-
 ## Integration
 
 - **Used after:** Every `executing-plans` task
 - **Used after:** Every `systematic-debugging` fix
 - **Used before:** Every `git-workflow` merge
 - **Enables:** Honest `code-review` findings
+- **Prevents:** False "done" claims in `incident-response`

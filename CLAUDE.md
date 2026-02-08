@@ -48,6 +48,13 @@ Skills activate automatically when their conditions are met. You MUST use the re
 | Production incident | `incident-response` |
 | Writing docs | `writing-documentation` |
 | Git operations | `git-workflow` |
+| API integration | `full-stack-api-integration` |
+| Completeness check | `product-completeness-audit` |
+| Deep audit | `brutal-exhaustive-audit` |
+| Cross-session memory | `persistent-memory` |
+| Complex multi-step task | `agent-team-coordination` |
+| Creating new skills | `writing-skills` |
+| Discovering skills | `using-skills` |
 
 ## Anti-Hallucination Protocol
 
@@ -70,16 +77,65 @@ All findings use the standard severity framework from `rules/severity-framework.
 | 🟢 | Low | Improvement opportunity, backlog |
 | ⚪ | Info | Observation, no action needed |
 
+## Commands
+
+Slash commands are available in `commands/`. Key commands:
+
+| Command | Purpose |
+|---------|---------|
+| `/audit` | Run security, performance, architecture, or database audit |
+| `/debug` | Systematic debugging with root cause analysis |
+| `/deep-audit` | Brutal 5-pass exhaustive audit |
+| `/execute` | Execute implementation plans with wave-based parallelization |
+| `/verify` | Validate implementations against plans |
+| `/plan` | Create granular implementation plans |
+| `/quick` | Execute small tasks without full planning |
+| `/commit` | Create conventional commits |
+| `/team` | Multi-agent team coordination |
+| `/memory` | Persistent memory management |
+| `/progress` | Project progress dashboard |
+| `/init-project` | Bootstrap `.planning/` directory |
+
+## Agents
+
+Specialist agents are available in `agents/` for subagent spawning:
+
+| Agent | Role |
+|-------|------|
+| `debugger` | Scientific hypothesis-driven debugging |
+| `verifier` | Implementation verification and gap analysis |
+| `mapper` | Codebase structural mapping |
+| `planner` | Task decomposition and wave planning |
+| `researcher` | Evidence-based code research |
+| `executor` | Plan implementation with verification |
+| `reviewer` | Code review and quality assessment |
+
 ## File Structure
 
 ```
 skills-by-amrit/
 ├── CLAUDE.md              ← You are here
+├── GEMINI.md              ← Gemini/Antigravity entry point
 ├── rules/                 ← Non-negotiable principles
 │   ├── core-principles.md
 │   ├── anti-hallucination.md
-│   └── severity-framework.md
-└── skills/                ← Composable skill library
+│   ├── severity-framework.md
+│   ├── memory-protocol.md
+│   └── team-protocol.md
+├── commands/              ← Slash commands (25 commands)
+│   ├── audit.md
+│   ├── debug.md
+│   ├── deep-audit.md
+│   ├── execute.md
+│   ├── verify.md
+│   └── ... (20 more)
+├── agents/                ← Specialist subagents (7 agents)
+│   ├── debugger.md
+│   ├── verifier.md
+│   ├── mapper.md
+│   └── ... (4 more)
+├── cursor-rules/          ← Cursor IDE rules (10 rules)
+└── skills/                ← Composable skill library (29 skills)
     ├── brainstorming/
     ├── writing-plans/
     ├── executing-plans/
@@ -102,6 +158,11 @@ skills-by-amrit/
     ├── writing-documentation/
     ├── codebase-mapping/
     ├── incident-response/
+    ├── full-stack-api-integration/
+    ├── product-completeness-audit/
+    ├── brutal-exhaustive-audit/
+    ├── persistent-memory/
+    ├── agent-team-coordination/
     ├── writing-skills/
     └── using-skills/
 ```

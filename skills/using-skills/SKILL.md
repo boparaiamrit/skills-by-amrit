@@ -11,6 +11,35 @@ Skills are not optional reading — they are mandatory workflows when their acti
 
 **Core principle:** If a skill exists for your situation, you MUST use it. Not using it is a process violation.
 
+## The Iron Law
+
+```
+IF A SKILL EXISTS FOR YOUR SITUATION, YOU MUST USE IT. NO EXCEPTIONS.
+```
+
+## When to Use
+
+- Before starting any task (check if a skill applies)
+- When composing multiple skills for complex work
+- When unsure which skill applies
+
+## When NOT to Use
+
+This is a meta-skill. It's always relevant. Check it before every task.
+
+## Anti-Shortcut Rules
+
+```
+YOU CANNOT:
+- Skip checking for applicable skills — check before EVERY task
+- Cherry-pick parts of a skill — follow it completely or not at all
+- Say "I know the gist" and skip reading SKILL.md — read it fully every time
+- Override Iron Laws with rationalizations — Iron Laws are absolute
+- Skip a skill because "this task is simple" — simple tasks have applicable skills too
+- Use a skill partially and claim you followed it — partial compliance ≠ compliance
+- Deviate from a skill without documenting why and getting approval
+```
+
 ## How Skills Work
 
 ### Automatic Activation
@@ -54,6 +83,10 @@ verification-before-completion → Final verification
 | Production incident | incident-response → systematic-debugging → test-driven-development |
 | New API endpoint | brainstorming → api-design-audit → writing-plans → executing-plans |
 | Frontend feature | brainstorming → frontend-audit → writing-plans → executing-plans |
+| Deep quality check | product-completeness-audit → brutal-exhaustive-audit |
+| API integration | full-stack-api-integration → verification-before-completion |
+| Documentation | writing-documentation → code-review |
+| Multi-role task | agent-team-coordination → (skills per role) |
 
 ## Skill Discovery
 
@@ -62,9 +95,10 @@ When starting a task:
 ```
 1. READ the task description
 2. IDENTIFY keywords that match skill descriptions
-3. CHECK the CLAUDE.md activation table
+3. CHECK the entry point file activation table
 4. IF match found → READ the SKILL.md before proceeding
-5. IF no match → Proceed with general principles from core-principles.md
+5. IF multiple matches → compose them in logical order
+6. IF no match → Proceed with general principles from core-principles.md
 ```
 
 ## Rules for Skill Usage
@@ -92,6 +126,10 @@ Skills are designed to work together. When multiple skills apply, use all of the
 
 If you need to deviate from a skill (rare), document why and get approval.
 
+### Do Re-Read Skills
+
+Even if you've used a skill before, re-read the SKILL.md each time. Skills get updated and your memory is imperfect.
+
 ## Quick Reference
 
 | Need | Skill |
@@ -115,4 +153,15 @@ If you need to deviate from a skill (rare), document why and get approval.
 | "Check accessibility" | accessibility-audit |
 | "Check CI/CD" | ci-cd-audit |
 | "Git help" | git-workflow |
+| "Check completeness" | product-completeness-audit |
+| "Deep exhaustive audit" | brutal-exhaustive-audit |
+| "Integrate an API" | full-stack-api-integration |
+| "Multi-agent task" | agent-team-coordination |
+| "Cross-session context" | persistent-memory |
 | "Create a new skill" | writing-skills |
+
+## Integration
+
+- This is a meta-skill: used to discover and apply other skills
+- Pairs with `writing-skills` for creating new skills
+- References all other skills in the library

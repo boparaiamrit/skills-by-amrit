@@ -25,6 +25,50 @@ NO CHANGES TO A CODEBASE YOU HAVEN'T MAPPED. NO ASSUMPTIONS ABOUT STRUCTURE.
 - When onboarding to a team
 - When the codebase feels "confusing"
 
+## When NOT to Use
+
+- You've already mapped this codebase and it hasn't changed significantly
+- Simple bug fix in a file you already understand (use `systematic-debugging`)
+- Adding to an area you've recently worked in (context is fresh)
+
+## Anti-Shortcut Rules
+
+```
+YOU CANNOT:
+- Start modifying code before completing the mapping — understand first, change second
+- Assume structure from directory names — read the actual files
+- Skip the dependency analysis — hidden dependencies create hidden bugs
+- Map only the parts you think are relevant — map the whole system, surprises hide in corners
+- Trust the README as ground truth — READMEs age, code doesn't lie
+- Skip the data model phase — the data model IS the architecture for most systems
+- Stop at the directory tree — trace actual data flows through the code
+- Declare mapping complete without tracing at least 2 critical flows end-to-end
+```
+
+## Common Rationalizations (Don't Accept These)
+
+| Rationalization | Reality |
+|----------------|---------|
+| "I just need to fix this one file" | One file connects to other files. Map first. |
+| "The README explains everything" | READMEs explain intent. Code reveals reality. |
+| "It's a small project, I can figure it out" | Small projects still have hidden complexity. |
+| "I've worked with this framework before" | Framework knowledge ≠ project knowledge. |
+| "I'll learn as I go" | Learning by breaking things is not mapping. |
+| "The tests explain the behavior" | Tests explain expected behavior. Code reveals actual behavior. |
+
+## Iron Questions
+
+```
+1. Can I explain what this system does in 2 sentences? (if not, keep mapping)
+2. Can I trace a request from entry point to database and back? (if not, trace it)
+3. What are the 3 most important files in this codebase? (know the core)
+4. Where does authentication happen? (one of the first things to understand)
+5. Where does business logic live? (separate from infrastructure?)
+6. What are the external dependencies? (APIs, services, databases)
+7. What's the test coverage picture? (well-tested, partially tested, untested)
+8. Are there any surprises? (unexpected patterns, odd file locations, magic)
+```
+
 ## The Mapping Process
 
 ### Phase 1: Surface Scan (5 minutes)
@@ -63,7 +107,7 @@ NO CHANGES TO A CODEBASE YOU HAVEN'T MAPPED. NO ASSUMPTIONS ABOUT STRUCTURE.
 
 ```markdown
 ## Structure Map
-\`\`\`
+```
 project/
 ├── src/           [N files] — Source code
 │   ├── api/       [N files] — API endpoints
@@ -73,7 +117,7 @@ project/
 ├── tests/         [N files] — Test suite
 ├── config/        [N files] — Configuration
 └── docs/          [N files] — Documentation
-\`\`\`
+```
 
 **Pattern:** [Layered / MVC / Hexagonal / etc.]
 **Core:** Business logic in [directory]
@@ -88,6 +132,17 @@ project/
 4. FLAG outdated or deprecated dependencies
 5. UNDERSTAND the tech stack
 ```
+
+**Dependency categories to identify:**
+
+| Category | Examples | Why It Matters |
+|----------|----------|---------------|
+| Framework | Express, Django, Rails | Core constraints and patterns |
+| Database | Prisma, SQLAlchemy, TypeORM | Data access patterns |
+| Auth | Passport, JWT, OAuth libs | Security model |
+| Testing | Jest, pytest, RSpec | Test capabilities |
+| Build | Webpack, Vite, esbuild | Build pipeline |
+| Monitoring | Sentry, Datadog | Observability |
 
 ### Phase 4: Data Model (10 minutes)
 
@@ -109,6 +164,18 @@ project/
 3. MAP the call chain for each flow
 ```
 
+**Flow tracing template:**
+
+```markdown
+### Flow: [Name]
+1. Entry: [file:function] — receives [what]
+2. Middleware: [file:function] — validates/transforms [what]
+3. Handler: [file:function] — processes [what]
+4. Service: [file:function] — business logic for [what]
+5. Repository: [file:function] — database [operation]
+6. Response: [format] — returns [what]
+```
+
 ### Phase 6: Health Indicators (5 minutes)
 
 ```
@@ -117,6 +184,7 @@ project/
 3. CHECK issue tracker (known problems?)
 4. CHECK CI/CD (automated builds and deploys?)
 5. CHECK documentation freshness
+6. CHECK code quality tools (linter, formatter, type checker)
 ```
 
 ## Output: The System Map
@@ -157,6 +225,7 @@ project/
 | Last commit | [date] |
 | CI/CD | Present / Missing |
 | Documentation | Current / Outdated / Missing |
+| Code quality tools | [Linter / Formatter / None] |
 
 ## Red Flags
 [Any immediate concerns noted during mapping]
@@ -171,9 +240,11 @@ project/
 - No tests directory
 - No CI/CD configuration
 - Node_modules or vendor committed
-- Secrets in code
+- Secrets in code (grep for `password`, `secret`, `key`, `token`)
 - Last commit > 6 months ago
 - > 50 direct dependencies
+- No type system (in a large project)
+- .env files committed to git
 
 ## Integration
 

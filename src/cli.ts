@@ -19,6 +19,12 @@ const __dirname = dirname(__filename);
 const PACKAGE_ROOT = resolve(__dirname, "..");
 const HOME = homedir();
 
+// Markers for entry point file sections (CLAUDE.md, GEMINI.md)
+const MARKER_START = "<!-- Skills by Amrit START -->";
+const MARKER_END = "<!-- Skills by Amrit END -->";
+// Legacy marker from older versions (for backward compat detection)
+const LEGACY_MARKER = "<!-- Skills by Amrit -->";
+
 const C = {
   reset: "\x1b[0m",
   bold: "\x1b[1m",
@@ -48,6 +54,7 @@ interface AgentConfig {
   workflowsDir?: string;
   agentsDir?: string;
   rulesDir?: string;
+  entryPointFile?: string; // e.g. "CLAUDE.md" or "GEMINI.md" — the file that goes in project root
 }
 
 // Asset types that can be installed
@@ -61,6 +68,7 @@ const AGENTS: AgentConfig[] = [
     globalDir: join(HOME, ".claude", "skills"),
     commandsDir: ".claude/commands",
     agentsDir: ".claude/agents",
+    entryPointFile: "CLAUDE.md",
   },
   {
     name: "cursor",
@@ -81,12 +89,14 @@ const AGENTS: AgentConfig[] = [
     localDir: ".agent/skills",
     globalDir: join(HOME, ".gemini", "antigravity", "skills"),
     workflowsDir: ".agent/workflows",
+    entryPointFile: "GEMINI.md",
   },
   {
     name: "gemini-cli",
     displayName: "Gemini CLI",
     localDir: ".gemini/skills",
     globalDir: join(HOME, ".gemini", "skills"),
+    entryPointFile: "GEMINI.md",
   },
   {
     name: "github-copilot",
@@ -356,25 +366,211 @@ function getSkillDescription(name: string): string {
   return m ? m[1] : "";
 }
 
-function copyDirRecursive(src: string, dest: string): number {
-  let count = 0;
-  const isUpdate = existsSync(dest);
-  if (!isUpdate) mkdirSync(dest, { recursive: true });
+interface CopyResult {
+  newFiles: number;
+  updatedFiles: number;
+}
+
+function copyDirRecursive(src: string, dest: string): CopyResult {
+  const result: CopyResult = { newFiles: 0, updatedFiles: 0 };
+  if (!existsSync(dest)) mkdirSync(dest, { recursive: true });
+
   for (const entry of readdirSync(src)) {
     const s = join(src, entry);
     const d = join(dest, entry);
     if (statSync(s).isDirectory()) {
-      count += copyDirRecursive(s, d);
+      const sub = copyDirRecursive(s, d);
+      result.newFiles += sub.newFiles;
+      result.updatedFiles += sub.updatedFiles;
     } else {
+      const isNew = !existsSync(d);
       copyFileSync(s, d);
-      count++;
+      if (isNew) {
+        result.newFiles++;
+      } else {
+        result.updatedFiles++;
+      }
     }
   }
-  return count;
+  return result;
 }
 
 function ensureDir(dir: string): void {
   if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+}
+
+function getPackageVersion(): string {
+  const pkgPath = join(PACKAGE_ROOT, "package.json");
+  if (existsSync(pkgPath)) {
+    const pkg = JSON.parse(readFileSync(pkgPath, "utf-8"));
+    return pkg.version || "unknown";
+  }
+  return "unknown";
+}
+
+// ─── Entry Point Content Generator ──────────────────────────────────────────
+// Generates the MINIMAL content to append/update in CLAUDE.md or GEMINI.md.
+// This is NOT the entire file — just the activation section with correct paths.
+
+function generateActivationSection(agent: AgentConfig): string {
+  const skillsPath = agent.localDir;
+  const hasWorkflows = !!agent.workflowsDir;
+  const hasCommands = !!agent.commandsDir;
+  const hasAgentDefs = !!agent.agentsDir;
+
+  let content = `## Skills by Amrit
+
+> An agentic skills framework that makes AI assistants think like senior staff engineers.
+
+You have a library of composable skills installed in \`${skillsPath}/\`. Before any task, check if a relevant skill exists. Skills are not suggestions — they are mandatory workflows when their activation conditions are met.
+
+**Check skills before:**
+- Writing any code
+- Debugging any issue
+- Reviewing any PR
+- Auditing any system
+- Planning any feature
+- Refactoring any module
+
+### Core Principles
+
+Read the \`_rules\` skill in \`${skillsPath}/_rules/SKILL.md\` for core principles, anti-hallucination protocol, and severity framework.
+
+**The three non-negotiables:**
+1. **Evidence before claims** — Never say "done" without verification
+2. **Root cause before fixes** — Never patch symptoms
+3. **Plan before code** — Never start coding without understanding what you're building
+
+### Skill Activation
+
+Skills activate automatically when their conditions are met. You MUST use the relevant skill — skipping is not an option.
+
+| Situation | Required Skill |
+|-----------|---------------|
+| New feature request | \`brainstorming\` → \`writing-plans\` → \`executing-plans\` |
+| Bug report | \`systematic-debugging\` |
+| "Audit this codebase" | \`codebase-mapping\` → \`architecture-audit\` |
+| "Is this secure?" | \`security-audit\` |
+| "Why is this slow?" | \`performance-audit\` |
+| "Review this code" | \`code-review\` |
+| Writing tests | \`test-driven-development\` |
+| About to say "done" | \`verification-before-completion\` |
+| Changing existing code | \`refactoring-safely\` |
+| Database questions | \`database-audit\` |
+| Frontend issues | \`frontend-audit\` |
+| API design | \`api-design-audit\` |
+| Deployment concerns | \`ci-cd-audit\` |
+| Accessibility | \`accessibility-audit\` |
+| Logging/monitoring | \`observability-audit\` |
+| Dependency updates | \`dependency-audit\` |
+| Production incident | \`incident-response\` |
+| Writing docs | \`writing-documentation\` |
+| Git operations | \`git-workflow\` |
+| API integration | \`full-stack-api-integration\` |
+| Completeness check | \`product-completeness-audit\` |
+| Deep audit | \`brutal-exhaustive-audit\` |
+| Cross-session memory | \`persistent-memory\` |
+| Complex multi-step task | \`agent-team-coordination\` |
+| Creating new skills | \`writing-skills\` |
+| Discovering skills | \`using-skills\` |
+
+### Anti-Hallucination Protocol
+
+1. **Never fabricate** — If you don't know, say so
+2. **Never assume** — Verify file existence, function signatures, variable names
+3. **Never extrapolate** — Read the actual code, don't guess from names
+4. **Never claim completion without evidence** — Run the command, read the output
+
+### Severity Framework
+
+| Level | Label | Meaning |
+|-------|-------|---------|
+| 🔴 | Critical | Production risk, security vulnerability, data loss potential |
+| 🟠 | High | Must fix before next deploy |
+| 🟡 | Medium | Technical debt, fix within sprint |
+| 🟢 | Low | Improvement opportunity, backlog |
+| ⚪ | Info | Observation, no action needed |
+`;
+
+  if (hasWorkflows) {
+    content += `
+### Workflows
+
+Workflows are installed in \`${agent.workflowsDir}/\`. Use \`/workflow-name\` to execute them. Workflows with \`// turbo\` annotations auto-run safe steps.
+`;
+  }
+
+  if (hasCommands) {
+    content += `
+### Commands
+
+Slash commands are available in \`${agent.commandsDir}/\`. Key commands include: \`/audit\`, \`/debug\`, \`/plan\`, \`/execute\`, \`/verify\`, \`/commit\`, \`/team\`, \`/memory\`.
+`;
+  }
+
+  if (hasAgentDefs) {
+    content += `
+### Agents
+
+Specialist agents are available in \`${agent.agentsDir}/\` for subagent spawning: debugger, verifier, mapper, planner, researcher, executor, reviewer.
+`;
+  }
+
+  content += `
+### Persistent Memory
+
+If \`.planning/MEMORY.md\` exists, read it at session start and update it at session end. This provides cross-session context. Memory is always project-local — never installed globally.
+`;
+
+  return content;
+}
+
+// ─── Entry Point File Management ─────────────────────────────────────────────
+// Handles CLAUDE.md and GEMINI.md with proper append/update/create logic.
+
+function installEntryPointFile(
+  agent: AgentConfig,
+  projectDir: string
+): "created" | "appended" | "updated" | "skipped" {
+  if (!agent.entryPointFile) return "skipped";
+
+  const destPath = join(projectDir, agent.entryPointFile);
+  const activationContent = generateActivationSection(agent);
+  const wrappedContent = `${MARKER_START}\n${activationContent}\n${MARKER_END}`;
+
+  if (!existsSync(destPath)) {
+    // Case 1: File doesn't exist → Create with just our section
+    writeFileSync(destPath, wrappedContent + "\n");
+    return "created";
+  }
+
+  const existing = readFileSync(destPath, "utf-8");
+
+  // Case 2: File has our START/END markers → Replace the section (UPDATE)
+  if (existing.includes(MARKER_START) && existing.includes(MARKER_END)) {
+    const startIdx = existing.indexOf(MARKER_START);
+    const endIdx = existing.indexOf(MARKER_END) + MARKER_END.length;
+    const before = existing.substring(0, startIdx);
+    const after = existing.substring(endIdx);
+    writeFileSync(destPath, before + wrappedContent + after);
+    return "updated";
+  }
+
+  // Case 3: File has legacy marker (old version) → Replace from legacy marker to end,
+  // then append our properly-marked section
+  if (existing.includes(LEGACY_MARKER)) {
+    const legacyIdx = existing.indexOf(LEGACY_MARKER);
+    const before = existing.substring(0, legacyIdx);
+    writeFileSync(destPath, before.trimEnd() + "\n\n" + wrappedContent + "\n");
+    return "updated";
+  }
+
+  // Case 4: File exists but has no markers → Append our section
+  writeFileSync(
+    destPath,
+    existing.trimEnd() + "\n\n" + wrappedContent + "\n"
+  );
+  return "appended";
 }
 
 // ─── Agent Detection ─────────────────────────────────────────────────────────
@@ -472,7 +668,8 @@ async function selectAgents(
 // ─── Installation ────────────────────────────────────────────────────────────
 
 interface InstallResult {
-  skills: number;
+  skillsNew: number;
+  skillsUpdated: number;
   commands: number;
   workflows: number;
   agents: number;
@@ -484,9 +681,10 @@ function installSkillsToAgent(
   skillNames: string[],
   projectDir: string,
   isGlobal: boolean
-): number {
+): { newSkills: number; updatedSkills: number } {
   const targetBase = isGlobal ? agent.globalDir : join(projectDir, agent.localDir);
-  let installed = 0;
+  let newSkills = 0;
+  let updatedSkills = 0;
 
   for (const skill of skillNames) {
     const src = join(PACKAGE_ROOT, "skills", skill);
@@ -497,11 +695,17 @@ function installSkillsToAgent(
       continue;
     }
 
+    const isNew = !existsSync(dest);
     copyDirRecursive(src, dest);
-    installed++;
+
+    if (isNew) {
+      newSkills++;
+    } else {
+      updatedSkills++;
+    }
   }
 
-  return installed;
+  return { newSkills, updatedSkills };
 }
 
 function installCommandsToAgent(
@@ -604,8 +808,10 @@ function installAllAssetsToAgent(
   projectDir: string,
   isGlobal: boolean
 ): InstallResult {
+  const skillResult = installSkillsToAgent(agent, skillNames, projectDir, isGlobal);
   return {
-    skills: installSkillsToAgent(agent, skillNames, projectDir, isGlobal),
+    skillsNew: skillResult.newSkills,
+    skillsUpdated: skillResult.updatedSkills,
     commands: isGlobal ? 0 : installCommandsToAgent(agent, projectDir),
     workflows: isGlobal ? 0 : installWorkflowsToAgent(agent, projectDir),
     agents: isGlobal ? 0 : installAgentDefsToAgent(agent, projectDir),
@@ -613,15 +819,14 @@ function installAllAssetsToAgent(
   };
 }
 
-function installRulesAndClaude(
+function installRulesAsSkill(
   agent: AgentConfig,
   projectDir: string,
   isGlobal: boolean
 ): void {
   const targetBase = isGlobal ? agent.globalDir : join(projectDir, agent.localDir);
-  const parentDir = dirname(targetBase);
 
-  // Install rules as a skill directory (rules-core-principles, etc.)
+  // Install rules as a combined _rules skill directory
   const rulesSrc = join(PACKAGE_ROOT, "rules");
   if (existsSync(rulesSrc)) {
     const rulesSkillDir = join(targetBase, "_rules");
@@ -648,16 +853,64 @@ These rules apply to ALL skills and must be followed at all times.
   }
 }
 
+// ─── Manifest ────────────────────────────────────────────────────────────────
+// Tracks installation state for version awareness and update detection.
+
+interface InstallManifest {
+  version: string;
+  installedAt: string;
+  updatedAt: string;
+  agents: string[];
+  skillCount: number;
+  scope: "local" | "global";
+}
+
+function writeManifest(
+  projectDir: string,
+  agents: AgentConfig[],
+  skillCount: number,
+  isGlobal: boolean
+): void {
+  const manifestPath = join(projectDir, ".skills-by-amrit.json");
+  const now = new Date().toISOString();
+
+  let manifest: InstallManifest;
+
+  if (existsSync(manifestPath)) {
+    // Update existing manifest
+    const existing: InstallManifest = JSON.parse(readFileSync(manifestPath, "utf-8"));
+    manifest = {
+      ...existing,
+      version: getPackageVersion(),
+      updatedAt: now,
+      agents: agents.map((a) => a.name),
+      skillCount,
+    };
+  } else {
+    // Create new manifest
+    manifest = {
+      version: getPackageVersion(),
+      installedAt: now,
+      updatedAt: now,
+      agents: agents.map((a) => a.name),
+      skillCount,
+      scope: isGlobal ? "global" : "local",
+    };
+  }
+
+  writeFileSync(manifestPath, JSON.stringify(manifest, null, 2) + "\n");
+}
+
 // ─── Commands ────────────────────────────────────────────────────────────────
 
-async function cmdAdd(args: string[]): Promise<void> {
+async function cmdAdd(args: string[], isUpdate: boolean = false): Promise<void> {
   const flags = parseFlags(args);
   const skillNames = flags.positional;
   const allSkills = getAllSkillNames();
 
   // Determine which skills to install
   let toInstall: string[];
-  if (skillNames.length === 0 || flags.all) {
+  if (skillNames.length === 0 || flags.all || isUpdate) {
     toInstall = allSkills;
   } else {
     // Validate
@@ -670,8 +923,11 @@ async function cmdAdd(args: string[]): Promise<void> {
     toInstall = skillNames;
   }
 
-  logHeader("🧠 Skills by Amrit");
-  log(`${C.dim}Installing ${toInstall.length} skill(s)${C.reset}`);
+  const version = getPackageVersion();
+  const action = isUpdate ? "Updating" : "Installing";
+
+  logHeader(`🧠 Skills by Amrit v${version}`);
+  log(`${C.dim}${action} ${toInstall.length} skill(s)${C.reset}`);
 
   const projectDir = process.cwd();
 
@@ -694,7 +950,7 @@ async function cmdAdd(args: string[]): Promise<void> {
         logWarn(`Unknown agent(s): ${unknown.join(", ")}`);
       }
     }
-  } else if (flags.yes) {
+  } else if (flags.yes || isUpdate) {
     // Non-interactive: detect and use detected agents, or all
     const detected = flags.global
       ? detectGlobalAgents()
@@ -716,12 +972,18 @@ async function cmdAdd(args: string[]): Promise<void> {
   log("");
 
   // Install to each agent
-  const totals: InstallResult = { skills: 0, commands: 0, workflows: 0, agents: 0, rules: 0 };
+  const totals: InstallResult = {
+    skillsNew: 0, skillsUpdated: 0,
+    commands: 0, workflows: 0, agents: 0, rules: 0,
+  };
+  const entryPointResults: Array<{ file: string; result: string }> = [];
+
   for (const agent of targetAgents) {
     const result = installAllAssetsToAgent(agent, toInstall, projectDir, flags.global);
-    installRulesAndClaude(agent, projectDir, flags.global);
+    installRulesAsSkill(agent, projectDir, flags.global);
 
-    totals.skills += result.skills;
+    totals.skillsNew += result.skillsNew;
+    totals.skillsUpdated += result.skillsUpdated;
     totals.commands += result.commands;
     totals.workflows += result.workflows;
     totals.agents += result.agents;
@@ -731,76 +993,73 @@ async function cmdAdd(args: string[]): Promise<void> {
       ? agent.globalDir
       : join(projectDir, agent.localDir);
 
+    const totalSkills = result.skillsNew + result.skillsUpdated;
     const parts: string[] = [];
-    if (result.skills > 0) parts.push(`${result.skills} skills`);
+    if (totalSkills > 0) {
+      const details: string[] = [];
+      if (result.skillsNew > 0) details.push(`${result.skillsNew} new`);
+      if (result.skillsUpdated > 0) details.push(`${result.skillsUpdated} updated`);
+      parts.push(`${totalSkills} skills (${details.join(", ")})`);
+    }
     if (result.commands > 0) parts.push(`${result.commands} commands`);
     if (result.workflows > 0) parts.push(`${result.workflows} workflows`);
     if (result.agents > 0) parts.push(`${result.agents} agents`);
     if (result.rules > 0) parts.push(`${result.rules} rules`);
 
-    const summary = parts.length > 0 ? parts.join(", ") : `${result.skills} skills`;
+    const summary = parts.length > 0 ? parts.join(", ") : `${totalSkills} skills`;
     logOk(
       `${C.bold}${agent.displayName}${C.reset} ${C.dim}→ ${summary} → ${targetPath}${C.reset}`
     );
+
+    // Install entry point file (CLAUDE.md / GEMINI.md) — LOCAL only
+    if (!flags.global && agent.entryPointFile) {
+      const epResult = installEntryPointFile(agent, projectDir);
+      if (epResult !== "skipped") {
+        entryPointResults.push({ file: agent.entryPointFile, result: epResult });
+      }
+    }
   }
 
-  // Also install CLAUDE.md and GEMINI.md to project root (not inside agent dirs)
-  if (!flags.global) {
-    // CLAUDE.md — for Claude Code
-    const claudeSrc = join(PACKAGE_ROOT, "CLAUDE.md");
-    const claudeDest = join(projectDir, "CLAUDE.md");
-    if (existsSync(claudeSrc) && targetAgents.some((a) => a.name === "claude-code")) {
-      if (existsSync(claudeDest)) {
-        const existing = readFileSync(claudeDest, "utf-8");
-        if (!existing.includes("Skills by Amrit")) {
-          const incoming = readFileSync(claudeSrc, "utf-8");
-          writeFileSync(
-            claudeDest,
-            existing + "\n\n<!-- Skills by Amrit -->\n" + incoming
-          );
-          logInfo("CLAUDE.md — appended (existing file preserved)");
-        } else {
-          logInfo("CLAUDE.md — already contains Skills by Amrit");
-        }
-      } else {
-        copyFileSync(claudeSrc, claudeDest);
-        logOk("CLAUDE.md created");
-      }
-    }
+  // Log entry point file results (deduplicated — multiple agents may share GEMINI.md)
+  const seenFiles = new Set<string>();
+  for (const ep of entryPointResults) {
+    if (seenFiles.has(ep.file)) continue;
+    seenFiles.add(ep.file);
 
-    // GEMINI.md — for Antigravity / Gemini CLI
-    const geminiSrc = join(PACKAGE_ROOT, "GEMINI.md");
-    const geminiDest = join(projectDir, "GEMINI.md");
-    if (existsSync(geminiSrc) && targetAgents.some((a) => a.name === "antigravity" || a.name === "gemini-cli")) {
-      if (existsSync(geminiDest)) {
-        const existing = readFileSync(geminiDest, "utf-8");
-        if (!existing.includes("Skills by Amrit")) {
-          const incoming = readFileSync(geminiSrc, "utf-8");
-          writeFileSync(
-            geminiDest,
-            existing + "\n\n<!-- Skills by Amrit -->\n" + incoming
-          );
-          logInfo("GEMINI.md — appended (existing file preserved)");
-        } else {
-          logInfo("GEMINI.md — already contains Skills by Amrit");
-        }
-      } else {
-        copyFileSync(geminiSrc, geminiDest);
-        logOk("GEMINI.md created");
-      }
+    switch (ep.result) {
+      case "created":
+        logOk(`${ep.file} ${C.dim}— created${C.reset}`);
+        break;
+      case "appended":
+        logInfo(`${ep.file} ${C.dim}— appended skill activation section (your content preserved)${C.reset}`);
+        break;
+      case "updated":
+        logInfo(`${ep.file} ${C.dim}— updated skill activation section to v${version}${C.reset}`);
+        break;
     }
+  }
+
+  // Write manifest (local installs only)
+  if (!flags.global) {
+    writeManifest(projectDir, targetAgents, toInstall.length, flags.global);
   }
 
   log("");
   logHeader("✅ Installation Complete");
 
-  const totalAssets = totals.skills + totals.commands + totals.workflows + totals.agents + totals.rules;
+  const totalSkills = totals.skillsNew + totals.skillsUpdated;
+  const totalAssets = totalSkills + totals.commands + totals.workflows + totals.agents + totals.rules;
   log(
     `   ${C.dim}${totalAssets} assets installed to ${targetAgents.length} agent(s)${C.reset}`
   );
 
   const breakdown: string[] = [];
-  if (totals.skills > 0) breakdown.push(`${totals.skills} skills`);
+  if (totalSkills > 0) {
+    const details: string[] = [];
+    if (totals.skillsNew > 0) details.push(`${totals.skillsNew} new`);
+    if (totals.skillsUpdated > 0) details.push(`${totals.skillsUpdated} updated`);
+    breakdown.push(`${totalSkills} skills (${details.join(", ")})`);
+  }
   if (totals.commands > 0) breakdown.push(`${totals.commands} commands`);
   if (totals.workflows > 0) breakdown.push(`${totals.workflows} workflows`);
   if (totals.agents > 0) breakdown.push(`${totals.agents} agent definitions`);
@@ -812,6 +1071,11 @@ async function cmdAdd(args: string[]): Promise<void> {
   log(
     `   ${C.dim}${flags.global ? "Global" : "Local"} scope${C.reset}`
   );
+
+  if (!flags.global) {
+    log(`   ${C.dim}Memory/planning: not installed (created at runtime per-project)${C.reset}`);
+  }
+
   log("");
 }
 
@@ -900,6 +1164,47 @@ function cmdAgents(): void {
   log("");
 }
 
+function cmdStatus(): void {
+  const projectDir = process.cwd();
+  const manifestPath = join(projectDir, ".skills-by-amrit.json");
+
+  if (!existsSync(manifestPath)) {
+    log(`\n${C.yellow}No skills-by-amrit installation found in this project.${C.reset}`);
+    log(`Run ${C.cyan}npx skills-by-amrit add${C.reset} to install.\n`);
+    return;
+  }
+
+  const manifest: InstallManifest = JSON.parse(readFileSync(manifestPath, "utf-8"));
+  const currentVersion = getPackageVersion();
+  const isOutdated = manifest.version !== currentVersion;
+
+  logHeader("🧠 Skills by Amrit — Installation Status\n");
+
+  log(`  ${C.bold}Installed version:${C.reset} ${manifest.version}${isOutdated ? ` ${C.yellow}(update available: ${currentVersion})${C.reset}` : ` ${C.green}(latest)${C.reset}`}`);
+  log(`  ${C.bold}Installed at:${C.reset}      ${manifest.installedAt}`);
+  log(`  ${C.bold}Last updated:${C.reset}      ${manifest.updatedAt}`);
+  log(`  ${C.bold}Scope:${C.reset}             ${manifest.scope}`);
+  log(`  ${C.bold}Skills:${C.reset}            ${manifest.skillCount}`);
+  log(`  ${C.bold}Agents:${C.reset}            ${manifest.agents.join(", ")}`);
+
+  if (isOutdated) {
+    log(`\n  ${C.yellow}Run ${C.cyan}npx skills-by-amrit update${C.yellow} to update to v${currentVersion}${C.reset}`);
+  }
+
+  // Check for entry point files
+  const claudeExists = existsSync(join(projectDir, "CLAUDE.md"));
+  const geminiExists = existsSync(join(projectDir, "GEMINI.md"));
+  const planningExists = existsSync(join(projectDir, ".planning", "MEMORY.md"));
+
+  log("");
+  log(`  ${C.bold}Entry points:${C.reset}`);
+  log(`    CLAUDE.md: ${claudeExists ? `${C.green}present${C.reset}` : `${C.dim}not found${C.reset}`}`);
+  log(`    GEMINI.md: ${geminiExists ? `${C.green}present${C.reset}` : `${C.dim}not found${C.reset}`}`);
+  log(`    .planning/MEMORY.md: ${planningExists ? `${C.green}active${C.reset}` : `${C.dim}not initialized (run /memory-sync)${C.reset}`}`);
+
+  log("");
+}
+
 function cmdVersion(): void {
   const pkgPath = join(PACKAGE_ROOT, "package.json");
   if (existsSync(pkgPath)) {
@@ -922,6 +1227,8 @@ ${C.bold}USAGE${C.reset}
   ${C.cyan}npx skills-by-amrit add -a '*'${C.reset}                   Install to ALL agents
   ${C.cyan}npx skills-by-amrit add -g${C.reset}                       Install globally (user-wide)
   ${C.cyan}npx skills-by-amrit add --all -y${C.reset}                 Non-interactive, all skills
+  ${C.cyan}npx skills-by-amrit update${C.reset}                       Update all skills to latest version
+  ${C.cyan}npx skills-by-amrit status${C.reset}                       Show installation status
   ${C.cyan}npx skills-by-amrit list${C.reset}                         List available skills
   ${C.cyan}npx skills-by-amrit agents${C.reset}                       List supported agents
   ${C.cyan}npx skills-by-amrit help${C.reset}                         Show this help
@@ -932,6 +1239,14 @@ ${C.bold}OPTIONS${C.reset}
   ${C.yellow}-g, --global${C.reset}          Install globally (user home) instead of project
   ${C.yellow}-y, --yes${C.reset}             Non-interactive mode (auto-accept)
   ${C.yellow}--all${C.reset}                 Install all skills
+
+${C.bold}INSTALL BEHAVIOR${C.reset}
+
+  ${C.bold}Skills:${C.reset}       Copied to agent skill directory. Re-running updates existing skills.
+  ${C.bold}CLAUDE.md:${C.reset}    If exists, appends activation section. If already present, updates it.
+  ${C.bold}GEMINI.md:${C.reset}    Same as CLAUDE.md — your existing content is always preserved.
+  ${C.bold}Memory:${C.reset}       Never installed. Created at runtime per-project by the AI agent.
+  ${C.bold}Global (-g):${C.reset}  Skills only. No entry point files, commands, workflows, or agents.
 
 ${C.bold}EXAMPLES${C.reset}
 
@@ -946,6 +1261,9 @@ ${C.bold}EXAMPLES${C.reset}
 
   ${C.dim}# Install globally for all agents (CI/CD friendly)${C.reset}
   npx skills-by-amrit add --all -g -a '*' -y
+
+  ${C.dim}# Update to latest version (re-runs on detected agents)${C.reset}
+  npx skills-by-amrit update
 
 ${C.bold}SUPPORTED AGENTS${C.reset}
 
@@ -1028,8 +1346,18 @@ async function main(): Promise<void> {
     return;
   }
 
+  if (command === "status") {
+    cmdStatus();
+    return;
+  }
+
   if (command === "add" || command === "install") {
-    await cmdAdd(args.slice(1));
+    await cmdAdd(args.slice(1), false);
+    return;
+  }
+
+  if (command === "update" || command === "upgrade") {
+    await cmdAdd(args.slice(1), true);
     return;
   }
 

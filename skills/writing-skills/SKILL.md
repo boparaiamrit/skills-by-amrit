@@ -17,6 +17,58 @@ Skills are the building blocks of this system. A well-written skill makes AI ass
 EVERY SKILL MUST HAVE A CLEAR IRON LAW, DEFINED ACTIVATION CONDITIONS, AND A VERIFIABLE PROCESS.
 ```
 
+## When to Use
+
+- Creating a new skill for the library
+- Enhancing an existing skill
+- Reviewing a skill's quality
+- Standardizing skill format
+
+## When NOT to Use
+
+- Applying an existing skill (use `using-skills`)
+- The intended behavior is better captured as a workflow, not a skill
+
+## Anti-Shortcut Rules
+
+```
+YOU CANNOT:
+- Create a skill without an Iron Law — if it has no non-negotiable rule, it's advice, not a skill
+- Write "Use when..." descriptions that are vague — "Use when coding" activates for everything
+- Include "it depends" in a skill — skills are prescriptive, not suggestive
+- Skip the Common Rationalizations section — every process has excuses people make to skip it
+- Write a process with vague steps — "make sure it's good" is not a verifiable step
+- Create a skill that duplicates another skill's scope — check existing skills first
+- Skip the Anti-Shortcut Rules — they prevent the most common ways the skill gets bypassed
+- Write Iron Questions that can be answered without evidence — "Did you check?" ≠ "What was the output?"
+```
+
+## Common Rationalizations (Don't Accept These)
+
+| Rationalization | Reality |
+|----------------|---------|
+| "This skill is too short to need all sections" | Short skills still need structure. Sections prevent shortcuts. |
+| "The process is self-explanatory" | To you, maybe. To an LLM following instructions literally, no. |
+| "Iron Questions are overkill" | They're the accountability mechanism. Without them, skills get skipped. |
+| "Not every skill needs rationalizations" | Every process has excuses for skipping it. Document them. |
+| "I'll add the missing sections later" | Later never comes. Complete the skill now. |
+| "This is a simple skill" | Simple skills with poor structure produce poor results. |
+
+## Iron Questions
+
+```
+1. Does this skill have an Iron Law? (absolute, falsifiable, concise)
+2. Does the description start with "Use when..."? (enables automatic activation)
+3. Does every process step have a verifiable outcome? (not just "do X")
+4. Are there Anti-Shortcut Rules? (preventing bypass)
+5. Are there Common Rationalizations with rebuttals? (preventing excuses)
+6. Are there Iron Questions that require evidence-based answers? (accountability)
+7. Does it have When NOT to Use? (preventing misapplication)
+8. Does it integrate with other skills? (skills compose, they don't standalone)
+9. Could someone follow this skill LITERALLY and produce good results?
+10. Is there an existing skill that already covers this? (check for duplication)
+```
+
 ## Skill Directory Structure
 
 ```
@@ -27,7 +79,7 @@ skills/
 
 Skills are single-file. All information lives in `SKILL.md`. No external dependencies.
 
-## SKILL.md Format
+## SKILL.md Format — The 10/10 Template
 
 Every skill MUST follow this structure:
 
@@ -48,21 +100,30 @@ description: "One-line description starting with 'Use when...' that enables auto
 
 ## When to Use
 [Specific, measurable activation conditions]
-[Counter-examples: when NOT to use]
 
-## The Process
-[Numbered, sequential steps]
+## When NOT to Use
+[Counter-examples: when a different skill is appropriate]
+
+## Anti-Shortcut Rules
+[Code block: "YOU CANNOT:" followed by specific prohibitions]
+
+## Common Rationalizations (Don't Accept These)
+[Table: Rationalization | Reality]
+
+## Iron Questions
+[Numbered code block: questions requiring evidence-based answers]
+
+## The Process / The Audit Process
+[Numbered, sequential phases with steps]
 [Key decision points]
 [Verification at each stage]
-
-## Red Flags — STOP
-[Signs the process is being violated]
-
-## Common Rationalizations (optional)
-[Excuses table: excuse → reality]
+[Tables and examples for clarity]
 
 ## Output Format (if applicable)
 [Template for skill output]
+
+## Red Flags — STOP
+[Observable signs the process is being violated]
 
 ## Integration
 [How this skill connects to other skills]
@@ -85,6 +146,33 @@ Must be:
 - **Concise** — One sentence in a code block
 - ✅ `NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST`
 - ❌ `Try to find the root cause when possible`
+
+### Anti-Shortcut Rules
+
+Must be:
+- **Specific** — Name the exact shortcut being prohibited
+- **Falsifiable** — You can tell if the rule was broken
+- **Exhaustive** — Cover the most common ways people bypass the process
+- ✅ `YOU CANNOT: Say "tests pass" without test output in this response`
+- ❌ `Don't skip steps`
+
+### Common Rationalizations
+
+Must be:
+- **Realistic** — Excuses people actually make
+- **Rebutted** — Each excuse has a one-line shutdown
+- **Formatted as table** — Easy to scan
+- ✅ `"I'll write tests after" | You won't. And if you do, they'll test your implementation, not requirements`
+- ❌ `Don't make excuses` (too vague)
+
+### Iron Questions
+
+Must be:
+- **Evidence-requiring** — Can't be answered with "yes" alone
+- **Specific** — About concrete artifacts, not feelings
+- **Numbered** — In a code block for consistency
+- ✅ `Have I run the FULL test suite in THIS response? (what was the output?)`
+- ❌ `Did you test it?` (can be answered with "yes" without evidence)
 
 ### The Process
 
@@ -110,6 +198,19 @@ Must be:
 - ✅ `test-driven-development`, `systematic-debugging`, `security-audit`
 - ❌ `good-coding`, `useful-stuff`, `misc-tips`
 
+## What Makes a Skill Valuable
+
+| Property | 10/10 | 5/10 | 1/10 |
+|----------|-------|------|------|
+| Iron Law | Absolute, falsifiable, one sentence | Present but soft | Missing |
+| Anti-Shortcut Rules | 6-8 specific prohibitions | Generic "don't skip" | Missing |
+| Common Rationalizations | 5-8 realistic excuses with rebuttals | 2-3 weak ones | Missing |
+| Iron Questions | 8-10 evidence-requiring questions | 3-4 yes/no questions | Missing |
+| Process | Phased, verified, specific | Present but vague | Missing |
+| When NOT to Use | Specific redirects to other skills | "When it doesn't apply" | Missing |
+| Red Flags | Observable, specific behaviors | Generic warnings | Missing |
+| Integration | Specific skill references with trigger conditions | "Works with other skills" | Missing |
+
 ## Testing a Skill
 
 Before adding a skill, verify:
@@ -121,21 +222,12 @@ Before adding a skill, verify:
 4. ARE the activation conditions specific enough?
 5. COULD someone misinterpret any step?
 6. IS anything missing? (common edge cases)
+7. CHECK against the quality rubric above — does every cell say "10/10"?
 ```
-
-## What Makes a Skill Valuable
-
-| Property | High Value | Low Value |
-|----------|-----------|----------|
-| Specificity | Exact steps for exact situations | Generic advice |
-| Falsifiability | Clear pass/fail criteria | "It depends" |
-| Iron Law | Non-negotiable rule | Soft suggestion |
-| Integration | Connects to other skills | Standalone |
-| Rationalization prevention | Tables of excuses with rebuttals | None |
-| Process enforcement | Checkpoints and verification | Trust-based |
 
 ## Integration
 
 - This is a meta-skill: used to create new skills
 - All created skills must cross-reference related skills
-- New skills must be added to the `CLAUDE.md` activation table
+- New skills must be added to entry point files (CLAUDE.md, GEMINI.md) activation tables
+- Use `using-skills` to understand how skills compose
