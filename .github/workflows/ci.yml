@@ -76,8 +76,10 @@ jobs:
       - name: Verify skill count
         run: |
           SKILL_COUNT=$(find skills -name "SKILL.md" | wc -l)
-          if [ "$SKILL_COUNT" -ne 26 ]; then
-            echo "Expected 26 skills, got $SKILL_COUNT"
+          EXPECTED=$(node -e "const d=require('./package.json').description; console.log(d.match(/(\d+) skills/)[1])")
+          if [ "$SKILL_COUNT" -ne "$EXPECTED" ]; then
+            echo "❌ Skill count mismatch: found $SKILL_COUNT, package.json declares $EXPECTED"
             exit 1
           fi
-          echo "✓ Skill count verified: $SKILL_COUNT"
+          echo "✓ Skill count verified: $SKILL_COUNT (matches package.json)"
+
