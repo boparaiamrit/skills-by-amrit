@@ -37,6 +37,7 @@
 - [writing-documentation](examples-skills-writing-documentation)
 - [using-skills](examples-skills-using-skills)
 - [writing-skills](examples-skills-writing-skills)
+- [ui-ux-redesign](examples-skills-ui-ux-redesign)
 
 ### ⚡ Commands
 - [debug](examples-commands-debug)
@@ -45,13 +46,15 @@
 - [commit](examples-commands-commit)
 - [team](examples-commands-team)
 - [audit](examples-commands-audit)
-- [View all 25 commands...](Examples#commands-examples)
+- [redesign](examples-commands-redesign)
+- [View all 26 commands...](Examples#commands-examples)
 
 ### 🔄 Workflows
 - [debug](examples-workflows-debug)
 - [audit](examples-workflows-audit)
 - [commit](examples-workflows-commit)
-- [View all 29 workflows...](Examples#workflows-examples)
+- [redesign](examples-workflows-redesign)
+- [View all 30 workflows...](Examples#workflows-examples)
 
 ### 🎭 Agents
 - [debugger](examples-agents-debugger)

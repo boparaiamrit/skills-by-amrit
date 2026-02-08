@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">🧠 Skills by Amrit</h1>
   <p align="center">
-    <strong>The ultimate AI agent skills framework — 30 skills · 25 commands · 29 workflows · 7 agents · 10 cursor rules</strong>
+    <strong>The ultimate AI agent skills framework — 31 skills · 26 commands · 30 workflows · 7 agents · 10 cursor rules</strong>
   </p>
   <p align="center">
     Make your AI coding assistant think like a staff engineer.
@@ -31,9 +31,9 @@
 
 | What's New | Count | Description |
 |:---|:---:|:---|
-| 🧠 **Skills** | 30 | All enhanced to 10/10 quality standard |
-| ⚡ **Commands** | 25 | Claude Code slash commands for project lifecycle |
-| 🔄 **Workflows** | 29 | Antigravity workflows with turbo-mode steps |
+| 🧠 **Skills** | 31 | All enhanced to 10/10 quality standard |
+| ⚡ **Commands** | 26 | Claude Code slash commands for project lifecycle |
+| 🔄 **Workflows** | 30 | Antigravity workflows with turbo-mode steps |
 | 🤖 **Agents** | 7 | Specialist agent definitions (researcher, executor, etc.) |
 | 🎯 **Cursor Rules** | 10 | `.mdc` rules for Cursor AI behavior |
 | 📏 **Rules** | 5 | Universal rules for GEMINI.md/CLAUDE.md |
@@ -121,7 +121,7 @@ Skills by Amrit works with **30+ AI coding agents**. Each agent gets assets inst
 
 ## 📚 Complete Asset Catalog
 
-### 🧠 Skills (30)
+### 🧠 Skills (31)
 
 Skills are deep instructional documents that teach AI agents HOW to think about specific engineering tasks. Each skill contains principles, protocols, anti-patterns, and quality criteria.
 
@@ -184,10 +184,11 @@ Skills are deep instructional documents that teach AI agents HOW to think about 
 | 28 | 📘 **using-skills** | How to use and combine skills effectively in your workflow |
 | 29 | ✍️ **writing-skills** | How to create new skills — format, quality standards, and testing requirements |
 | 30 | 🔄 **codebase-conformity** | Pattern uniformity enforcement — read existing patterns before writing, match them exactly, double-verify conformity before claiming done |
+| 31 | 🎨 **ui-ux-redesign** | Full-stack visual audit — inventories backend APIs, audits every component and design token, analyzes user flows, and produces layered redesign recommendations |
 
 ---
 
-### ⚡ Commands (25)
+### ⚡ Commands (26)
 
 Commands are Claude Code slash commands (`.md` files installed to `.claude/commands/`). They provide structured workflows for common project tasks.
 
@@ -250,10 +251,11 @@ Commands are Claude Code slash commands (`.md` files installed to `.claude/comma
 | `/integrate` | 🔗 Full-stack API integration from spec — surface mapping, SOLID architecture, endpoint implementation, and verification |
 | `/health-check` | 🏥 Product completeness audit — route inventory, placeholder detection, flow testing, and API connection checks |
 | `/deep-audit` | 🔬 Brutal exhaustive 5-pass audit — build, routes, data flow, user flows, and edge cases with anti-shortcut rules |
+| `/redesign` | 🎨 Full UI/UX redesign audit — visual audit, component census, token extraction, UX analysis, layered redesign plan |
 
 ---
 
-### 🔄 Workflows (29)
+### 🔄 Workflows (30)
 
 Workflows are Antigravity step-by-step execution scripts (`.md` files installed to `.agent/workflows/`). Many include `// turbo` annotations for auto-execution.
 
@@ -288,6 +290,7 @@ Workflows are Antigravity step-by-step execution scripts (`.md` files installed 
 | `/integrate-api` | 🔗 Full-stack API integration workflow — ✨ NEW |
 | `/product-health-check` | 🏥 Product completeness audit workflow — ✨ NEW |
 | `/deep-audit` | 🔬 Brutal exhaustive audit workflow — ✨ NEW |
+| `/redesign` | 🎨 Full UI/UX redesign workflow — ✨ NEW |
 
 ---
 
@@ -656,14 +659,14 @@ npx skills-by-amrit help
 
 | Metric | Count |
 |:---:|:---:|
-| 🧠 Skills | **30** |
-| ⚡ Commands | **25** |
-| 🔄 Workflows | **29** |
+| 🧠 Skills | **31** |
+| ⚡ Commands | **26** |
+| 🔄 Workflows | **30** |
 | 🤖 Agents | **7** |
 | 🎯 Cursor Rules | **10** |
 | 📏 Rules | **5** |
 | 🤖 Supported Agents | **34** |
-| 📄 Total Assets | **106** |
+| 📄 Total Assets | **109** |
 
 ---
 

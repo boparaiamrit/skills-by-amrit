@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.3.0] — 2026-02-08 — UI/UX Redesign 🎨
+
+### 🆕 New Skill
+- **ui-ux-redesign** — Full-stack visual audit for frontend redesign. Inventories every backend API and data model, audits every frontend component and design token (colors, spacing, typography, radii, shadows), analyzes user flows for friction points, and produces layered redesign recommendations with implementation waves.
+
+### 🆕 New Command
+- `/redesign` — Triggers the UI/UX redesign workflow
+
+### 🆕 New Workflow
+- `/redesign` — 8-step workflow: backend inventory → component census → token extraction → UX analysis → consistency scoring → recommendations → implementation plan → report
+
+### 📚 New Examples
+- `examples-skills-ui-ux-redesign.md`
+- `examples-commands-redesign.md`
+- `examples-workflows-redesign.md`
+
+### 📊 By the Numbers
+- 31 skills (+1 new)
+- 26 commands (+1 new)
+- 30 workflows (+1 new)
+- 109 example files (+3 new)
+
+---
+
 ## [3.2.0] — 2026-02-08 — Examples & Conformity 📚
 
 ### 🆕 New Skill
@@ -31,7 +55,6 @@ All notable changes to this project will be documented in this file.
 - All assets now have usage examples
 
 ---
-
 
 ## [3.1.0] — 2026-02-08 — Quality & CLI Overhaul 🔧
 

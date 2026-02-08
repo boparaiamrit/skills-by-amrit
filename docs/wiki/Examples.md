@@ -6,12 +6,12 @@
 
 | Category | Examples | Coverage |
 |----------|----------|----------|
-| Skills | 30 | 100% ✅ |
-| Commands | 25 | 100% ✅ |
-| Workflows | 29 | 100% ✅ |
+| Skills | 31 | 100% ✅ |
+| Commands | 26 | 100% ✅ |
+| Workflows | 30 | 100% ✅ |
 | Agents | 7 | 100% ✅ |
 | Rules | 15 | 100% ✅ |
-| **Total** | **106** | **100%** ✅ |
+| **Total** | **109** | **100%** ✅ |
 
 ---
 
@@ -66,6 +66,7 @@
 | [using-skills](examples-skills-using-skills) | How to use skills |
 | [writing-skills](examples-skills-writing-skills) | Creating new skills |
 | [writing-documentation](examples-skills-writing-documentation) | Doc generation |
+| [ui-ux-redesign](examples-skills-ui-ux-redesign) | Full-stack visual redesign |
 
 ---
 
@@ -98,6 +99,7 @@
 | [/init-project](examples-commands-init-project) | Project setup |
 | [/progress](examples-commands-progress) | Progress display |
 | [/quick](examples-commands-quick) | Quick tasks |
+| [/redesign](examples-commands-redesign) | UI/UX redesign |
 
 ---
 
@@ -134,6 +136,7 @@
 | [/team-session](examples-workflows-team-session) | Team sessions |
 | [/test](examples-workflows-test) | Testing |
 | [/verify](examples-workflows-verify) | Verification |
+| [/redesign](examples-workflows-redesign) | UI/UX redesign |
 
 ---
 
