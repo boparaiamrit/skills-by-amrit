@@ -27,19 +27,26 @@
 
 **Skills by Amrit** is a comprehensive, agent-agnostic skills framework that transforms AI coding assistants into senior staff engineers. Install once, use everywhere — across **34+ supported agents** including Antigravity, Cursor, Claude Code, Gemini CLI, Windsurf, Copilot, and more.
 
-### 🏆 v3.1.0 Highlights
+### 🏆 Recent Releases
 
-| What's New | Count | Description |
-|:---|:---:|:---|
-| 🧠 **Skills** | 31 | All enhanced to 10/10 quality standard |
-| ⚡ **Commands** | 26 | Claude Code slash commands for project lifecycle |
-| 🔄 **Workflows** | 30 | Antigravity workflows with turbo-mode steps |
-| 🤖 **Agents** | 7 | Specialist agent definitions (researcher, executor, etc.) |
-| 🎯 **Cursor Rules** | 10 | `.mdc` rules for Cursor AI behavior |
-| 📏 **Rules** | 5 | Universal rules for GEMINI.md/CLAUDE.md |
-| 🤝 **Agent Teams** | ✅ | Claude Code-style team coordination — for ANY agent |
-| 💾 **Persistent Memory** | ✅ | Like claude-mem — zero infrastructure, ANY agent |
-| 🔧 **CLI** | ✅ | New `update`, `status` commands + smart entry point management |
+#### v3.3.0 — UI/UX Redesign & Database Deep Dive 🎨🗄️
+
+- 🆕 **ui-ux-redesign** skill — Full-stack visual audit: backend inventory, component census, design token extraction, UX flow analysis, layered redesign plan
+- 🧠 **database-audit** overhaul — Deep indexing for high-volume tables (logs, activity, notifications), partial indexes, partitioning, query pattern analysis
+- 🔧 **Version sync system** — Automated version + counts sync across all docs on every release
+- 📊 **31 skills · 26 commands · 30 workflows**
+
+#### v3.2.0 — Examples & Conformity 📚
+
+- 🆕 **codebase-conformity** skill — Enforces pattern uniformity across frontend and backend
+- 📚 **106 usage examples** with interactive examples page, wiki integration, and search/filter
+- 🌐 Website improvements — logos, examples link, agent-specific syntax
+
+#### v3.1.0 — Quality & CLI Overhaul 🔧
+
+- 🧠 All 29 skills enhanced to **10/10 quality standard** with anti-shortcut rules and iron questions
+- 🔧 CLI overhaul — `update`, `status` commands, `-y` flag for CI/CD, smart entry point management
+- 🤝 **Agent Teams** + 💾 **Persistent Memory** — for ANY agent, zero infrastructure
 
 ---
 

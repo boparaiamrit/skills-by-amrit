@@ -206,6 +206,33 @@ Update these files if counts changed:
 - `docs/index.html` (meta description)
 - `CHANGELOG.md` (for new skills)
 
+### 📝 README Version Highlights Rule
+
+**The `README.md` has a "🏆 Recent Releases" section that shows the last 3 minor versions.**
+
+**On every MINOR release (e.g. 3.4.0):**
+1. Add the new version at the top of "Recent Releases"
+2. Remove the oldest version (keep only 3)
+3. Each version entry should have 3-4 bullet points summarizing key changes
+
+**On PATCH releases (e.g. 3.3.1):** No README update needed — patches are too small.
+
+**Format:**
+```markdown
+### 🏆 Recent Releases
+
+#### vX.Y.0 — Title 🎨
+- 🆕 Key new feature
+- 🧠 Key enhancement
+- 📊 Asset counts
+
+#### vX.Y-1.0 — Title 📚
+- ...
+
+#### vX.Y-2.0 — Title 🔧
+- ...
+```
+
 ### 3. Commit ALL Modified Files
 ```powershell
 git add -A
