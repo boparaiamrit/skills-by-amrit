@@ -1,93 +1,134 @@
-# /team — Agent Team Coordination
+# /team — LLM Council Command
 
-Start and manage a multi-role team session for complex features. Uses sequential role-switching with a shared blackboard for coordination.
+Start and manage an LLM Council session — a Manager-orchestrated multi-agent team with deep codebase intelligence via the Memory Module.
 
 ## Usage
-- `/team start [objective]` — Start a new team session
-- `/team resume` — Resume an existing team session
-- `/team next` — Switch to the next role
-- `/team board` — Show current task board
-- `/team status` — Show team session status
+- `/team start [objective]` — Start a new council session
+- `/team resume` — Resume an existing council session
+- `/team board` — Show current council task board
+- `/team status` — Show council status, routing log, and agent states
+- `/team route [agent]` — Manually route next task to a specific agent
+- `/team memory` — Show Memory Module status and staleness
 
 ## Protocol
 
-### Starting a Team (`start`)
+### Starting a Council (`start`)
 1. Ask the user for the objective if not provided
-2. Assess complexity and suggest a role preset:
-   - **Quick (3 roles):** Researcher → Executor → Reviewer
-   - **Full (5 roles):** Researcher → Architect → Planner → Executor → Reviewer
-   - **Debug (3 roles):** Investigator → Fixer → Verifier
-3. Create `.planning/team/` directory structure
-4. Write `config.json` with team definition
-5. Create empty `BOARD.md` task board
-6. Begin Phase 1 in the first role
+2. **Initialize Memory Module** (if not exists):
+   - Scan codebase → `.planning/memory/codebase-map.md`
+   - Extract ALL database schemas → `.planning/memory/database-schemas.md`
+   - Map ALL API routes/controllers → `.planning/memory/api-routes.md`
+   - Map ALL services/dependencies → `.planning/memory/service-graph.md`
+   - Map frontend (if applicable) → `.planning/memory/frontend-map.md`
+   - Inventory tech stack → `.planning/memory/tech-stack.md`
+   - Compress into `.planning/MEMORY.md`
+3. **Select a council preset** based on complexity:
+   - 🏗️ **Full Council (5):** Researcher → Architect → Planner → Executor → Reviewer
+   - ⚡ **Rapid Council (3):** Researcher → Executor → Reviewer
+   - 🐛 **Debug Council (3):** Investigator → Fixer → Verifier
+   - 📐 **Architecture Council (3):** Researcher → Architect → Reviewer
+   - 🔄 **Refactoring Council (4):** Researcher → Planner → Executor → Reviewer
+   - 🔍 **Audit Council (4):** Security + Performance + Architecture → Synthesizer
+4. Create `.planning/council/` directory structure
+5. Write `council.json` with configuration
+6. Create `BOARD.md` task board
+7. Enter **Manager role** and make first routing decision
 
 ### Resuming (`resume`)
-1. Read `.planning/team/config.json`
-2. Determine current phase and role
-3. Read the latest handoff document
+1. Read `.planning/council/council.json`
+2. Read `.planning/MEMORY.md` (project brain)
+3. Read last message in `.planning/council/messages/`
 4. Read the task board
-5. Continue from the current phase
-
-### Switching Roles (`next`)
-1. Verify current phase is complete:
-   - All role objectives met
-   - Handoff document written
-   - Task board updated
-2. Advance `config.json` to next phase
-3. Read the handoff from the completing role
-4. Announce role switch: "🔬 → ⚙️ Switching to Executor role"
-5. Begin new role's responsibilities
+5. Enter **Manager role** and determine next action
 
 ### Task Board (`board`)
-Display `.planning/team/BOARD.md` with:
-- Blocked tasks
-- In-progress tasks
-- Completed tasks
+Display `.planning/council/BOARD.md` with:
+- Council members and their statuses
+- Blocked / In-progress / Done tasks
+- Recent routing decisions
 - Progress bar
 
 ### Status (`status`)
 Show:
-- Team name and objective
-- Current phase and role
-- Tasks: total, done, in-progress, blocked
-- Timeline of phase completions
+- Council name, objective, preset
+- Current active agent and task
+- All agents and their states (active / idle / done)
+- Routing log (last 10 decisions)
+- Message count
+- Memory Module staleness check
 
-## Role Behaviors
+### Route (`route`)
+Manually override Manager routing:
+- Force-route next task to a specific agent
+- Manager still provides Memory Module context in the routing message
+- Useful for course-correcting or exploring alternatives
 
-When in each role, the agent should:
+### Memory (`memory`)
+Show Memory Module health:
+- Which intelligence files exist
+- Last updated timestamps
+- Staleness warnings (>24h since last update)
+- Missing coverage (tables/routes/services not documented)
+
+## Manager Behavior
+
+When in Manager role, the agent:
+
+1. **Reads messages** from sub-agents (handoffs, questions, escalations)
+2. **Consults Memory Module** for relevant context
+3. **Makes routing decisions** — which agent should handle the next task
+4. **Provides context** — pulls relevant schemas, routes, gotchas into routing messages
+5. **Enforces quality gates** — verifies acceptance criteria before phase transitions
+6. **Handles escalations** — provides guidance using deep project knowledge
+7. **Updates the board** — maintains real-time task status
+
+## Sub-Agent Behaviors
 
 ### 🔬 Researcher
-- Search codebase extensively
-- Read documentation
-- Identify patterns, risks, dependencies
-- Write findings to `handoffs/phase-N-research.md`
+- Search codebase in areas specified by Manager's routing
+- Research external documentation/best practices
+- Produce evidence-backed findings with file paths
+- Write handoff message to Manager
 
 ### 📐 Architect
-- Design solution based on research
-- Document patterns, interfaces, data flow
-- Identify breaking changes
-- Write design to `handoffs/phase-N-architect.md`
+- Read research findings (via Manager routing)
+- Design solution using Memory Module for schema/service context
+- Document interfaces, data flows, breaking changes
+- Can peer-communicate with Researcher for clarification
+- Write handoff message to Manager
 
 ### 📋 Planner
-- Break architecture into atomic tasks
-- Create task files in `tasks/`
-- Identify dependencies and waves
-- Write plan to `handoffs/phase-N-plan.md`
+- Read architecture design (via Manager routing)
+- Decompose into atomic tasks with dependencies
+- Group into execution waves
+- Create task files in `.planning/council/tasks/`
+- Write handoff message to Manager
 
 ### ⚙️ Executor
-- Implement tasks in wave order
-- Run tests after each task
-- Update task status in files and board
-- Write results to `handoffs/phase-N-execute.md`
+- Read task breakdown (via Manager routing)
+- Implement tasks in wave order, run tests
+- Can peer-communicate with Architect for design clarification
+- Escalate blockers to Manager
+- Write handoff message to Manager per wave
 
 ### 🔍 Reviewer
-- Read ALL previous handoffs
-- Review code for correctness, security, performance
-- Run full test suite
-- Write review to `handoffs/phase-N-review.md`
+- Read ALL previous handoffs for full context
+- Review code against architecture design
+- Check security, performance, correctness
+- Can peer-communicate with Executor and Architect
+- Write review report to Manager
+
+## Communication
+
+Sub-agents communicate via structured messages in `.planning/council/messages/`:
+- **📤 Handoff** — "I'm done, here's my work"
+- **❓ Question** — To Manager or allowed peers
+- **🚨 Escalation** — "I'm stuck" (always to Manager)
+- **📊 Status** — Progress update to Manager
+- **🔄 Request** — "I need specialist X" (to Manager for routing)
 
 ## Integration
+- Memory Module persists across sessions in `.planning/memory/`
 - Works with `/memory` command for cross-session continuity
-- Team decisions are logged to `.planning/decisions/DECISIONS.md`
-- Team state is tracked in `.planning/MEMORY.md`
+- Council decisions logged to `.planning/decisions/DECISIONS.md`
+- Council state tracked in `council.json` for seamless resume

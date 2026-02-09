@@ -1,70 +1,113 @@
 ---
-description: Start a coordinated team session with sequential role-switching for complex features
+description: Start an LLM Council session — Manager-orchestrated multi-agent team with Memory Module for deep codebase intelligence
 ---
 
-# Team Session Workflow
+# LLM Council Session Workflow
 
-This workflow orchestrates a multi-role team session using sequential role-switching with a shared blackboard.
+This workflow orchestrates a full LLM Council session: Memory Module initialization → Manager formation → dynamic routing through specialist agents.
 
 ## Usage
 Use `/team-session` to:
-- Start a new team session for a feature or task
-- Resume an existing team session
-- Switch between specialist roles
+- Start a new council session for a feature, refactor, or investigation
+- Resume an existing council session
+- The Manager orchestrates everything — you just provide the objective
 
 ## Steps
 
 // turbo-all
 
-### 1. Check for existing team session
-Check if `.planning/team/config.json` exists. If yes, read it to determine the current phase and offer to resume. If no, proceed to step 2.
+### 1. Check for existing council session
+Check if `.planning/council/council.json` exists.
+- If **yes**: Read it. Read the last message in `messages/`. Read `MEMORY.md`. Offer to resume.
+- If **no**: Proceed to step 2.
 
-### 2. Define the team
-Ask the user what they want to accomplish. Based on complexity, choose a role preset:
+### 2. Initialize Memory Module
+Check if `.planning/memory/` exists and is current.
+- If **no** or if **stale** (>48h since last update):
+  1. Scan entire codebase directory structure → `codebase-map.md`
+  2. Extract ALL database schemas (tables, columns, types, relationships, indexes, RLS) → `database-schemas.md`
+  3. Map ALL API routes/endpoints with controllers, auth, middleware → `api-routes.md`
+  4. Map ALL services with dependencies, methods, patterns → `service-graph.md`
+  5. Map frontend components, state, routing (if applicable) → `frontend-map.md`
+  6. Inventory tech stack, config, environment → `tech-stack.md`
+  7. Compress highlights into `.planning/MEMORY.md`
+- If **yes** and current: Read `MEMORY.md` for full context.
 
-**Quick Feature (small scope):**
-- 🔬 Researcher → ⚙️ Executor → 🔍 Reviewer
+### 3. Define the council
+Ask the user what they want to accomplish. Based on complexity and the Memory Module context, select a council preset:
 
-**Full Pipeline (complex feature):**
-- 🔬 Researcher → 📐 Architect → 📋 Planner → ⚙️ Executor → 🔍 Reviewer
+**🏗️ Full Council (complex features, multi-module impact):**
+- 🎯 Manager → 🔬 Researcher → 📐 Architect → 📋 Planner → ⚙️ Executor → 🔍 Reviewer
 
-**Debug Investigation:**
-- 🕵️ Investigator → 🔧 Fixer → ✅ Verifier
+**⚡ Rapid Council (small features, clear requirements):**
+- 🎯 Manager → 🔬 Researcher → ⚙️ Executor → 🔍 Reviewer
 
-Create `.planning/team/` directory structure and `config.json`.
+**🐛 Debug Council (bug investigation, production issues):**
+- 🎯 Manager → 🕵️ Investigator → 🔧 Fixer → ✅ Verifier
 
-### 3. Initialize the task board
-Create `.planning/team/BOARD.md` with the team objective and empty task sections.
+**📐 Architecture Council (design decisions, tech evaluation):**
+- 🎯 Manager → 🔬 Researcher → 📐 Architect → 🔍 Reviewer
 
-### 4. Execute Phase 1 — First Role
-Adopt the first role's persona and focus:
-- Read the role's focus area from config
-- Perform the role's responsibilities
-- Produce the role's expected outputs
-- Write the handoff document to `.planning/team/handoffs/phase-N-[role].md`
-- Update `config.json` to advance to the next phase
+**🔄 Refactoring Council (large-scale refactoring):**
+- 🎯 Manager → 🔬 Researcher → 📋 Planner → ⚙️ Executor → 🔍 Reviewer
 
-### 5. Role Transition
-When a phase completes:
-- Update the task board in `BOARD.md`
-- Read the previous role's handoff document
-- Adopt the next role's persona
-- Continue with the new role's focus
+**🔍 Audit Council (system audit, pre-launch review):**
+- 🎯 Manager → 🛡️ Security Auditor + ⚡ Performance Auditor + 📐 Architecture Auditor → 📝 Synthesizer
 
-### 6. Execute Remaining Phases
-Repeat step 5 for each role in the pipeline until all phases are complete.
+Create `.planning/council/` structure: `council.json`, `BOARD.md`, `messages/`, `handoffs/`, `tasks/`, `reviews/`.
 
-### 7. Team Completion
-When all phases are done:
-- Update `config.json` status to "completed"
-- Update the task board with final status
-- Write a comprehensive summary
-- Feed key learnings into `.planning/MEMORY.md` (if persistent-memory is active)
-- Clean up or archive the team session
+### 4. Manager makes first routing decision
+As the Manager:
+1. Analyze the objective in context of the Memory Module
+2. Identify which areas of the codebase are affected
+3. Write the first routing message with Memory Module context:
+   - Which agent gets the first task
+   - What specific areas to investigate
+   - Relevant schema/route/service context from Memory Module
+   - Known gotchas to watch out for
+4. Route to the first sub-agent
+
+### 5. Sub-agent execution
+Switch to the routed sub-agent role:
+1. Read the Manager's routing message (includes Memory Module context)
+2. Execute the specialist work
+3. When complete, write a message back to Manager:
+   - Type: handoff, question, escalation, status, or request
+   - Include files produced and suggested next action
+4. Update the task board
+
+### 6. Manager routing loop
+Switch back to Manager role:
+1. Read the sub-agent's message
+2. Consult Memory Module for context on affected areas
+3. Check quality gates for the current phase
+4. Make routing decision:
+   - **Route to next agent** — provide Memory Module context and quality expectations
+   - **Send back to same agent** — with guidance from Memory Module
+   - **Handle escalation** — use deep project knowledge to guide
+   - **Close council** — if objective is fully met
+5. Write routing message and update council.json
+
+### 7. Repeat steps 5-6
+Continue the routing loop until the Manager determines the objective is complete.
+- Each cycle: sub-agent works → messages Manager → Manager routes next
+- **Peer communication** can happen between steps when agents need quick alignment
+- **Escalations** always route through the Manager
+
+### 8. Council completion
+When the Manager closes the council:
+1. Update `council.json` status to "completed"
+2. Update the task board with final status
+3. Update Memory Module if schemas/routes/services changed
+4. Write comprehensive summary
+5. Feed key learnings into `.planning/MEMORY.md`
+6. Write `.planning/handoffs/LATEST.md` for next session
+7. Log decisions to `.planning/decisions/DECISIONS.md`
 
 ### Notes
-- Each role transition should be explicit and acknowledged
-- The agent should announce role switches: "Switching to ⚙️ Executor role..."
-- Handoff documents are the primary communication channel
+- The **Manager role is always available** — any sub-agent can escalate at any time
+- Manager provides **Memory Module context** in every routing message
+- **Quality gates** must be checked before advancing phases
+- **Peer communication** is allowed between agents in each other's `can_talk_to` list
 - The task board should be updated in real-time
-- If a role identifies issues, it creates tasks for a later role to handle
+- The council can span multiple sessions — `council.json` preserves full state
