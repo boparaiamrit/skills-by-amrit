@@ -52,7 +52,7 @@ Skills activate automatically when their conditions are met. You MUST use the re
 | Completeness check | `product-completeness-audit` |
 | Deep audit | `brutal-exhaustive-audit` |
 | Cross-session memory | `persistent-memory` |
-| Complex multi-step task | `agent-team-coordination` |
+| Complex multi-step task / LLM Council | `agent-team-coordination` |
 | Adding code to existing codebase | `codebase-conformity` |
 | Creating new skills | `writing-skills` |
 | Discovering skills | `using-skills` |

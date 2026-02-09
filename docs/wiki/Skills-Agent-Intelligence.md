@@ -2,7 +2,7 @@
 
 > 2 skills that give AI agents persistent memory and team coordination capabilities
 
-These skills are the **flagship additions in v3.0.0** — they bring Claude Code-style agent teams and claude-mem-style persistent memory to **every AI coding agent**.
+These skills are the **flagship additions in v3.0.0** — they bring LLM Council-style agent coordination and claude-mem-style persistent memory to **every AI coding agent**.
 
 ---
 
@@ -22,7 +22,7 @@ Every AI session starts from scratch. You explain the same architecture, repeat 
 SESSION START                    DURING SESSION                 SESSION END
 ┌──────────────┐                ┌──────────────┐               ┌──────────────┐
 │Read MEMORY.md│                │Capture:      │               │Write session │
-│Read LATEST.md│───▶            │ ▪ Decisions  │───▶           │Write handoff │
+│Read LATEST.md│───►            │ ▪ Decisions  │───►           │Write handoff │
 │Full context! │                │ ▪ Gotchas    │               │Update memory │
 └──────────────┘                │ ▪ Architecture│              │Compress      │
                                 └──────────────┘               └──────────────┘
@@ -81,101 +81,81 @@ When MEMORY.md exceeds 300 lines:
 
 ---
 
-## 24. 🤝 agent-team-coordination
+## 24. 💎 agent-team-coordination
 
-**Use When:** Complex tasks that benefit from structured phases — research, design, plan, execute, review.
+**Use When:** Complex tasks that benefit from deep project knowledge and structured specialist coordination — research, design, plan, execute, review.
 
 **What It Does:**
-Enables Claude Code-style agent team dynamics in single-agent environments through sequential role-switching with shared blackboard files.
+Implements the **LLM Council pattern** — a Manager agent with full project knowledge orchestrates specialist sub-agents through dynamic routing, peer communication, and structured escalation. The **Memory Module** deeply scans your codebase (schemas, routes, services, patterns) BEFORE any work begins, giving the Manager complete understanding.
 
 **The Problem It Solves:**
-Claude Code has Agent Teams (parallel agents via tmux). But Antigravity, Cursor, and most agents run single sessions. This skill brings team coordination patterns to ANY agent.
+AI coding tasks fail at scale because no single agent can hold all context simultaneously. Linear handoffs lose context. Parallel chaos creates conflicts. The LLM Council solves this with an intelligent routing graph where the Manager has deep project knowledge and dynamically routes work to specialists.
 
 **How It Works:**
 
 ```
-┌────────────────────────────────────────────────┐
-│              Single Agent Session                │
-│                                                  │
-│  Phase 1: 🔬 Researcher                        │
-│     Focus: Codebase analysis, evidence gathering │
-│     Produces: Research findings + handoff         │
-│                                                  │
-│  Phase 2: 📐 Architect                          │
-│     Focus: Solution design, pattern selection    │
-│     Reads: Research findings                      │
-│     Produces: Architecture design + handoff       │
-│                                                  │
-│  Phase 3: 📋 Planner                            │
-│     Focus: Task decomposition, wave planning     │
-│     Reads: Architecture design                    │
-│     Produces: Task files + plan + handoff         │
-│                                                  │
-│  Phase 4: ⚙️ Executor                           │
-│     Focus: Implementation, testing               │
-│     Reads: Plan + task files                      │
-│     Produces: Code changes + handoff              │
-│                                                  │
-│  Phase 5: 🔍 Reviewer                           │
-│     Focus: Quality review, security, performance  │
-│     Reads: ALL previous handoffs                  │
-│     Produces: Review report                       │
-└────────────────────────────────────────────────┘
+              ╔═══════════════════════════════╗
+              ║       🎯 MANAGER AGENT         ║
+              ║  Has: Full Memory Module        ║
+              ║  Routes tasks dynamically        ║
+              ║  Resolves conflicts              ║
+              ╚════════════╦══════════════════╝
+                           ║
+            ┌──────────────┼──────────────────┐
+            │  Dynamic Routing + Escalation     │
+     ┌──────▼──┐ ┌──────▼──┐ ┌──▼───┐ ┌──▼──────┐
+     │🔬Research│ │📐Architect│ │⚙️Exec│ │🔍Review │
+     └────┬─────┘ └────┬────┘ └──┬──┘ └────┬────┘
+          └─────────────┴────┬───┴──────────┘
+                   Peer-to-Peer Communication
 ```
 
-**Team Directory Structure:**
+**Memory Module Structure:**
 ```
-.planning/team/
-├── config.json              # Team definition (name, roles, phase)
-├── BOARD.md                 # Kanban task board
-├── tasks/
-│   ├── 001-task-name.md     # Individual task files
-│   └── 002-task-name.md
-├── handoffs/
-│   ├── phase-1-research.md  # Role handoff documents
-│   ├── phase-2-architect.md
-│   └── phase-3-plan.md
-└── reviews/
-    └── review-001.md        # Review feedback
+.planning/
+├── MEMORY.md                    # 🧠 Compressed project brain (~300 lines)
+├── memory/                      # 📚 Deep intelligence files
+│   ├── codebase-map.md         # Directory structure + module purposes
+│   ├── database-schemas.md     # ALL tables, columns, relationships, indexes
+│   ├── api-routes.md           # ALL endpoints, controllers, middleware
+│   ├── service-graph.md        # Service dependencies + business logic
+│   ├── frontend-map.md         # Components, state, routing
+│   └── tech-stack.md           # Languages, frameworks, tools, config
+└── council/                     # 🎯 Council state
+    ├── council.json            # Configuration + routing log
+    ├── BOARD.md                # Task board
+    ├── messages/               # Structured agent-to-agent messages
+    ├── handoffs/               # Role completion documents
+    ├── tasks/                  # Task definitions
+    └── reviews/                # Review feedback
 ```
 
-**Role Presets:**
-| Preset | Roles | Best For |
+**Communication Types:**
+| Type | From → To | Purpose |
 |:---|:---|:---|
-| ⚡ Quick (3) | Researcher → Executor → Reviewer | Small features, bug fixes |
+| 📤 Handoff | Agent → Manager | "I'm done, here's my work" |
+| ❓ Question | Agent → Agent | "I need clarification on X" |
+| 🚨 Escalation | Agent → Manager | "I'm stuck, need guidance" |
+| 📊 Status | Agent → Manager | "Here's my progress" |
+| 🔄 Request | Agent → Manager | "I need specialist X" |
+
+**Council Presets:**
+| Preset | Agents | Best For |
+|:---|:---|:---|
 | 🏗️ Full (5) | Researcher → Architect → Planner → Executor → Reviewer | Complex features |
-| 🐛 Debug (3) | Investigator → Fixer → Verifier | Bug investigations |
-| 🔬 Research (3) | Researcher-A → Researcher-B → Synthesizer | Multi-angle research |
+| ⚡ Rapid (3) | Researcher → Executor → Reviewer | Quick features |
+| 🐛 Debug (3) | Investigator → Fixer → Verifier | Bug hunting |
+| 📐 Architecture (3) | Researcher → Architect → Reviewer | Design decisions |
+| 🔄 Refactoring (4) | Researcher → Planner → Executor → Reviewer | Safe refactoring |
+| 🔍 Audit (4) | Security + Performance + Architecture → Synthesizer | System audits |
 
-**Task Board Example:**
-```markdown
-# 📋 Team Board: auth-refactor
-> Phase 3 — ⚙️ Executor
-
-## 🔴 Blocked
-- [ ] #005 — Integration tests (blocked by #003, #004)
-
-## 🟡 In Progress
-- [ ] #003 — Implement token refresh
-
-## 🟢 Done
-- [x] #001 — Research OAuth2 providers
-- [x] #002 — Design auth schema
-- [x] #004 — Database migration
-
-## 📊 Progress
-[██████░░░░] 60% — 3/5 tasks
-```
-
-**Multi-Conversation Support:**
-Team sessions can span multiple conversations. The blackboard persists in `.planning/team/`, so any conversation can resume from exactly where the last one left off.
-
-**Comparison with Claude Code Agent Teams:**
-| Feature | Claude Code Teams | agent-team-coordination |
+**Key Differentiators:**
+| Feature | Linear Handoffs | LLM Council |
 |:---|:---:|:---:|
-| Parallelism | True parallel (tmux) | Sequential (role-switching) |
-| Infrastructure | tmux + iTerm | Zero ✅ |
-| Agent support | Claude Code only | ANY agent ✅ |
-| Communication | Inter-agent messaging | Handoff documents |
-| Context loss | Possible (parallel) | None (sequential) ✅ |
-| File conflicts | Possible (parallel) | None (sequential) ✅ |
+| Project knowledge | Partial | Full (Memory Module) ✅ |
+| Routing | Fixed sequence | Dynamic (Manager decides) ✅ |
+| Feedback loops | None | Escalation + re-routing ✅ |
+| Peer communication | None | Direct specialist-to-specialist ✅ |
+| Quality gates | None | Enforced at every transition ✅ |
+| Infrastructure | Zero | Zero ✅ |
+| Agent support | Single agent | ANY agent ✅ |

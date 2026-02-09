@@ -27,6 +27,42 @@
 
 **Skills by Amrit** is a comprehensive, agent-agnostic skills framework that transforms AI coding assistants into senior staff engineers. Install once, use everywhere — across **34+ supported agents** including Antigravity, Cursor, Claude Code, Gemini CLI, Windsurf, Copilot, and more.
 
+---
+
+### 💎 The Gem: LLM Council + Memory Module
+
+> The most powerful pattern in AI-assisted development — and it works in ANY agent.
+
+**The Memory Module** deeply scans your entire codebase BEFORE any work begins — databases, schemas, API routes, service dependencies, frontend components, tech stack — and creates a structured intelligence layer that persists across sessions.
+
+**The LLM Council** uses that intelligence to orchestrate a **Manager + Specialist** team:
+
+```
+                    ╔═══════════════════════════════╗
+                    ║       🎯 MANAGER AGENT         ║
+                    ║  Full project knowledge         ║
+                    ║  Routes tasks dynamically        ║
+                    ║  Resolves conflicts              ║
+                    ╚════════════╦══════════════════╝
+                                 ║
+              ┌──────────────────┼──────────────────┐
+              │    Dynamic Routing + Escalation       │
+       ┌──────▼──┐ ┌──────▼──┐ ┌──▼────┐ ┌──▼──────┐
+       │🔬Research│ │📐Architect│ │⚙️Exec │ │🔍Review │
+       └────┬─────┘ └────┬────┘ └──┬───┘ └────┬────┘
+            └─────────────┴────┬───┴───────────┘
+                     Peer-to-Peer Communication
+```
+
+**What makes it different:**
+- ✅ Manager has **full project context** via Memory Module (every table, every route, every service)
+- ✅ Sub-agents can **talk to each other** directly for quick alignment
+- ✅ Any agent can **escalate to the Manager** when stuck — Manager guides with deep context
+- ✅ **Dynamic routing** — not a fixed linear sequence, but an intelligent routing graph
+- ✅ **Zero infrastructure** — pure file-based, works in ANY agent environment
+
+---
+
 ### 🏆 Recent Releases
 
 #### v3.3.0 — UI/UX Redesign & Database Deep Dive 🎨🗄️
@@ -174,7 +210,7 @@ Skills are deep instructional documents that teach AI agents HOW to think about 
 | # | Skill | Description |
 |:---:|:---|:---|
 | 23 | 💾 **persistent-memory** | Automated session memory — captures decisions, context, and learnings across sessions via file-based protocols. Zero infrastructure, works in ANY agent. Inspired by [claude-mem](https://github.com/thedotmack/claude-mem). |
-| 24 | 🤝 **agent-team-coordination** | Multi-role team coordination — sequential role-switching (Researcher → Architect → Planner → Executor → Reviewer) with shared blackboard. Brings [Claude Code Agent Teams](https://code.claude.com/docs/en/agent-teams) to ANY agent. |
+| 24 | 💎 **agent-team-coordination** | **LLM Council** — Manager-orchestrated multi-agent coordination with Memory Module. Manager has full project knowledge (schemas, routes, services), dynamically routes tasks to specialist sub-agents, enables peer communication, handles escalations across 6 council presets. |
 
 #### 🔶 Integration & Completeness (3 skills) — ✨ NEW
 
@@ -411,47 +447,45 @@ Use `/memory init` to initialize, `/memory write` to save.
 
 ---
 
-## 🤝 Agent Team Coordination — ✨ NEW in v3
+## 💎 LLM Council — Agent Team Coordination
 
 ### The Problem
-Claude Code has [Agent Teams](https://code.claude.com/docs/en/agent-teams) — parallel AI instances via tmux. But most devs use Antigravity or Cursor (single-agent).
+AI coding tasks fail at scale because no single agent can hold all context: database schemas, API routes, service dependencies, frontend components, and business logic — simultaneously. Linear handoffs lose context. Parallel chaos creates conflicts.
 
-### The Solution
-Sequential role-switching with a shared blackboard. One agent, multiple specialist hats.
+### The Solution: Memory Module + Manager-Orchestrated Council
+
+**Phase 0 — Memory Module**: Before any team work begins, deeply scan the entire codebase to create a structured intelligence layer: every table, every API route, every service dependency, every pattern.
+
+**Phase 1+ — LLM Council**: A Manager agent with full Memory Module knowledge orchestrates specialist sub-agents through dynamic routing.
 
 ```
-┌────────────────────────────────────────┐
-│           Single Agent Session          │
-│                                         │
-│  Phase 1: 🔬 Researcher                │
-│     → Research, evidence, findings     │
-│     → Write handoff document           │
-│                                         │
-│  Phase 2: 📐 Architect                 │
-│     → Read research, design solution   │
-│     → Write handoff document           │
-│                                         │
-│  Phase 3: 📋 Planner                   │
-│     → Read design, create tasks        │
-│     → Write handoff document           │
-│                                         │
-│  Phase 4: ⚙️ Executor                  │
-│     → Read plan, implement tasks       │
-│     → Write handoff document           │
-│                                         │
-│  Phase 5: 🔍 Reviewer                  │
-│     → Read ALL handoffs, review code   │
-│     → Write review report              │
-└────────────────────────────────────────┘
+                    ╔═══════════════════════════════╗
+                    ║       🎯 MANAGER AGENT         ║
+                    ║  Has: Full Memory Module        ║
+                    ║  Knows: Every schema, route,    ║
+                    ║         service, pattern         ║
+                    ║  Does: Route, guide, resolve     ║
+                    ╚════════════╦══════════════════╝
+                                 ║
+              ┌──────────────────┼──────────────────┐
+              │    Dynamic Routing + Escalation       │
+       ┌──────▼──┐ ┌──────▼──┐ ┌──▼────┐ ┌──▼──────┐
+       │🔬Research│ │📐Architect│ │⚙️Exec │ │🔍Review │
+       └────┬─────┘ └────┬────┘ └──┬───┘ └────┬────┘
+            └─────────────┴────┬───┴───────────┘
+                     Peer-to-Peer Communication
 ```
 
-### Role Presets
+### Key Capabilities
 
-| Preset | Roles | Best For |
-|:---|:---|:---|
-| ⚡ Quick | Researcher → Executor → Reviewer | Small features |
-| 🏗️ Full | Researcher → Architect → Planner → Executor → Reviewer | Complex features |
-| 🐛 Debug | Investigator → Fixer → Verifier | Bug hunting |
+| Capability | Description |
+|:---|:---|
+| 🧠 **Memory Module** | Deep intelligence: schemas, routes, services, components, tech stack |
+| 🎯 **Manager routing** | Dynamic task routing based on context — not fixed linear sequence |
+| 💬 **Peer communication** | Sub-agents talk directly for quick specialist alignment |
+| 🚨 **Escalation** | Agents escalate to Manager who guides with full project context |
+| 🎛️ **6 presets** | Full, Rapid, Debug, Architecture, Refactoring, Audit councils |
+| 🚪 **Quality gates** | Manager enforces gates at every phase transition |
 
 ---
 
@@ -620,7 +654,7 @@ npx skills-by-amrit help
 
 **New Skills:**
 - 💾 `persistent-memory` — Zero-infrastructure session memory for ANY agent
-- 🤝 `agent-team-coordination` — Claude Code-style teams for ANY agent
+- 💎 `agent-team-coordination` — LLM Council with Memory Module for ANY agent
 
 **New Commands (25 total):**
 - `/memory` — Memory management (init, read, write, compress, status)

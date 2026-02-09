@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### 💎 Major Overhaul: LLM Council + Memory Module
+- **agent-team-coordination** completely rewritten as the flagship feature
+- **Memory Module** — Deep codebase intelligence gathering (schemas, routes, services, patterns) as a prerequisite to any team coordination
+- **LLM Council pattern** — Manager agent with full project knowledge orchestrates specialist sub-agents
+- **Dynamic routing** — Manager routes tasks as an intelligent graph, not a fixed linear sequence
+- **Peer-to-peer communication** — Sub-agents can talk directly to each other for quick specialist alignment
+- **Escalation protocol** — Any agent can escalate to the Manager who guides with deep Memory Module context
+- **6 council presets** — Full Council, Rapid, Debug, Architecture, Refactoring, Audit
+- **Quality gates** — Manager enforces quality gates at every phase transition
+- **Structured messaging** — 5 message types: handoff, question, escalation, status, request
+- **Anti-shortcut rules** — with common rationalizations and rebuttals
+- **Iron questions** — 10 mandatory questions before closing any council session
+
+### 📝 Documentation
+- README updated with prominent "💎 The Gem" section for LLM Council
+- Council architecture diagram in README
+
 ## [3.3.0] — 2026-02-08 — UI/UX Redesign & Database Deep Dive 🎨🗄️
 
 ### 🆕 New Skill

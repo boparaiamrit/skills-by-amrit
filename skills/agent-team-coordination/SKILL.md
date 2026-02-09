@@ -1,229 +1,1031 @@
 ---
 name: agent-team-coordination
-description: File-based multi-agent team coordination protocol — enables sequential role-switching with shared blackboard, task boards, and handoff documents. Works in any single-agent environment (Antigravity, Cursor, Claude Code).
+description: "💎 LLM Council — Manager-orchestrated multi-agent coordination with deep Memory Module. One manager agent with full project knowledge routes tasks to specialist sub-agents, enables peer communication, handles escalations, and ensures quality. The Memory Module provides comprehensive codebase intelligence (schemas, routes, services, patterns) BEFORE any work begins."
 ---
 
-# 🤝 Agent Team Coordination
+# 💎 LLM Council — Agent Team Coordination
 
-> Multi-role coordination for single-agent environments — bringing team dynamics to solo AI sessions.
+> The most powerful pattern in AI-assisted development: a **Manager agent** with full project intelligence orchestrating **specialist sub-agents** through dynamic routing, peer communication, and structured escalation.
 
-## Why This Exists
+## What Makes This Different
 
-Claude Code introduced "Agent Teams" — multiple AI instances working in parallel via tmux sessions. But most developers use **Antigravity** or **Cursor**, which run single-agent sessions. This skill brings team coordination patterns to these environments through **sequential role-switching** with a **shared blackboard**.
+Every other AI team coordination system does one of two things:
+1. **Linear handoffs** — Agent A → Agent B → Agent C (rigid, no feedback loops)
+2. **Parallel chaos** — Multiple agents working simultaneously with no shared brain
 
-Instead of multiple agents running simultaneously, one agent wears different specialist hats in sequence, with handoff documents preserving context between roles.
+The LLM Council is neither. It's an **intelligent routing graph** where:
 
----
-
-## Core Concept: Sequential Role-Switching
+- ✅ A **Manager** has deep knowledge of the ENTIRE project (via Memory Module)
+- ✅ **Sub-agents** are specialists who do the actual work
+- ✅ Sub-agents can **talk to each other** directly for quick checks
+- ✅ Any agent can **escalate to the Manager** when stuck
+- ✅ The Manager **dynamically routes** work based on context — not a fixed sequence
+- ✅ The Manager can **re-route** work when new information emerges
+- ✅ Everything is **file-based** — works in ANY agent (Antigravity, Cursor, Claude Code, Gemini CLI)
 
 ```
-Traditional Team (Claude Code):
-┌──────────┐  ┌──────────┐  ┌──────────┐
-│Researcher│  │Executor  │  │Reviewer  │
-│ (Agent 1)│  │ (Agent 2)│  │ (Agent 3)│
-└────┬─────┘  └────┬─────┘  └────┬─────┘
-     │              │              │
-     └──────────┬───┘──────────────┘
-                │
-          Shared Files
-
-This Skill (Any Agent):
-┌────────────────────────────────────────┐
-│            Single Agent                 │
-│                                         │
-│  Phase 1: 🔬 Researcher Role           │
-│     → writes research findings          │
-│     → creates handoff document          │
-│                                         │
-│  Phase 2: 📋 Planner Role              │
-│     → reads research findings           │
-│     → creates implementation plan       │
-│     → creates handoff document          │
-│                                         │
-│  Phase 3: ⚙️ Executor Role             │
-│     → reads plan                        │
-│     → implements changes                │
-│     → creates handoff document          │
-│                                         │
-│  Phase 4: 🔍 Reviewer Role             │
-│     → reads all previous handoffs       │
-│     → reviews implementation            │
-│     → writes review feedback            │
-└────────────────────────────────────────┘
+                         ╔══════════════════════════════╗
+                         ║      🎯 MANAGER AGENT        ║
+                         ║                               ║
+                         ║  ▪ Full Memory Module loaded   ║
+                         ║  ▪ Knows ALL schemas, routes   ║
+                         ║  ▪ Knows ALL services, flows   ║
+                         ║  ▪ Routes tasks dynamically    ║
+                         ║  ▪ Resolves conflicts           ║
+                         ║  ▪ Guides stuck agents          ║
+                         ╚════════════╦═════════════════╝
+                                      ║
+                    ╔═════════════════╬═════════════════╗
+                    ║    Dynamic Task Routing             ║
+                    ║    + Escalation Channel              ║
+                    ╚═════╦═══╦═══╦═══╦═══╦══════════════╝
+                          ║   ║   ║   ║   ║
+                 ┌────────▼┐ ┌▼───▼┐ ┌▼───▼┐ ┌──────────┐
+                 │🔬Research│ │📐Arch│ │📋Plan│ │⚙️Execute │
+                 │  Agent   │ │Agent │ │Agent│ │  Agent   │
+                 └─────┬───┘ └──┬──┘ └──┬──┘ └────┬─────┘
+                       │        │       │          │
+                       ╰────────┴───┬───┴──────────╯
+                                    │
+                         Peer-to-Peer Communication
+                         (Direct specialist handoffs)
 ```
-
-The blackboard (shared files) ensures no context is lost between role switches.
 
 ---
 
-## Architecture
+## Part 1: The Memory Module 🧠
+
+> **PREREQUISITE**: Before ANY council session begins, the Memory Module MUST exist. If it doesn't, the Manager's first job is to create it.
+
+The Memory Module is the project's **comprehensive intelligence layer** — a structured, deep scan of the entire codebase that gives the Manager complete understanding.
+
+### What the Memory Module Contains
+
+```
+.planning/
+├── MEMORY.md                         # 🧠 Compressed project brain (~300 lines)
+└── memory/                           # 📚 Deep intelligence files
+    ├── codebase-map.md              # Directory structure + module purposes
+    ├── database-schemas.md          # ALL tables, columns, types, relationships
+    ├── api-routes.md                # ALL endpoints, controllers, middleware
+    ├── service-graph.md             # Service dependencies + business logic
+    ├── frontend-map.md              # Components, state, routing (if applicable)
+    ├── patterns.md                  # Established code patterns + conventions
+    └── tech-stack.md                # Languages, frameworks, tools, config
+```
+
+### Memory Module Generation Protocol
+
+When starting a council session and no Memory Module exists, the Manager MUST execute this protocol:
+
+#### Step 1: Codebase Scan (`codebase-map.md`)
+
+```markdown
+# Codebase Map
+> Generated: [DATE]
+> Framework: [Next.js / Laravel / Django / etc.]
+> Language: [TypeScript / Python / PHP / etc.]
+
+## Directory Structure
+[Full tree with purpose annotations]
+├── src/
+│   ├── app/           # Next.js App Router pages
+│   ├── components/    # React components (147 files)
+│   ├── lib/           # Shared utilities and services
+│   ├── hooks/         # Custom React hooks (23 files)
+│   └── types/         # TypeScript type definitions
+├── supabase/
+│   ├── migrations/    # 42 migration files
+│   └── functions/     # 8 edge functions
+└── tests/             # Test files (67 files)
+
+## Module Boundaries
+- **Auth Module**: src/lib/auth/ — Better Auth, session management
+- **Data Module**: src/lib/services/ — All Supabase queries
+- **UI Module**: src/components/ — Presentational components
+- **API Module**: src/app/api/ — API routes
+
+## Entry Points
+- Main: src/app/layout.tsx
+- API: src/app/api/
+- Auth: src/lib/auth/auth.ts
+
+## Dependencies (Critical)
+[Package dependencies that affect architecture decisions]
+```
+
+#### Step 2: Database Intelligence (`database-schemas.md`)
+
+```markdown
+# Database Schemas
+> Generated: [DATE]
+> Database: [PostgreSQL / MySQL / SQLite]
+> ORM: [Prisma / Drizzle / SQLAlchemy / Eloquent]
+> Total Tables: [N]
+
+## Schema Overview
+[Entity-relationship summary]
+
+## Tables
+
+### users
+| Column | Type | Nullable | Default | Notes |
+|--------|------|----------|---------|-------|
+| id | uuid | NO | gen_random_uuid() | PK |
+| email | varchar(255) | NO | — | UNIQUE |
+| name | varchar(255) | YES | — | |
+| created_at | timestamptz | NO | now() | |
+
+**Indexes:** idx_users_email (UNIQUE)
+**RLS:** Enabled — users can only read own row
+**Relationships:**
+- users.id → posts.author_id (1:many)
+- users.id → profiles.user_id (1:1)
+
+### posts
+[Same format for every table...]
+
+## Relationships Graph
+users ──1:many──→ posts
+users ──1:1────→ profiles
+posts ──many:many→ tags (via post_tags)
+
+## Migration History (Last 10)
+| Version | Date | Description |
+|---------|------|-------------|
+| 20260208_001 | 2026-02-08 | Add notifications table |
+| 20260207_001 | 2026-02-07 | Add user preferences |
+```
+
+#### Step 3: API Route Intelligence (`api-routes.md`)
+
+```markdown
+# API Routes
+> Generated: [DATE]
+> Total Endpoints: [N]
+
+## Route Map
+
+### Authentication
+| Method | Path | Controller/Handler | Auth | Description |
+|--------|------|--------------------|------|-------------|
+| POST | /api/auth/login | auth.ts:login | None | Email/password login |
+| POST | /api/auth/signup | auth.ts:signup | None | Create account |
+| POST | /api/auth/logout | auth.ts:logout | Required | End session |
+| GET | /api/auth/session | auth.ts:session | Required | Current session |
+
+### Resources
+| Method | Path | Controller/Handler | Auth | Description |
+|--------|------|--------------------|------|-------------|
+| GET | /api/posts | posts.ts:list | Required | List user posts |
+| POST | /api/posts | posts.ts:create | Required | Create post |
+
+## Controller Flows
+### POST /api/posts (Create Post)
+```
+Request → Auth Middleware → Validate Body → PostService.create()
+  → Database Insert → Revalidate Cache → 201 Response
+```
+
+## Middleware Chains
+- `/api/*` → rateLimiter → corsHandler
+- `/api/protected/*` → authMiddleware → rateLimiter
+- `/api/admin/*` → authMiddleware → adminCheck
+```
+
+#### Step 4: Service Layer Intelligence (`service-graph.md`)
+
+```markdown
+# Service Graph
+> Generated: [DATE]
+
+## Services
+
+### PostService (src/lib/services/post-service.ts)
+**Purpose:** CRUD operations for blog posts
+**Dependencies:** SupabaseClient, CacheService, NotificationService
+**Methods:**
+- create(data) → Post — Creates post, invalidates cache, sends notification
+- update(id, data) → Post — Updates post, invalidates cache
+- delete(id) → void — Soft delete, invalidates cache
+- list(filters) → Post[] — Paginated list with caching
+
+### NotificationService (src/lib/services/notification-service.ts)
+**Purpose:** User notification management
+**Dependencies:** SupabaseClient, EmailService
+**Methods:**
+- send(userId, type, data) → Notification
+- markRead(id) → void
+- getUnread(userId) → Notification[]
+
+## Dependency Graph
+PostService → SupabaseClient
+PostService → CacheService
+PostService → NotificationService → EmailService
+AuthService → SupabaseClient → (Supabase)
+
+## Event/Observer Patterns
+- PostCreated → NotificationService.send()
+- UserSignup → WelcomeEmailJob
+
+## Background Jobs / Queues
+- WelcomeEmailJob — Sends welcome email on signup
+- DigestJob — Weekly digest email (cron: every Monday 8am)
+
+## External API Integrations
+- Stripe (payments) — src/lib/stripe/
+- SendGrid (email) — src/lib/email/
+- Cloudinary (images) — src/lib/storage/
+```
+
+#### Step 5: Frontend Map (`frontend-map.md`) — if applicable
+
+```markdown
+# Frontend Map
+> Generated: [DATE]
+> Framework: [Next.js / React / Vue / etc.]
+> Total Components: [N]
+
+## Page Structure
+/                    → HomePage (public)
+/login               → LoginPage (public)
+/dashboard           → DashboardPage (auth required)
+/dashboard/settings  → SettingsPage (auth required)
+/posts/[id]          → PostDetailPage (public)
+/admin               → AdminPage (admin role required)
+
+## Component Hierarchy
+App
+├── Layout
+│   ├── Sidebar
+│   │   ├── NavLink[]
+│   │   └── UserAvatar
+│   ├── Header
+│   │   ├── SearchBar
+│   │   └── NotificationBell
+│   └── MainContent
+│       └── [Page Components]
+├── Providers
+│   ├── AuthProvider
+│   ├── ThemeProvider
+│   └── QueryProvider
+
+## State Management
+- **Auth state:** React Context (AuthProvider)
+- **Server state:** TanStack Query / SWR
+- **UI state:** useState/useReducer (local)
+- **Theme:** CSS variables + context
+
+## Design System
+- **Colors:** CSS custom properties in globals.css
+- **Typography:** Inter (body), JetBrains Mono (code)
+- **Spacing:** 4px base unit
+- **Breakpoints:** 640px, 768px, 1024px, 1280px
+```
+
+#### Step 6: Tech Stack & Config (`tech-stack.md`)
+
+```markdown
+# Tech Stack
+> Generated: [DATE]
+
+## Core
+| Layer | Technology | Version |
+|-------|-----------|---------|
+| Language | TypeScript | 5.3 |
+| Framework | Next.js | 14.2 |
+| Database | PostgreSQL | 15 (Supabase) |
+| Auth | Better Auth | 1.2 |
+| Styling | Tailwind CSS | 3.4 |
+
+## Infrastructure
+- **Hosting:** Vercel
+- **Database:** Supabase (PostgreSQL)
+- **Storage:** Supabase Storage
+- **Email:** SendGrid
+- **CI/CD:** GitHub Actions
+
+## Configuration Files
+- `next.config.js` — Next.js config
+- `tsconfig.json` — TypeScript config
+- `.env.local` — Environment variables (NOT committed)
+
+## Environment Variables
+| Variable | Purpose | Required |
+|----------|---------|----------|
+| SUPABASE_URL | Database connection | Yes |
+| SUPABASE_ANON_KEY | Public API key | Yes |
+| STRIPE_SECRET_KEY | Payment processing | Yes |
+| SENDGRID_API_KEY | Email sending | Yes |
+```
+
+### Memory Module Iron Rules
+
+```
+1. The Memory Module MUST be created BEFORE any council work begins.
+2. The Memory Module MUST be updated after significant changes.
+3. MEMORY.md stays under 300 lines — detail lives in memory/ subdirectory.
+4. Every table must be documented with columns, types, relationships and indexes.
+5. Every API endpoint must be documented with method, path, auth, and handler.
+6. Every service must be documented with purpose, dependencies, and methods.
+7. The Memory Module is READ by all agents. Only the MANAGER may UPDATE it.
+```
+
+---
+
+## Part 2: The Council Architecture 🎯
+
+### Council Configuration (`council.json`)
+
+```json
+{
+  "council_name": "feature-oauth-refactor",
+  "objective": "Refactor authentication module to support OAuth2",
+  "status": "active",
+  "created_at": "2026-02-09T10:00:00Z",
+
+  "manager": {
+    "name": "manager",
+    "emoji": "🎯",
+    "status": "active",
+    "context": "Full Memory Module loaded. Knows all schemas, routes, services.",
+    "responsibilities": [
+      "Maintain full project knowledge via Memory Module",
+      "Route tasks to appropriate specialist agents",
+      "Resolve conflicts between agents",
+      "Provide guidance when agents are stuck",
+      "Enforce quality gates before phase transitions",
+      "Synthesize final output"
+    ]
+  },
+
+  "agents": [
+    {
+      "name": "researcher",
+      "emoji": "🔬",
+      "status": "idle",
+      "specialization": "Codebase analysis, external research, evidence gathering",
+      "can_talk_to": ["manager", "architect", "planner"],
+      "current_task": null
+    },
+    {
+      "name": "architect",
+      "emoji": "📐",
+      "status": "idle",
+      "specialization": "System design, patterns, interfaces, data flow, schema design",
+      "can_talk_to": ["manager", "researcher", "planner", "executor"],
+      "current_task": null
+    },
+    {
+      "name": "planner",
+      "emoji": "📋",
+      "status": "idle",
+      "specialization": "Task decomposition, dependency analysis, wave planning, estimation",
+      "can_talk_to": ["manager", "architect", "executor"],
+      "current_task": null
+    },
+    {
+      "name": "executor",
+      "emoji": "⚙️",
+      "status": "idle",
+      "specialization": "Code implementation, testing, database migrations",
+      "can_talk_to": ["manager", "architect", "planner", "reviewer"],
+      "current_task": null
+    },
+    {
+      "name": "reviewer",
+      "emoji": "🔍",
+      "status": "idle",
+      "specialization": "Code review, security audit, performance analysis, test validation",
+      "can_talk_to": ["manager", "executor", "architect"],
+      "current_task": null
+    }
+  ],
+
+  "routing_log": [],
+  "message_count": 0,
+  "current_agent": "manager"
+}
+```
 
 ### Directory Structure
 
 ```
 .planning/
-├── team/
-│   ├── config.json              # Team definition
-│   ├── BOARD.md                 # Human-readable task board
-│   ├── tasks/
-│   │   ├── 001-task-name.md     # Individual task files
-│   │   ├── 002-task-name.md
+├── MEMORY.md                          # 🧠 Compressed project brain
+├── memory/                            # 📚 Deep intelligence (Memory Module)
+│   ├── codebase-map.md
+│   ├── database-schemas.md
+│   ├── api-routes.md
+│   ├── service-graph.md
+│   ├── frontend-map.md
+│   └── tech-stack.md
+├── council/                           # 🎯 Council state
+│   ├── council.json                  # Council configuration + routing log
+│   ├── BOARD.md                      # Human-readable task board
+│   ├── messages/                     # Structured communication
+│   │   ├── msg-001.md
 │   │   └── ...
-│   ├── handoffs/
-│   │   ├── phase-1-research.md  # Role handoff documents
-│   │   ├── phase-2-plan.md
-│   │   ├── phase-3-execute.md
-│   │   └── phase-4-review.md
-│   └── reviews/
-│       └── review-NNN.md        # Review feedback on tasks
+│   ├── handoffs/                     # Role completion documents
+│   │   ├── handoff-researcher.md
+│   │   └── ...
+│   ├── tasks/                        # Task definitions
+│   │   ├── 001-task-name.md
+│   │   └── ...
+│   └── reviews/                      # Review feedback
+│       └── review-NNN.md
+├── decisions/
+│   └── DECISIONS.md
+└── context/
+    ├── architecture.md
+    ├── patterns.md
+    ├── gotchas.md
+    └── tech-debt.md
 ```
 
-### Team Config (`config.json`)
+---
+
+## Part 3: Communication Protocol 💬
+
+### Message Format
+
+All agent-to-agent communication uses structured messages in `.planning/council/messages/`:
+
+```markdown
+# Message #[NNN]
+
+## Meta
+- **From:** 🔬 researcher
+- **To:** 🎯 manager (or 📐 architect for peer-to-peer)
+- **Type:** handoff | question | escalation | status | request
+- **Timestamp:** [DATE]
+- **Related Task:** #[task_id] (if applicable)
+
+## Content
+[The actual message content]
+
+## Files Produced
+- `.planning/council/handoffs/handoff-researcher.md`
+- [Any other files created]
+
+## Suggested Next Action
+[What the sender thinks should happen next]
+```
+
+### Message Types
+
+#### 1. 📤 Handoff — "I'm done, here's my work"
+```markdown
+**Type:** handoff
+**From:** 🔬 researcher → 🎯 manager
+**Content:** Research complete. Found 3 OAuth2 approaches. Recommending PKCE flow
+  for our SPA architecture. Documented in handoff-researcher.md.
+**Suggested Next Action:** Route to architect for system design.
+```
+
+#### 2. ❓ Question — "I need clarification"
+```markdown
+**Type:** question
+**From:** 📐 architect → 🔬 researcher
+**Content:** Your research mentions "existing session table has polymorphic
+  relationships." Can you clarify which tables reference sessions and how
+  the polymorphic type column works?
+**Suggested Next Action:** Researcher investigates and responds.
+```
+
+#### 3. 🚨 Escalation — "I'm stuck, need manager help"
+```markdown
+**Type:** escalation
+**From:** ⚙️ executor → 🎯 manager
+**Content:** The auth migration conflicts with the existing RLS policies.
+  Table `user_sessions` has row-level security that blocks the new OAuth
+  columns. I need guidance on whether to modify RLS or restructure the schema.
+**Suggested Next Action:** Manager provides guidance using Memory Module context.
+```
+
+#### 4. 📊 Status — "Here's my progress"
+```markdown
+**Type:** status
+**From:** ⚙️ executor → 🎯 manager
+**Content:** Tasks #001 and #002 complete. Starting #003 (token refresh).
+  Estimated 20 minutes remaining.
+**Suggested Next Action:** No action needed, continuing.
+```
+
+#### 5. 🔄 Request — "I need a specific specialist"
+```markdown
+**Type:** request
+**From:** ⚙️ executor → 🎯 manager
+**Content:** I've written the API endpoints but need the architect to review
+  the schema changes before I write the migration. This affects 3 tables.
+**Suggested Next Action:** Route to architect for schema review.
+```
+
+### Manager Routing Decisions
+
+When the Manager receives a message, it MUST follow this protocol:
+
+```
+1. READ the message carefully
+2. CONSULT the Memory Module for relevant context
+3. DECIDE the next action:
+   a. Route to another agent (specify which and why)
+   b. Provide guidance directly (for escalations)
+   c. Acknowledge and wait (for status updates)
+   d. Create new tasks (if scope expanded)
+   e. Close the council (if objective is complete)
+4. UPDATE council.json routing_log
+5. WRITE a routing message to the next agent
+```
+
+**Manager Routing Message:**
+```markdown
+# Routing Decision #[N]
+
+## From Manager to: 📐 architect
+## Reason: Research phase complete, design needed
+
+## Context from Memory Module
+[Relevant information the Manager pulls from the Memory Module]
+- The current auth system uses Better Auth with session-based auth
+- Tables affected: users, sessions, accounts (see database-schemas.md)
+- Known gotcha: sessions table has RLS that must be updated
+
+## Task Assignment
+[What the architect should do]
+
+## Quality Gate
+[What "done" looks like for this assignment]
+
+## Watch Out For
+[Specific warnings from the Memory Module]
+- The sessions table has a trigger that auto-expires after 30 days
+- The accounts table is used by both auth and billing — be careful
+```
+
+---
+
+## Part 4: Execution Flow 🔄
+
+### Phase 0: Memory Module Initialization
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│  🎯 MANAGER: Memory Module Check                             │
+│                                                               │
+│  Does .planning/memory/ exist and is it current?              │
+│                                                               │
+│  NO → Execute full codebase intelligence gathering            │
+│       1. Scan directory structure → codebase-map.md           │
+│       2. Extract ALL database schemas → database-schemas.md   │
+│       3. Map ALL API routes/controllers → api-routes.md       │
+│       4. Map ALL services/dependencies → service-graph.md     │
+│       5. Map frontend (if applicable) → frontend-map.md      │
+│       6. Inventory tech stack → tech-stack.md                 │
+│       7. Compress into MEMORY.md                              │
+│                                                               │
+│  YES → Read MEMORY.md + check handoffs/LATEST.md              │
+│        Verify Memory Module is still current                  │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### Phase 1: Council Formation
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│  🎯 MANAGER: Council Formation                               │
+│                                                               │
+│  1. Analyze the objective                                     │
+│  2. Determine which agents are needed                         │
+│  3. Select a Council Preset (or custom)                       │
+│  4. Create council.json                                       │
+│  5. Create initial task board (BOARD.md)                       │
+│  6. Route first task to appropriate agent                     │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### Phase 2: Dynamic Execution Loop
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    COUNCIL EXECUTION LOOP                           │
+│                                                                     │
+│  ┌─────────────────────────────────────────┐                       │
+│  │ 1. Manager assigns task to Agent X       │                       │
+│  └────────────────┬────────────────────────┘                       │
+│                   ▼                                                  │
+│  ┌─────────────────────────────────────────┐                       │
+│  │ 2. Agent X works on task                 │                       │
+│  │    - Reads Memory Module for context     │                       │
+│  │    - Reads previous handoffs             │                       │
+│  │    - Executes specialist work            │                       │
+│  └────────────────┬────────────────────────┘                       │
+│                   ▼                                                  │
+│  ┌─────────────────────────────────────────┐                       │
+│  │ 3. Agent X writes a message              │    ◄── Can be:       │
+│  │    - handoff (done, pass to next)        │    ◄── question       │
+│  │    - escalation (stuck, need help)       │    ◄── request        │
+│  │    - status (still working)              │    ◄── peer message   │
+│  └────────────────┬────────────────────────┘                       │
+│                   ▼                                                  │
+│  ┌─────────────────────────────────────────────────┐               │
+│  │ 4. Manager reads message + consults Memory       │               │
+│  │    - What did the agent produce?                  │               │
+│  │    - What does the Memory Module say is relevant? │               │
+│  │    - Who should handle this next?                 │               │
+│  │    - Are there any gotchas to warn about?         │               │
+│  └────────────────┬────────────────────────────────┘               │
+│                   ▼                                                  │
+│  ┌─────────────────────────────────────────┐                       │
+│  │ 5. Manager makes routing decision        │                       │
+│  │    a) Route to Agent Y                   │ ──→ Loop back to #1   │
+│  │    b) Provide guidance + re-route        │ ──→ Loop back to #2   │
+│  │    c) Send back to same agent with help  │ ──→ Loop back to #2   │
+│  │    d) Close council (objective met)      │ ──→ Exit              │
+│  └─────────────────────────────────────────┘                       │
+│                                                                     │
+│  LOOP CONTINUES until Manager determines objective is complete      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+### Peer-to-Peer Communication
+
+Sub-agents can communicate directly for **quick checks** without going through the Manager:
+
+```
+Allowed Peer Conversations:
+- 🔬 Researcher ↔ 📐 Architect  (research ↔ design alignment)
+- 📐 Architect  ↔ 📋 Planner    (design ↔ task breakdown)
+- 📐 Architect  ↔ ⚙️ Executor   (design clarification during impl)
+- 📋 Planner    ↔ ⚙️ Executor   (task clarification during impl)
+- ⚙️ Executor   ↔ 🔍 Reviewer   (review feedback discussion)
+- 🔍 Reviewer   ↔ 📐 Architect  (architecture concerns)
+
+NOT Allowed Without Manager:
+- 🔬 Researcher ↔ ⚙️ Executor  (too disconnected, Manager must mediate)
+- 🔬 Researcher ↔ 🔍 Reviewer  (no direct relationship)
+- 📋 Planner    ↔ 🔍 Reviewer  (Manager handles rework routing)
+```
+
+**When to escalate to Manager vs. peer:**
+- **Escalate to Manager:** Scope changes, blockers, conflicts, quality concerns
+- **Peer communication:** Clarification questions, quick alignment checks, technical details
+
+---
+
+## Part 5: Council Presets 🎛️
+
+### Full Council (5 agents) — Complex features
 
 ```json
 {
-  "team_name": "feature-auth-refactor",
-  "objective": "Refactor authentication module to support OAuth2",
-  "roles": [
-    {
-      "name": "researcher",
-      "emoji": "🔬",
-      "phase": 1,
-      "focus": "Understand current auth system, research OAuth2 best practices",
-      "reads": [],
-      "produces": ["research-findings.md", "handoff"]
-    },
-    {
-      "name": "architect",
-      "emoji": "📐",
-      "phase": 2,
-      "focus": "Design the new auth architecture based on research",
-      "reads": ["phase-1-research.md"],
-      "produces": ["architecture-decision.md", "handoff"]
-    },
-    {
-      "name": "planner",
-      "emoji": "📋",
-      "phase": 3,
-      "focus": "Break architecture into implementable tasks",
-      "reads": ["phase-2-architect.md"],
-      "produces": ["PLAN.md", "task-files", "handoff"]
-    },
-    {
-      "name": "executor",
-      "emoji": "⚙️",
-      "phase": 4,
-      "focus": "Implement tasks from the plan",
-      "reads": ["phase-3-plan.md", "task-files"],
-      "produces": ["code-changes", "handoff"]
-    },
-    {
-      "name": "reviewer",
-      "emoji": "🔍",
-      "phase": 5,
-      "focus": "Review all changes for quality, security, performance",
-      "reads": ["all-handoffs", "code-changes"],
-      "produces": ["review-report.md"]
-    }
-  ],
-  "current_phase": 1,
-  "current_role": "researcher",
-  "created_at": "2026-02-08T04:00:00Z",
-  "status": "active"
+  "preset": "full-council",
+  "agents": ["researcher", "architect", "planner", "executor", "reviewer"],
+  "use_when": "Complex feature spanning multiple modules, significant architecture impact",
+  "typical_flow": "Manager → Researcher → Manager → Architect → Manager → Planner → Manager → Executor → Manager → Reviewer → Manager (close)"
+}
+```
+
+### Rapid Council (3 agents) — Quick features
+
+```json
+{
+  "preset": "rapid-council",
+  "agents": ["researcher", "executor", "reviewer"],
+  "use_when": "Small to medium features, clear requirements, minimal architecture impact",
+  "typical_flow": "Manager → Researcher → Manager → Executor → Manager → Reviewer → Manager (close)"
+}
+```
+
+### Debug Council (3 agents) — Investigation
+
+```json
+{
+  "preset": "debug-council",
+  "agents": ["investigator", "fixer", "verifier"],
+  "use_when": "Bug investigation, production issues, performance problems",
+  "investigator": {
+    "specialization": "Hypothesis generation, log analysis, reproduction steps"
+  },
+  "fixer": {
+    "specialization": "Root cause fix implementation, test writing"
+  },
+  "verifier": {
+    "specialization": "Fix validation, regression testing, edge case verification"
+  }
+}
+```
+
+### Architecture Council (3 agents) — Design decisions
+
+```json
+{
+  "preset": "architecture-council",
+  "agents": ["researcher", "architect", "reviewer"],
+  "use_when": "Architecture decisions, tech stack evaluation, migration planning",
+  "typical_flow": "Manager → Researcher (multiple investigations) → Manager → Architect → Manager → Reviewer → Manager (decision)"
+}
+```
+
+### Refactoring Council (4 agents) — Safe refactoring
+
+```json
+{
+  "preset": "refactoring-council",
+  "agents": ["researcher", "planner", "executor", "reviewer"],
+  "use_when": "Large-scale refactoring, module extraction, pattern migration",
+  "typical_flow": "Manager → Researcher → Manager → Planner (incremental waves) → Manager → Executor (wave by wave) → Manager → Reviewer → Manager (close)"
+}
+```
+
+### Audit Council (4 agents) — Comprehensive audit
+
+```json
+{
+  "preset": "audit-council",
+  "agents": ["security-auditor", "performance-auditor", "architecture-auditor", "synthesizer"],
+  "use_when": "Full system audit, pre-launch review, compliance check",
+  "typical_flow": "Manager assigns all auditors in parallel → Manager → Synthesizer combines all findings → Manager (report)"
 }
 ```
 
 ---
 
-## Pre-Built Role Templates
+## Part 6: Manager Role Specification 🎯
 
-### 🔬 Researcher Role
+The Manager is NOT just another role — it's the **brain** of the council. Here is the exhaustive specification:
 
-**When active, the agent:**
-1. Reads the team objective from `config.json`
-2. Searches the codebase for relevant code, patterns, and tests
-3. Researches external documentation if needed
-4. Produces a findings document with evidence
-5. Writes a handoff for the next role
+### Manager Initialization Checklist
 
-**Handoff template:**
-```markdown
-# Phase 1 Handoff: Research → Architect
+```
+BEFORE starting any council work, the Manager MUST:
 
-## Research Summary
-[Key findings in 3-5 bullet points]
-
-## Codebase Analysis
-- **Current implementation:** [where the code lives]
-- **Dependencies:** [what depends on this code]
-- **Test coverage:** [current test state]
-- **Technical debt:** [existing issues]
-
-## External Research
-- [Finding 1 with source]
-- [Finding 2 with source]
-
-## Recommendations
-1. [Recommendation with rationale]
-2. [Recommendation with rationale]
-
-## Risks Identified
-- [Risk 1 — severity and mitigation]
-- [Risk 2 — severity and mitigation]
-
-## Files of Interest
-- `path/to/file.ts` — [why it matters]
+□ 1. Load MEMORY.md (project brain)
+□ 2. Load or create Memory Module (memory/*.md files)
+□ 3. Read handoffs/LATEST.md (last session context)
+□ 4. Read any existing council state (council.json)
+□ 5. Understand the full objective
+□ 6. Select appropriate council preset
+□ 7. Define quality gates for each agent
+□ 8. Create initial task board
 ```
 
-### 📐 Architect Role
+### Manager's Decision Framework
 
-**When active, the agent:**
-1. Reads the researcher's handoff
-2. Designs the solution architecture
-3. Documents patterns, interfaces, and data flow
-4. Identifies breaking changes and migration needs
-5. Writes a handoff for the planner
+When routing work, the Manager asks:
 
-### 📋 Planner Role
+```
+1. WHAT was just completed?
+   → Read the handoff/message carefully
 
-**When active, the agent:**
-1. Reads the architect's handoff
-2. Decomposes the architecture into atomic tasks
-3. Identifies dependencies between tasks
-4. Groups tasks into implementation waves
-5. Creates individual task files
-6. Writes a handoff for the executor
+2. WHAT does the Memory Module say about affected areas?
+   → Check database-schemas.md for affected tables
+   → Check api-routes.md for affected endpoints
+   → Check service-graph.md for affected services
+   → Check gotchas.md for known issues in those areas
 
-### ⚙️ Executor Role
+3. WHO should handle this next?
+   → Which specialist has the right expertise?
+   → Is there a dependency that must be resolved first?
 
-**When active, the agent:**
-1. Reads the planner's handoff and task files
-2. Implements tasks in wave order (respecting dependencies)
-3. Runs tests after each task
-4. Updates task status (todo → done)
-5. Writes a handoff for the reviewer
+4. WHAT context does the next agent need?
+   → Pull relevant sections from Memory Module
+   → Include warnings from gotchas.md
+   → Reference specific files and line numbers
 
-### 🔍 Reviewer Role
+5. WHAT does "done" look like for the next agent?
+   → Define clear quality gates
+   → Specify what must be in the handoff
+```
 
-**When active, the agent:**
-1. Reads ALL previous handoffs for full context
-2. Reviews code changes for correctness, security, performance
-3. Runs the full test suite
-4. Produces a review report with severity-based feedback
-5. Updates the team board with final status
+### Manager's Quality Gates
+
+The Manager enforces quality gates at each transition:
+
+```markdown
+## Quality Gates
+
+### Research → Design
+- [ ] All relevant code areas identified with file paths
+- [ ] External research includes sources
+- [ ] Risks documented with severity
+- [ ] At least 2 approaches compared
+
+### Design → Planning
+- [ ] Architecture changes documented with diagrams
+- [ ] Breaking changes identified
+- [ ] Migration path defined
+- [ ] Data flow documented
+
+### Planning → Execution
+- [ ] Tasks are atomic (max 30 minutes each)
+- [ ] Dependencies between tasks are explicit
+- [ ] Wave order is dependency-safe
+- [ ] Estimated total effort is documented
+
+### Execution → Review
+- [ ] All tasks marked done with implementation notes
+- [ ] Tests written (or justified why not)
+- [ ] Files changed are documented
+- [ ] No TODO/FIXME left unexplained
+
+### Review → Close
+- [ ] All critical/high issues resolved
+- [ ] Test suite passes
+- [ ] Memory Module updated with new information
+- [ ] DECISIONS.md updated with key decisions
+```
+
+### Manager's Guidance Protocol
+
+When a sub-agent escalates a problem, the Manager:
+
+```
+1. READ the escalation message carefully
+2. CONSULT the Memory Module for context:
+   - Has this area been problematic before? (gotchas.md)
+   - What patterns exist? (patterns.md)
+   - What are the dependencies? (service-graph.md)
+3. PROVIDE guidance with specifics:
+   - Reference exact files, functions, tables
+   - Explain the "why" from the architecture context
+   - Suggest a concrete approach
+4. DECIDE whether to:
+   a. Let the same agent continue with guidance
+   b. Route to a different specialist
+   c. Create a new task for investigation
+5. WRITE a guidance message to the agent
+```
 
 ---
 
-## Task Board (`BOARD.md`)
+## Part 7: Sub-Agent Role Specifications 🔧
 
-Human-readable task board maintained by all roles:
+### 🔬 Researcher
+
+**Activation:** Manager routes a research task
+
+**What the Researcher does:**
+1. Reads the Manager's routing message (includes Memory Module context)
+2. Investigates the codebase in the areas specified
+3. Researches external documentation/best practices
+4. Produces evidence-backed findings
+5. Writes a handoff message to the Manager
+
+**Researcher Handoff Template:**
+```markdown
+# 🔬 Research Handoff
+
+## Summary
+[3-5 sentences of key findings]
+
+## Codebase Findings
+### Area 1: [Module/Component]
+- **Location:** `path/to/file.ts:L45-L120`
+- **Current behavior:** [What it does now]
+- **Relevant patterns:** [What patterns it uses]
+- **Dependencies:** [What depends on it]
+- **Concerns:** [Any issues found]
+
+### Area 2: [Module/Component]
+[Same structure...]
+
+## External Research
+- **Option A:** [Approach with sources]
+- **Option B:** [Approach with sources]
+- **Recommendation:** [Which and why]
+
+## Risks
+| Risk | Severity | Mitigation |
+|------|----------|-----------|
+| [Risk 1] | 🔴 Critical | [Mitigation] |
+| [Risk 2] | 🟡 Medium | [Mitigation] |
+
+## Files of Interest
+- `path/to/file.ts` — [Why it matters]
+- `path/to/other.ts` — [Why it matters]
+```
+
+### 📐 Architect
+
+**Activation:** Manager routes a design task (usually after research)
+
+**What the Architect does:**
+1. Reads the Researcher's handoff (via Manager)
+2. Reads relevant Memory Module files (schemas, routes, services)
+3. Designs the solution architecture
+4. Documents interfaces, data flows, and patterns
+5. Identifies breaking changes and migration needs
+6. Can peer-communicate with Researcher for clarification
+7. Writes a handoff message to the Manager
+
+**Architect Handoff Template:**
+```markdown
+# 📐 Architecture Handoff
+
+## Design Overview
+[Architecture description with rationale]
+
+## Data Model Changes
+### New Tables
+[Schema definitions with columns, types, indexes, RLS]
+
+### Modified Tables
+[Column additions/modifications with migration approach]
+
+### Relationships
+[New relationships between entities]
+
+## API Changes
+### New Endpoints
+| Method | Path | Purpose | Auth |
+|--------|------|---------|------|
+| ... | ... | ... | ... |
+
+### Modified Endpoints
+[What changes and backward compatibility impact]
+
+## Service Layer Changes
+[New services, modified services, dependency changes]
+
+## Component/UI Changes (if applicable)
+[New components, modified components, state changes]
+
+## Migration Strategy
+[Step-by-step migration plan, rollback plan]
+
+## Breaking Changes
+[List of breaking changes with impact assessment]
+
+## Decision Record
+**Decision:** [What was decided]
+**Alternatives Considered:** [What was rejected and why]
+**Trade-offs:** [What we gain vs. what we lose]
+```
+
+### 📋 Planner
+
+**Activation:** Manager routes a planning task (usually after architecture)
+
+**What the Planner does:**
+1. Reads the Architect's handoff (via Manager)
+2. Decomposes the design into atomic tasks
+3. Identifies task dependencies
+4. Groups tasks into execution waves
+5. Creates individual task files
+6. Updates the task board
+7. Writes a handoff message to the Manager
+
+### ⚙️ Executor
+
+**Activation:** Manager routes an implementation task
+
+**What the Executor does:**
+1. Reads the Planner's task breakdown (via Manager)
+2. Reads relevant Memory Module files for context
+3. Implements tasks in wave order
+4. Runs tests after each task
+5. Updates task status on the board
+6. Can peer-communicate with Architect for design clarification
+7. Can escalate blockers to Manager
+8. Writes a handoff message to the Manager when wave is complete
+
+### 🔍 Reviewer
+
+**Activation:** Manager routes a review task (usually after execution)
+
+**What the Reviewer does:**
+1. Reads ALL previous handoffs for full context
+2. Reviews code changes against the architecture design
+3. Checks for security, performance, and correctness
+4. Runs the full test suite
+5. Can peer-communicate with Executor for clarification
+6. Can peer-communicate with Architect for architecture concerns
+7. Produces a review report with severity-based feedback
+8. Writes a handoff message to the Manager
+
+---
+
+## Part 8: Task Board (`BOARD.md`) 📋
 
 ```markdown
-# 📋 Team Board: [team_name]
-> Objective: [objective from config]
-> Status: Phase [N] — [role_name]
-> Last Updated: [DATE]
+# 📋 Council Board: [council_name]
+> 🎯 Objective: [objective]
+> 🎛️ Preset: [preset name]
+> 📊 Status: [active | paused | complete]
+> 🎯 Current Agent: [emoji name]
+> 📬 Messages: [N]
+> ⏱️ Last Updated: [DATE]
+
+## 💎 Council Members
+| Role | Agent | Status | Current Task |
+|------|-------|--------|-------------|
+| 🎯 Manager | manager | active | Orchestrating |
+| 🔬 Research | researcher | idle | — |
+| 📐 Architecture | architect | idle | — |
+| 📋 Planning | planner | idle | — |
+| ⚙️ Execution | executor | idle | — |
+| 🔍 Review | reviewer | idle | — |
 
 ## 🔴 Blocked
 - [ ] #003 — Write OAuth2 tests (blocked by #002)
@@ -235,172 +1037,221 @@ Human-readable task board maintained by all roles:
 - [x] #001 — Research OAuth2 providers
 - [x] #004 — Update database schema
 
+## 📬 Recent Routing
+| # | From | To | Type | Summary |
+|---|------|----|------|---------|
+| 5 | ⚙️ executor | 🎯 manager | escalation | RLS conflict on sessions table |
+| 4 | 🎯 manager | ⚙️ executor | routing | Start implementation wave 1 |
+| 3 | 📋 planner | 🎯 manager | handoff | 6 tasks created in 2 waves |
+
 ## 📊 Progress
-[████████░░] 60% — 3/5 tasks complete
+[██████████░░░░░░░░░░] 40% — 2/5 tasks complete
 ```
 
 ---
 
-## Task File Template
+## Part 9: How to Use 🚀
 
-Each task in `.planning/team/tasks/`:
-
-```markdown
-# Task #[NNN] — [Title]
-
-## Meta
-- **Status:** todo | in-progress | review | done | blocked
-- **Phase:** [which phase creates this task]
-- **Assigned Role:** [which role implements]
-- **Priority:** critical | high | medium | low
-- **Wave:** [execution wave number]
-- **Dependencies:** [task IDs this depends on]
-- **Estimated Effort:** [S/M/L/XL]
-
-## Description
-[What needs to be done]
-
-## Acceptance Criteria
-- [ ] [Criterion 1]
-- [ ] [Criterion 2]
-- [ ] [Criterion 3]
-
-## Implementation Notes
-[Filled by executor — how it was implemented]
-
-## Files Changed
-- `path/to/file` — [what changed]
-
-## Review Notes
-[Filled by reviewer — feedback on implementation]
-
-## Timestamps
-- Created: [DATE]
-- Started: [DATE or null]
-- Completed: [DATE or null]
-- Reviewed: [DATE or null]
-```
-
----
-
-## How to Use
-
-### Starting a Team Session
+### Starting a Council Session
 
 Tell the agent:
 ```
-Start a team session for: [describe the task/feature]
+Start a council session for: [describe the objective]
 ```
 
 The agent will:
-1. Create `.planning/team/` directory structure
-2. Generate `config.json` with appropriate roles
-3. Begin Phase 1 (Researcher role)
+1. Enter **Manager** role
+2. Check for existing Memory Module (create if missing)
+3. Analyze the objective
+4. Select the appropriate council preset
+5. Create the council directory structure
+6. Begin routing to the first agent
 
-### Switching Roles
+### During the Session
 
-When a phase is complete, tell the agent:
+The agent automatically switches between Manager and sub-agent roles. You can:
+
 ```
-Switch to the next role
+# Let the council run autonomously
+Continue the council session
+
+# Check status
+Show the council board
+
+# Intervene as the Manager
+As manager, route this to the architect instead
+
+# Add context
+Manager note: the client requested OAuth2 specifically, not SAML
+
+# Pause the session
+Pause the council session
 ```
 
-Or the agent should automatically switch when it completes its phase objectives and writes the handoff document.
+### Resuming a Session
 
-### Resuming a Team Session
-
-If a team session spans multiple conversations:
+If a council session spans multiple conversations:
 ```
-Resume the team session
+Resume the council session
 ```
 
 The agent will:
-1. Read `config.json` to determine current phase
-2. Read the latest handoff document
-3. Continue from where the last role left off
+1. Read `council.json` for current state
+2. Read `MEMORY.md` + latest handoff
+3. Read the last message in `messages/`
+4. Continue from where it left off
 
-### Multi-Conversation Teams
+### Multi-Session Councils
 
-For complex features spanning multiple sessions:
-- Each conversation picks up from the current phase in `config.json`
-- The handoff documents ensure zero context loss
-- The persistent-memory skill's MEMORY.md tracks the team session state
+For complex features spanning multiple conversations:
+- The Memory Module provides full project context instantly
+- `council.json` tracks exactly where the council is
+- Messages preserve the full communication history
+- The Manager always knows the full picture
 
 ---
 
-## Role Presets
+## Part 10: Integration with Persistent Memory Skill 🔗
 
-### Quick Feature (3 roles)
-```json
-{
-  "roles": ["researcher", "executor", "reviewer"],
-  "description": "Fast iteration for small features"
-}
+The Council and Persistent Memory work together:
+
+```
+Persistent Memory (MEMORY.md):
+  └── Provides project brain for Manager initialization
+  └── Updated at end of council session with decisions + outcomes
+
+Memory Module (memory/*.md):
+  └── Deep intelligence files created/updated by Manager
+  └── Read by all agents for context
+  └── Survives across council sessions
+
+Council State (council/):
+  └── Active council configuration + messages
+  └── Cleaned up after council closes (archived)
+  └── Board preserved as historical record
 ```
 
-### Full Pipeline (5 roles)
-```json
-{
-  "roles": ["researcher", "architect", "planner", "executor", "reviewer"],
-  "description": "Complete pipeline for complex features"
-}
+**Session Flow:**
 ```
-
-### Debug Investigation (3 roles)
-```json
-{
-  "roles": ["investigator", "fixer", "verifier"],
-  "description": "Scientific debugging with hypothesis testing"
-}
-```
-
-### Parallel Research (3 roles)
-```json
-{
-  "roles": ["researcher-frontend", "researcher-backend", "synthesizer"],
-  "description": "Multi-angle research before implementation"
-}
+1. Session starts → Agent reads MEMORY.md (persistent memory)
+2. Council starts → Manager reads memory/*.md (Memory Module)
+3. Council runs → Messages + handoffs accumulate
+4. Council ends → Manager updates MEMORY.md with outcomes
+5. Session ends → Agent writes handoffs/LATEST.md
 ```
 
 ---
 
-## Integration with Persistent Memory
+## Anti-Shortcut Rules 🚫
 
-The team coordination skill works hand-in-hand with the persistent-memory skill:
+```
+1. NEVER skip the Memory Module — it's the foundation of everything.
+   Rationalization: "I already know this codebase."
+   Rebuttal: You don't. Scan it. Document it. The next session won't know.
 
-1. **Memory reads team state**: `MEMORY.md` includes active team session info
-2. **Handoffs feed memory**: Phase handoffs are compressed into MEMORY.md
-3. **Decisions tracked**: Team decisions go into `DECISIONS.md`
-4. **Cross-session continuity**: If a team session spans multiple conversations, the memory system provides continuity
+2. NEVER let one agent do everything — that defeats the council.
+   Rationalization: "It's faster if I just implement it directly."
+   Rebuttal: Speed ≠ Quality. The council catches what solo agents miss.
+
+3. NEVER skip the Manager routing step — every handoff goes through Manager.
+   Rationalization: "The next agent is obvious."
+   Rebuttal: The Manager adds context from the Memory Module. That context catches bugs.
+
+4. NEVER skip peer communication when you need clarification.
+   Rationalization: "I'll figure it out myself."
+   Rebuttal: Wrong assumptions compound. Ask the specialist.
+
+5. NEVER close the council without the Reviewer.
+   Rationalization: "The code works, tests pass."
+   Rebuttal: Working code ≠ correct code. The Reviewer catches integration risk.
+
+6. NEVER leave the Memory Module outdated after significant changes.
+   Rationalization: "I'll update it later."
+   Rebuttal: Later never comes. Update it NOW while context is fresh.
+```
+
+## Common Rationalizations and Rebuttals
+
+| Rationalization | Rebuttal |
+|:---|:---|
+| "This is too small for a council" | Use the Rapid Council (3 agents). Even small changes benefit from research → execute → review. |
+| "I know the codebase well enough" | Prove it. Can you name every table, every API endpoint, every service dependency from memory? The Memory Module can. |
+| "Sequential is too slow" | The council prevents re-work. One hour of research saves ten hours of debugging. |
+| "The Memory Module is too much work" | It's created once, updated incrementally. It saves exponentially more time than it costs. |
+| "Messages are overhead" | Messages are the evidence trail. When something breaks, they tell you exactly what was decided and why. |
+
+---
+
+## Iron Questions ⚔️
+
+Before closing any council session, the Manager MUST answer:
+
+```
+1. Was the Memory Module consulted before every routing decision?
+2. Did every agent receive relevant context from the Memory Module?
+3. Were all escalations resolved with specific guidance?
+4. Did peer communication happen where specialists needed alignment?
+5. Were quality gates enforced at every phase transition?
+6. Is the task board accurate and up-to-date?
+7. Has the Memory Module been updated with new schemas/routes/services?
+8. Has DECISIONS.md been updated with key decisions?
+9. Has MEMORY.md been updated with the council outcomes?
+10. Can the next session resume without losing any context?
+```
+
+---
+
+## Red Flags 🚩
+
+🔴 **CRITICAL:**
+- Memory Module doesn't exist and wasn't created before starting
+- Manager routing without consulting Memory Module context
+- Sub-agent writing code without reading Memory Module
+- No reviewer in the council
+- Council closing without updating MEMORY.md
+
+🟠 **HIGH:**
+- Escalation received but Manager didn't check gotchas.md
+- Peer communication happening between agents not in each other's `can_talk_to` list
+- Tasks not atomic (> 30 minutes estimated)
+- Quality gates not checked before phase transition
+
+🟡 **MEDIUM:**
+- Task board not updated after task completion
+- Messages missing structured format
+- Memory Module not updated after schema changes
+- Handoffs missing "Watch Out For" section
+
+🟢 **LOW:**
+- Council preset not documented in council.json
+- Routing log not maintained
+- Status messages infrequent during long tasks
 
 ---
 
 ## Agent-Specific Setup
 
 ### Antigravity (Gemini)
-Use the `/team-session` workflow in `.agent/workflows/`.
+Use the `/team-session` workflow in `.agent/workflows/`. The workflow triggers Memory Module initialization and council formation.
 
 ### Cursor
-The `team-protocol.mdc` rule in `.cursor/rules/` activates team behavior.
+The `team-protocol.mdc` rule in `.cursor/rules/` activates council behavior. Memory Module files are read via `@file` references.
 
 ### Claude Code
-Use the `/team` command in `.claude/commands/`.
+Use the `/team` command in `.claude/commands/`. Supports multi-instance (actual parallel agents via tmux) or single-instance (sequential role-switching with council protocol).
 
 ---
 
-## Anti-Patterns
+## Best Practices ✅
 
-❌ **Don't** skip the handoff document — it's the team's communication channel
-❌ **Don't** let one role do everything — that defeats the purpose
-❌ **Don't** start implementing before research is done
-❌ **Don't** skip the review role — it catches issues
-❌ **Don't** create too many tasks — keep them atomic but not micro
-❌ **Don't** modify task files from the wrong role
-
-## Best Practices
-
-✅ **Do** write thorough handoff documents between roles
-✅ **Do** keep the task board updated in real-time
-✅ **Do** include "watch out for" notes in handoffs
-✅ **Do** respect task dependencies (wave order)
-✅ **Do** mark acceptance criteria as met before marking tasks done
-✅ **Do** have the reviewer read ALL handoffs for full context
+✅ **Do** create the Memory Module FIRST — before any council work
+✅ **Do** keep MEMORY.md under 300 lines — detail lives in memory/ files
+✅ **Do** have the Manager provide specific Memory Module context in every routing
+✅ **Do** use peer communication for quick specialist-to-specialist alignment
+✅ **Do** escalate to Manager when stuck — don't guess
+✅ **Do** update the task board in real-time
+✅ **Do** enforce quality gates at every phase transition
+✅ **Do** update the Memory Module after significant changes
+✅ **Do** write thorough handoff documents with "Watch Out For" sections
+✅ **Do** include file paths and line numbers in all technical references
+✅ **Do** commit `.planning/` to version control (except secrets)
