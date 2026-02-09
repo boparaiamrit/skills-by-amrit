@@ -12,12 +12,14 @@ At the start of EVERY conversation involving project work:
 1. **Check** if `.planning/MEMORY.md` exists in the project root
 2. If it exists, **read it silently** before doing anything else
 3. Also **read** `.planning/handoffs/LATEST.md` if it exists
+   - If LATEST.md doesn't exist, that's OK — skip this step
 4. **Acknowledge** context briefly: "From memory: we're working on [X], last session we [Y]"
 5. Use this context to inform ALL your work in this session
 
 ## During Session — CAPTURE AS YOU GO
 
 ### On Significant Decisions
+Decisions worth capturing: architecture, technology choices, trade-offs, breaking changes.
 Append to `.planning/decisions/DECISIONS.md`:
 ```
 ## [DATE] — [Topic]
@@ -36,16 +38,21 @@ Append to `.planning/context/gotchas.md`:
 ### On Architecture Changes
 Update `.planning/context/architecture.md` with the change.
 
+### Auto-Save Reminder
+After completing significant milestones, proactively ask:
+> "Would you like me to save progress to memory now?"
+
 ## Session End — ALWAYS DO THIS
 
 When significant work is complete or the user indicates session end:
 
-1. **Create** session log: `.planning/sessions/YYYY-MM-DD-session-N.md`
-   - What was done, decisions made, files changed, next steps
-2. **Write** handoff: `.planning/handoffs/LATEST.md`
+1. **Archive previous handoff**: Move `LATEST.md` to `handoffs/_history/YYYY-MM-DD-HHMMSS.md`
+2. **Create** session log: `.planning/sessions/YYYY-MM-DD-session-N.md`
+   - Session numbering: N = (highest N for today) + 1, or 1 if first session today
+3. **Write** handoff: `.planning/handoffs/LATEST.md` with:
    - Summary, current state, next steps, blockers, gotchas
-3. **Update** `.planning/MEMORY.md` with new information
-4. **Compress** if MEMORY.md exceeds 300 lines
+4. **Update** `.planning/MEMORY.md` with new information
+5. **Compress** if MEMORY.md exceeds 300 lines
 
 ## Memory Structure
 
@@ -53,20 +60,31 @@ When significant work is complete or the user indicates session end:
 .planning/
 ├── MEMORY.md              # Project brain (~300 lines max)
 ├── sessions/              # Session logs
+│   └── _archive/          # Compressed old sessions
 ├── decisions/DECISIONS.md # Decision log
 ├── context/
 │   ├── architecture.md    # Architecture decisions
 │   ├── patterns.md        # Code patterns
 │   ├── gotchas.md         # Known issues
 │   └── tech-debt.md       # Technical debt
-└── handoffs/LATEST.md     # Last session handoff
+└── handoffs/
+    ├── LATEST.md          # Current handoff
+    └── _history/          # Previous handoffs (archived)
 ```
 
 ## Rules
 
 - NEVER skip reading MEMORY.md at session start
 - NEVER skip writing the handoff at session end
+- ALWAYS archive previous LATEST.md before overwriting
 - ALWAYS keep MEMORY.md under 300 lines
 - NEVER store sensitive data (API keys, passwords) in memory files
-- ALWAYS compress older entries when memory grows
-- Commit `.planning/` to version control (secrets in .gitignore)
+- Commit `.planning/` to version control (except secrets)
+
+## Error Recovery
+
+If MEMORY.md is corrupted or empty:
+1. Check context/ files for detailed information
+2. Read recent session logs and handoff history
+3. Reconstruct MEMORY.md from these sources
+4. Run `/memory init` to validate structure
