@@ -121,8 +121,7 @@ body {
 .section-header { margin-bottom: 40px; }
 .section-header h2 {
   font-size: 2rem; font-weight: 800; margin-bottom: 8px;
-  background: linear-gradient(135deg, #fff 0%, #c0c0d0 100%);
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  color: #fff;
 }
 .section-header p { color: var(--text-secondary); font-size: 1rem; max-width: 600px; }
 
