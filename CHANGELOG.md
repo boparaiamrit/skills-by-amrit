@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [3.3.0] — 2026-02-08 — UI/UX Redesign 🎨
+## [3.3.0] — 2026-02-08 — UI/UX Redesign & Database Deep Dive 🎨🗄️
 
 ### 🆕 New Skill
 - **ui-ux-redesign** — Full-stack visual audit for frontend redesign. Inventories every backend API and data model, audits every frontend component and design token (colors, spacing, typography, radii, shadows), analyzes user flows for friction points, and produces layered redesign recommendations with implementation waves.
@@ -17,6 +17,13 @@ All notable changes to this project will be documented in this file.
 - `examples-skills-ui-ux-redesign.md`
 - `examples-commands-redesign.md`
 - `examples-workflows-redesign.md`
+
+### 🧠 Skill Enhancement
+- **database-audit** — Massively enhanced with deep indexing strategy for high-volume tables (logs, activity, notifications). New phases: high-volume table audit, text column indexing strategy, partial indexes, table partitioning, query pattern analysis. Added health scoring per table, DDL examples for every recommendation.
+
+### 🔧 Infrastructure
+- **Version sync system** — `scripts/sync-version.js` auto-syncs version and asset counts from `package.json` to `docs/index.html` on every release. `postversion` npm hook ensures everything stays in sync.
+- **CI fix** — `publish.yml` now checks if version already exists on npm before publishing (prevents E403 errors)
 
 ### 📊 By the Numbers
 - 31 skills (+1 new)
