@@ -123,6 +123,11 @@ body {
   font-size: 2rem; font-weight: 800; margin-bottom: 8px;
   color: #fff;
 }
+.section-header h2 .emoji {
+  color: initial;
+  -webkit-text-fill-color: initial;
+  font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', sans-serif;
+}
 .section-header p { color: var(--text-secondary); font-size: 1rem; max-width: 600px; }
 
 /* ── Cards Grid ── */
