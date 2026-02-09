@@ -1,44 +1,111 @@
-## 🤝 Agent Team Coordination Protocol
+## 🎯 LLM Council Protocol
 
-> Installed by skills-by-amrit. Enables structured multi-role work for complex tasks.
+> Installed by skills-by-amrit. Enables Manager-orchestrated multi-agent coordination.
 
-### When to Activate Team Mode
+### When to Activate Council Mode
 
-Activate sequential role-switching when:
+Activate the LLM Council when:
 - Task spans multiple systems or modules
 - Task requires research before implementation
 - Task is complex enough to need structured phases
-- User requests: "start a team session", "use team mode", etc.
+- User requests: "start a council", "use team mode", "team session", etc.
 
-### Role Pipeline
+### The LLM Council Pattern
 
-**Quick Feature (3 roles):** 🔬Researcher → ⚙️Executor → 🔍Reviewer
-**Full Pipeline (5 roles):** 🔬Researcher → 📐Architect → 📋Planner → ⚙️Executor → 🔍Reviewer
-**Debug Investigation (3 roles):** 🕵️Investigator → 🔧Fixer → ✅Verifier
+Unlike simple role-switching, the Council has a **Manager** with full project knowledge who orchestrates **specialist sub-agents**:
+
+```
+🎯 MANAGER (orchestrator)
+  ├── 🔬 Researcher
+  ├── 📐 Architect
+  ├── 📋 Planner
+  ├── ⚙️ Executor
+  └── 🔍 Reviewer
+```
+
+### Council Presets
+
+| Preset | Agents | Use When |
+|--------|--------|----------|
+| **Full Council** | Researcher → Architect → Planner → Executor → Reviewer | Complex multi-module features |
+| **Rapid Council** | Researcher → Executor → Reviewer | Small features, clear requirements |
+| **Debug Council** | Investigator → Fixer → Verifier | Bug investigation, production issues |
+| **Architecture** | Researcher → Architect → Reviewer | Design decisions, tech evaluation |
+| **Refactoring** | Researcher → Planner → Executor → Reviewer | Large-scale refactoring |
+
+### Directory Structure
+
+```
+.planning/
+├── MEMORY.md                    # Project brain (persistent memory)
+├── memory/                      # Memory Module (codebase intelligence)
+│   ├── codebase-map.md
+│   ├── database-schemas.md
+│   ├── api-routes.md
+│   ├── service-graph.md
+│   ├── frontend-map.md
+│   └── tech-stack.md
+├── council/                     # Active council state
+│   ├── council.json            # Configuration + routing log
+│   ├── BOARD.md                # Task board
+│   ├── messages/               # Agent communications
+│   ├── handoffs/               # Phase handoff documents
+│   ├── tasks/                  # Task definitions
+│   └── reviews/                # Review feedback
+└── decisions/DECISIONS.md       # Decision log
+```
 
 ### Protocol
 
-1. **Create** `.planning/team/config.json` with team definition
-2. **Create** `.planning/team/BOARD.md` task board
-3. **For each role:**
-   a. Announce: "━━━ Phase N: [emoji] [Role] ━━━"
-   b. Read previous handoff from `.planning/team/handoffs/`
-   c. Perform role responsibilities
-   d. Write handoff to `.planning/team/handoffs/phase-N-[role].md`
-   e. Update task board and config
-4. **On completion:** Update MEMORY.md with team session summary
+#### Starting a Council
+1. **Check Memory Module** — Create if missing, refresh if stale (>48h)
+2. **Create** `.planning/council/` with `council.json` and `BOARD.md`
+3. **Select preset** based on task complexity
+4. **Enter Manager role** and route first task
 
-### Role Behaviors
+#### Manager Responsibilities
+- Load and consult Memory Module before every routing decision
+- Provide relevant context (schemas, routes, gotchas) in routing messages
+- Enforce quality gates at phase transitions
+- Handle escalations with specific guidance
+- Update BOARD.md after each routing
 
-- **🔬 Researcher:** Search code, read docs, gather evidence, write findings
-- **📐 Architect:** Design solution, document patterns, identify risks
-- **📋 Planner:** Create tasks, identify dependencies, group into waves
-- **⚙️ Executor:** Implement in wave order, run tests, update task status
-- **🔍 Reviewer:** Read ALL handoffs, review code, write review report
+#### Sub-Agent Responsibilities
+- Read Manager's routing message (includes Memory Module context)
+- Execute specialist work
+- Write structured message back to Manager (handoff, question, escalation, status)
+- Can peer-communicate with allowed agents for quick alignment
+
+#### Ending a Council
+- Manager verifies objective is complete
+- Update Memory Module with new schemas/routes/services
+- Update MEMORY.md with council outcomes
+- Update DECISIONS.md with key decisions
+- Archive council to `.planning/council/_archive/`
+
+### Message Format
+
+All communications go to `.planning/council/messages/msg-NNN.md`:
+
+```markdown
+# Message #NNN
+**From:** 🔬 researcher
+**To:** 🎯 manager
+**Type:** handoff | question | escalation | status | request
+**Timestamp:** [DATE]
+
+## Content
+[Message content]
+
+## Suggested Next Action
+[What should happen next]
+```
 
 ### Rules
 
-- ALWAYS write handoff documents between roles
-- ALWAYS update the task board when status changes
-- NEVER implement before research is done
-- NEVER skip the review phase
+- ALWAYS create/refresh Memory Module before council work
+- ALWAYS route through Manager (except allowed peer-to-peer)
+- ALWAYS write structured messages between agents
+- ALWAYS enforce quality gates before phase transitions
+- NEVER skip the Reviewer phase
+- NEVER close council without updating Memory Module and MEMORY.md

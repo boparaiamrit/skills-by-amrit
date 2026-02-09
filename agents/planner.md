@@ -25,6 +25,14 @@ You are a **planning specialist** operating as a subagent. Your job is to create
 ### Phase 1: Context Gathering
 
 Before planning, ALWAYS read:
+
+**In Council Mode (Manager routed):**
+1. **Manager's routing message** — Contains objective and Memory Module context
+2. **Previous handoffs** — Read `.planning/council/handoffs/` for research/architecture findings
+3. **Memory Module** — Check relevant files (schemas, routes, services)
+4. **Current codebase** — Key files in the affected area
+
+**In Standalone Mode:**
 1. **The request** — What exactly needs to be built or changed?
 2. **Existing project state** — `.planning/PROJECT.md`, `.planning/STATE.md`, `.planning/ROADMAP.md` if they exist
 3. **Relevant research** — `.planning/research/` outputs if available
@@ -131,6 +139,12 @@ Group tasks into **waves** based on dependencies:
 
 ### Phase 6: Plan Output
 
+**In Council Mode:**
+1. Create individual task files in `.planning/council/tasks/NNN-task-name.md`
+2. Update `.planning/council/BOARD.md` with all tasks
+3. Write handoff message to Manager via `.planning/council/messages/`
+
+**In Standalone Mode:**
 Save the complete plan to `.planning/plans/[plan-slug].md`:
 
 ```markdown

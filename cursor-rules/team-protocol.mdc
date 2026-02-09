@@ -1,75 +1,139 @@
 ---
-description: Agent team coordination protocol — sequential role-switching with shared blackboard for complex features
+description: LLM Council protocol — Manager-orchestrated multi-agent coordination with Memory Module for complex tasks
 globs: *
 ---
 
-# Agent Team Coordination Protocol
+# LLM Council Protocol
 
 ## Concept
 
-For complex tasks, switch between specialist roles sequentially:
-- 🔬 **Researcher** → Deep analysis and evidence gathering
-- 📐 **Architect** → Solution design and pattern selection
-- 📋 **Planner** → Task decomposition and wave planning
-- ⚙️ **Executor** → Implementation with verification
-- 🔍 **Reviewer** → Quality assurance and feedback
+For complex tasks, use the LLM Council pattern: a **Manager** with full project knowledge orchestrates **specialist sub-agents**.
+
+```
+🎯 MANAGER (has Memory Module)
+  ├── 🔬 Researcher — codebase analysis, evidence gathering
+  ├── 📐 Architect — system design, patterns, interfaces
+  ├── 📋 Planner — task decomposition, wave planning
+  ├── ⚙️ Executor — implementation, testing
+  └── 🔍 Reviewer — code review, quality assurance
+```
 
 ## When to Activate
 
-Activate team coordination when:
+Activate council coordination when:
 - Task involves multiple systems or modules
 - Task requires research before implementation
 - Task is complex enough to benefit from structured phases
-- User explicitly requests a team approach
+- User explicitly requests council/team approach
+
+## Directory Structure
+
+```
+.planning/
+├── MEMORY.md                    # Project brain
+├── memory/                      # Memory Module (codebase intelligence)
+│   ├── codebase-map.md
+│   ├── database-schemas.md
+│   ├── api-routes.md
+│   ├── service-graph.md
+│   └── tech-stack.md
+├── council/                     # Active council state
+│   ├── council.json            # Config + routing log
+│   ├── BOARD.md                # Task board
+│   ├── messages/               # msg-NNN.md files
+│   │   └── msg-001.md
+│   ├── handoffs/               # handoff-NNN-agent.md files
+│   │   └── handoff-001-researcher.md
+│   ├── tasks/                  # Task definitions
+│   │   └── 001-task-name.md
+│   └── reviews/
+└── decisions/DECISIONS.md
+```
 
 ## Protocol
 
-### Starting a Team
-1. Assess task complexity
-2. Choose preset: Quick (3 roles) | Full (5 roles) | Debug (3 roles)
-3. Create `.planning/team/` with `config.json` and `BOARD.md`
-4. Begin Phase 1
+### Starting a Council
+1. Check Memory Module exists and is current (<48h old)
+2. If missing/stale, scan codebase to create memory/*.md files
+3. Create `.planning/council/` with council.json, BOARD.md
+4. Select preset: Full (5) | Rapid (3) | Debug (3) | Architecture (3)
+5. Enter Manager role, make first routing decision
 
-### Role Execution
-Each role:
-1. Reads the previous role's handoff from `.planning/team/handoffs/`
-2. Performs its specific function
-3. Writes its outputs
-4. Creates a handoff document for the next role
-5. Updates the task board
+### Manager Routing
 
-### Role Switching
-Announce role switches explicitly:
+Manager, on receiving any message:
+1. Read the message carefully
+2. Consult Memory Module for relevant context
+3. Check quality gates for current phase
+4. Write routing message with:
+   - Context from Memory Module
+   - Task assignment
+   - Quality expectations
+   - "Watch out for" warnings
+5. Update BOARD.md and council.json
+
+### Sub-Agent Execution
+
+Each sub-agent:
+1. Reads Manager's routing message
+2. Reads relevant Memory Module files
+3. Performs specialist work
+4. Writes message back to Manager:
+   - Type: handoff, question, escalation, status, request
+   - Files produced
+   - Suggested next action
+5. Updates task board
+
+### Message Numbering
+
 ```
-━━━ Phase 2: 📐 Architect Role ━━━
-Reading research handoff...
+1. List .planning/council/messages/msg-*.md
+2. Find highest NNN
+3. New message = msg-{NNN+1 padded to 3 digits}.md
 ```
 
-### Task Board
-Maintain `.planning/team/BOARD.md`:
-- List all tasks with status (todo/in-progress/done/blocked)
-- Track dependencies
-- Show progress percentage
+### Quality Gates
 
-## File Structure
+Check before advancing phases:
+- **Research → Design:** Areas identified, risks documented, alternatives compared
+- **Design → Planning:** Architecture documented, breaking changes identified
+- **Planning → Execution:** Tasks atomic (<30min), dependencies explicit
+- **Execution → Review:** All tasks done, tests pass, no unexplained TODOs
+- **Review → Close:** Critical issues resolved, Memory Module updated
 
-```
-.planning/team/
-├── config.json          # Team definition
-├── BOARD.md             # Task board
-├── tasks/               # Individual task files
-│   └── NNN-name.md
-├── handoffs/            # Role transition documents
-│   └── phase-N-role.md
-└── reviews/             # Review feedback
-    └── review-NNN.md
-```
+### Peer Communication
+
+Allowed direct communication (still goes to messages/):
+- 🔬 Researcher ↔ 📐 Architect
+- 📐 Architect ↔ 📋 Planner
+- 📐 Architect ↔ ⚙️ Executor
+- ⚙️ Executor ↔ 🔍 Reviewer
+
+For scope changes, blockers, or conflicts → escalate to Manager.
+
+## Council Presets
+
+| Preset | Agents | Use Case |
+|--------|--------|----------|
+| Full | Researcher → Architect → Planner → Executor → Reviewer | Complex features |
+| Rapid | Researcher → Executor → Reviewer | Small features |
+| Debug | Investigator → Fixer → Verifier | Bug investigation |
+| Architecture | Researcher → Architect → Reviewer | Design decisions |
 
 ## Rules
 
-- ALWAYS write a handoff document before switching roles
-- ALWAYS update the task board when task status changes
-- ALWAYS read ALL previous handoffs in the reviewer role
-- NEVER skip the research phase for complex tasks
-- NEVER implement without a written plan
-- RESPECT task dependencies (wave order)
+- ALWAYS create Memory Module before council work begins
+- ALWAYS route through Manager (except allowed peer-to-peer)
+- ALWAYS write structured messages between phases
+- ALWAYS update BOARD.md when task status changes
+- NEVER skip the review phase
+- NEVER close council without updating Memory Module + MEMORY.md
+
+## Error Recovery
+
+| Issue | Recovery |
+|-------|----------|
+| council.json corrupted | Recreate from BOARD.md and messages/ |
+| Memory Module stale | Re-scan codebase before continuing |
+| Agent stuck (no message in 10+ min) | Manager sends status request |
+| Unhandled escalation | Resume by addressing escalation first |

@@ -53,6 +53,32 @@ The LLM Council is neither. It's an **intelligent routing graph** where:
 
 ---
 
+## Related Assets
+
+| Asset | Location | Purpose |
+|-------|----------|---------|
+| Command | `commands/team.md` | `/team start`, `/team resume`, `/team board` |
+| Workflow | `workflows/team-session.md` | End-to-end council session workflow |
+| Cursor Rule | `cursor-rules/team-protocol.mdc` | Auto-enforced council protocol for Cursor |
+| Universal Rule | `rules/team-protocol.md` | Council protocol for any agent |
+| Agents | `agents/*.md` | Individual agent specifications |
+
+### Agent Definitions
+
+| Agent | File | Preset Usage |
+|-------|------|--------------|
+| 🔬 Researcher | `agents/researcher.md` | Full, Rapid, Architecture, Refactoring |
+| 📐 Architect | `agents/mapper.md` | Full, Architecture |
+| 📋 Planner | `agents/planner.md` | Full, Refactoring |
+| ⚙️ Executor | `agents/executor.md` | Full, Rapid, Refactoring |
+| 🔍 Reviewer | `agents/reviewer.md` | All presets |
+| 🕵️ Investigator | `agents/investigator.md` | Debug |
+| 🔧 Fixer | `agents/fixer.md` | Debug |
+| ✅ Verifier | `agents/verifier.md` | Debug |
+| 🐛 Debugger | `agents/debugger.md` | Standalone debugging |
+
+---
+
 ## Part 1: The Memory Module 🧠
 
 > **PREREQUISITE**: Before ANY council session begins, the Memory Module MUST exist. If it doesn't, the Manager's first job is to create it.
@@ -1255,3 +1281,300 @@ Use the `/team` command in `.claude/commands/`. Supports multi-instance (actual 
 ✅ **Do** write thorough handoff documents with "Watch Out For" sections
 ✅ **Do** include file paths and line numbers in all technical references
 ✅ **Do** commit `.planning/` to version control (except secrets)
+
+---
+
+## Part 11: Operational Protocols 🔧
+
+### Message Numbering Algorithm
+
+All messages go to `.planning/council/messages/msg-NNN.md`:
+
+```
+1. List all files: .planning/council/messages/msg-*.md
+2. Extract NNN from each filename as integers
+3. Find the highest NNN (or 0 if no messages exist)
+4. New message number = highest + 1
+5. Format with zero-padding: msg-001.md, msg-002.md, etc.
+
+Example:
+- Existing: msg-001.md, msg-002.md, msg-003.md
+- Next message: msg-004.md
+```
+
+### Handoff Naming Convention
+
+Handoffs go to `.planning/council/handoffs/`:
+
+```
+Format: handoff-{NNN}-{agent-name}.md
+
+Where:
+- NNN = sequential number (matching message that triggered the handoff)
+- agent-name = the agent that produced the handoff
+
+Examples:
+- handoff-001-researcher.md
+- handoff-002-architect.md
+- handoff-003-executor.md
+```
+
+### Task File Format
+
+Tasks go to `.planning/council/tasks/`:
+
+```markdown
+# Task #NNN: [Title]
+
+## Status
+- [x] Assigned to: ⚙️ executor
+- [ ] In progress
+- [ ] Complete
+- [ ] Blocked
+
+## Description
+[What needs to be done]
+
+## Files to Modify
+- `path/to/file.ts` — [what changes]
+- `path/to/other.ts` — [what changes]
+
+## Dependencies
+- Depends on: #[task-id] (or "None")
+- Blocks: #[task-id]
+
+## Verification
+[How to confirm this task is done correctly]
+
+## Effort Estimate
+[S/M/L with time estimate]
+
+## Completion Notes
+[Filled in when task is marked complete]
+```
+
+### Staleness Detection Protocol
+
+The Memory Module is considered stale when:
+
+```
+1. Check last modified timestamp of each file in .planning/memory/
+2. Calculate age = (current time) - (file modified time)
+3. Staleness threshold = 48 hours (configurable)
+
+IF any memory file age > threshold:
+  → Memory Module is STALE
+  → Manager MUST refresh affected files before council work
+
+Staleness check order (most important first):
+1. database-schemas.md — Schema changes break everything
+2. api-routes.md — Route changes affect integration
+3. service-graph.md — Service dependencies affect design
+4. codebase-map.md — Structure changes affect navigation
+5. frontend-map.md — UI changes (lower priority)
+6. tech-stack.md — Rarely changes (lowest priority)
+```
+
+### Council Resume Protocol
+
+When resuming a paused or interrupted council:
+
+```
+1. READ council.json
+   - Check status (active, paused, completed)
+   - Get current_agent
+   - Get last message number
+
+2. CHECK for unhandled items:
+   a. Read the last message in messages/
+   b. If type is "escalation" or "question" AND no response exists:
+      → Handle this first before continuing
+   c. If type is "handoff" AND no routing decision followed:
+      → Manager must make routing decision
+
+3. CHECK for orphaned tasks:
+   - Read BOARD.md
+   - Find tasks with status "in-progress" but no assigned agent
+   → Reassign or reset to "todo"
+
+4. CHECK Memory Module staleness:
+   - If stale, refresh before continuing
+   - Update MEMORY.md with refresh note
+
+5. DETERMINE recovery action:
+   a. If last action was Manager routing → sub-agent should execute
+   b. If last action was sub-agent handoff → Manager should route
+   c. If last action was escalation → Manager should respond
+   d. If unclear → Ask user for clarification
+```
+
+### Error Recovery Protocol
+
+| Error | Symptoms | Recovery |
+|-------|----------|----------|
+| **council.json corrupted** | JSON parse error | Recreate from BOARD.md + messages/. Restore routing_log from message headers. |
+| **BOARD.md out of sync** | Tasks don't match council.json | Regenerate BOARD.md from tasks/ files + council.json state |
+| **Missing message** | Gap in msg-NNN sequence | Accept the gap. Continue from highest number. |
+| **Orphaned task** | In-progress but no agent working | Reset to "todo" and notify Manager |
+| **Memory Module missing** | memory/ directory empty | Re-run Memory Module generation before continuing |
+| **Memory Module partial** | Some files missing | Generate only missing files |
+| **Agent stuck** | No message in >10 minutes | Manager sends status request message |
+| **Circular routing** | Same agent routed 3+ times without progress | Manager escalates to user with context |
+
+### Council Archival Protocol
+
+When closing a council:
+
+```
+1. UPDATE council.json:
+   - status: "completed"
+   - completed_at: [timestamp]
+   - summary: [one-paragraph summary]
+
+2. ARCHIVE the council:
+   - Create: .planning/council/_archive/[council-name]-[date]/
+   - Move all files from council/ to archive (except _archive/ itself)
+   - Keep BOARD.md as historical record
+
+3. UPDATE persistent memory:
+   - Update MEMORY.md with council outcomes
+   - Update DECISIONS.md with key decisions made
+   - Update context/architecture.md if architecture changed
+   - Update context/patterns.md if new patterns established
+   - Update context/gotchas.md if new issues discovered
+
+4. REFRESH Memory Module:
+   - If database schemas changed → update database-schemas.md
+   - If routes changed → update api-routes.md
+   - If services changed → update service-graph.md
+
+5. WRITE handoff for next session:
+   - Create handoffs/LATEST.md with council summary
+```
+
+### Parallel Execution Protocol (Audit Council Only)
+
+The Audit Council runs auditors in **pseudo-parallel**:
+
+```
+1. Manager assigns all three auditors simultaneously:
+   - Create msg-001.md targeting security-auditor
+   - Create msg-002.md targeting performance-auditor
+   - Create msg-003.md targeting architecture-auditor
+   - Update BOARD.md to show all three as "in-progress"
+
+2. Execute auditors SEQUENTIALLY (pseudo-parallel):
+   - Since we're one agent, run them one at a time
+   - Each writes their handoff independently
+   - No inter-auditor communication needed
+
+3. Track completion in council.json:
+   - parallel_batch: [security, performance, architecture]
+   - completed: [security] (updated as each finishes)
+
+4. When ALL auditors complete:
+   - Manager reads all three handoffs
+   - Manager routes to Synthesizer with combined findings
+```
+
+### Quality Gate Checking Protocol
+
+Manager, before routing to next phase:
+
+```
+1. READ the incoming handoff carefully
+
+2. CHECK each gate item for the current transition:
+   - Research → Design: Areas identified? Risks documented? Alternatives compared?
+   - Design → Planning: Breaking changes? Migration path? Data flow?
+   - Planning → Execution: Tasks atomic? Dependencies explicit? Estimates provided?
+   - Execution → Review: Tasks done? Tests pass? No unexplained TODOs?
+   - Review → Close: Critical issues resolved? Memory updated?
+
+3. IF any gate FAILS:
+   - Write message back to sender with feedback
+   - Specify exactly what's missing
+   - Do NOT advance to next phase
+
+4. IF all gates PASS:
+   - Log gate passage in routing message
+   - Include context for next agent
+   - Proceed with routing
+
+5. UPDATE routing_log in council.json:
+   - routing_log.push({
+       from: [previous agent],
+       to: [next agent],
+       gate_check: "passed",
+       timestamp: [now]
+     })
+```
+
+### Watchdog Protocol
+
+For detecting stuck agents:
+
+```
+When routing to a sub-agent, note the timestamp.
+
+IF no response message within 10 minutes (configurable):
+1. Manager writes a status request message:
+   Type: request
+   To: [stuck agent]
+   Content: "Status check: Please provide a progress update."
+
+IF no response within 5 more minutes:
+2. Manager escalates to user:
+   "Agent [name] appears stuck on [task].
+   Last activity: [timestamp].
+   Options: (a) continue waiting, (b) reset and re-route, (c) provide guidance"
+```
+
+---
+
+## Token Efficiency Estimates
+
+Approximate token overhead for council sessions:
+
+| Component | Size | Tokens (est.) |
+|-----------|------|---------------|
+| MEMORY.md | ~300 lines | 1,500-3,000 |
+| Memory Module (all files) | ~600 lines | 3,000-6,000 |
+| council.json | ~50 lines | 250-500 |
+| BOARD.md | ~50 lines | 250-500 |
+| Average message | ~30 lines | 150-300 |
+| Average handoff | ~100 lines | 500-1,000 |
+
+**Per-routing overhead:**
+- Manager reads: MEMORY.md + relevant memory/*.md + last message + BOARD.md
+- Estimated: 2,000-4,000 tokens per routing decision
+
+**Session overhead:**
+- Initial load (Manager init): ~5,000-10,000 tokens
+- Each routing cycle: ~2,000-4,000 tokens
+- Full council (5 agents, 5 cycles): ~15,000-30,000 tokens total
+
+> ⚠️ Token counts vary significantly based on project size, content density, and how much context is included in routing messages.
+
+---
+
+## Comparison: Memory Module vs Persistent Memory
+
+| Aspect | MEMORY.md (Persistent Memory) | memory/*.md (Memory Module) |
+|--------|-------------------------------|----------------------------|
+| **Purpose** | Session continuity | Codebase intelligence |
+| **Scope** | Project overview, decisions, gotchas | Deep technical details |
+| **Size** | ~300 lines max | ~600 lines across all files |
+| **Who writes** | Any agent | Manager only |
+| **When updated** | Every session end | Council sessions, after changes |
+| **Read frequency** | Every session start | Council sessions only |
+| **Content** | Summary, state, recent work | Schemas, routes, services, patterns |
+| **Survives** | All sessions | All sessions |
+
+**How they work together:**
+1. Session starts → Agent reads MEMORY.md
+2. Council starts → Manager reads memory/*.md
+3. Council runs → Sub-agents get context from Manager's routing
+4. Council ends → Manager updates memory/*.md with changes
+5. Session ends → Agent updates MEMORY.md with council outcomes
+

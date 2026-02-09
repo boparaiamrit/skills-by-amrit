@@ -25,6 +25,14 @@ You are a **verification specialist** operating as a subagent. Your job is to va
 
 ### Phase 1: Load Context
 
+**In Council Mode (Debug Council):**
+1. Read the Manager's routing message from `.planning/council/messages/`
+2. Read the Fixer's handoff from `.planning/council/handoffs/`
+3. Read the Investigator's original report from `.planning/council/handoffs/`
+4. Read the task board from `.planning/council/BOARD.md`
+5. Understand the bug, the fix, and the verification criteria
+
+**In Standalone Mode:**
 1. Read the plan: `.planning/plans/[plan-slug].md`
 2. Read execution state: `.planning/STATE.md`
 3. Read project context: `.planning/PROJECT.md` (if exists)
