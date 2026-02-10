@@ -17,9 +17,43 @@ All notable changes to this project will be documented in this file.
 - **Anti-shortcut rules** — with common rationalizations and rebuttals
 - **Iron questions** — 10 mandatory questions before closing any council session
 
+### 🔬 Brutal Audit: Agent Team Coordination (20 issues fixed)
+- **Standardized directory structure** — All assets now consistently use `.planning/council/` (rules/cursor-rules previously used `.planning/team/`)
+- **New agents:** `investigator.md` (bug investigation) and `fixer.md` (fix implementation) for Debug Council preset
+- **Message numbering algorithm** — Explicit zero-padded sequential numbering for council messages
+- **Council resume protocol** — 5-step state machine for resuming paused/interrupted councils
+- **Staleness detection** — Memory Module freshness checking with 48h threshold and priority-ordered file list
+- **Error recovery table** — 8 common failure scenarios with recovery procedures
+- **Pseudo-parallel execution** — Protocol for Audit Council's parallel auditor assignment
+- **Quality gate checking** — 5-step protocol for Manager phase-transition enforcement
+- **Watchdog protocol** — Configurable timeout detection for stuck agents
+- **Council archival protocol** — 5-step process for archiving completed councils
+- **Task file template** — Standardized format for `.planning/council/tasks/` files
+- **Handoff naming convention** — `handoff-{NNN}-{agent-name}.md` format
+- **Token efficiency estimates** — Per-routing (~2-4K tokens) and full-session (~15-30K tokens) overhead
+- **Memory Module vs Persistent Memory** — Comparison table clarifying the two systems
+- **Related Assets table** — Cross-references all commands, workflows, rules, and 9 agent definitions
+- **All 7 existing agents updated** — Each now has Council Mode + Standalone Mode sections
+- **Rules completely rewritten** — `rules/team-protocol.md` and `cursor-rules/team-protocol.mdc` aligned to LLM Council
+
+### 🔬 Brutal Audit: Persistent Memory (18 issues fixed)
+- **Session numbering algorithm** — Deterministic naming: `YYYY-MM-DD-N`
+- **Handoff archival** — `handoffs/_history/` preservation before overwrite
+- **Codebase scan algorithm** — Explicit scan steps for initialization
+- **Multi-agent conflict handling** — Git-based workflow for concurrent agents
+- **Auto-save reminder** — Periodic prompts during long sessions
+- **Edge case handling** — Missing LATEST.md, partial `.planning/` setups, corrupted files
+- **Error recovery section** — Recovery table for common failures
+- **Cross-references** — Related commands, workflows, and rules listed
+- **Token efficiency** — Disclaimer about approximate token counts
+- **All related assets updated** — `commands/memory.md`, `workflows/memory-sync.md`, `rules/memory-protocol.md`, `cursor-rules/memory-protocol.mdc`
+
 ### 📝 Documentation
 - README updated with prominent "💎 The Gem" section for LLM Council
 - Council architecture diagram in README
+
+### 📊 By the Numbers
+- 9 agents (+2 new: investigator, fixer)
 
 ## [3.3.0] — 2026-02-08 — UI/UX Redesign & Database Deep Dive 🎨🗄️
 
