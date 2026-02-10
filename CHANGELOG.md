@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [3.4.0] — 2026-02-10 — Brutal Audit Edition 🔬
 
 ### 💎 Major Overhaul: LLM Council + Memory Module
 - **agent-team-coordination** completely rewritten as the flagship feature

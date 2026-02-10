@@ -65,6 +65,13 @@
 
 ### 🏆 Recent Releases
 
+#### v3.4.0 — Brutal Audit Edition 🔬
+
+- 🔬 **38 audit issues fixed** across persistent-memory and agent-team-coordination modules
+- 🆕 **2 new agents** — `investigator.md` and `fixer.md` for Debug Council preset
+- 🧠 **Operational protocols** — message numbering, council resume, staleness detection, error recovery, watchdog, archival
+- 📊 **9 agents · 31 skills · 26 commands · 30 workflows**
+
 #### v3.3.0 — UI/UX Redesign & Database Deep Dive 🎨🗄️
 
 - 🆕 **ui-ux-redesign** skill — Full-stack visual audit: backend inventory, component census, design token extraction, UX flow analysis, layered redesign plan
@@ -77,12 +84,6 @@
 - 🆕 **codebase-conformity** skill — Enforces pattern uniformity across frontend and backend
 - 📚 **106 usage examples** with interactive examples page, wiki integration, and search/filter
 - 🌐 Website improvements — logos, examples link, agent-specific syntax
-
-#### v3.1.0 — Quality & CLI Overhaul 🔧
-
-- 🧠 All 29 skills enhanced to **10/10 quality standard** with anti-shortcut rules and iron questions
-- 🔧 CLI overhaul — `update`, `status` commands, `-y` flag for CI/CD, smart entry point management
-- 🤝 **Agent Teams** + 💾 **Persistent Memory** — for ANY agent, zero infrastructure
 
 ---
 
