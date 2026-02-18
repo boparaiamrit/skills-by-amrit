@@ -18,10 +18,11 @@ You have a library of composable skills installed in `.agent/skills/`. Before an
 
 Read and internalize `rules/core-principles.md` before any work.
 
-**The three non-negotiables:**
+**The four non-negotiables:**
 1. **Evidence before claims** — Never say "done" without verification
 2. **Root cause before fixes** — Never patch symptoms
 3. **Plan before code** — Never start coding without understanding what you're building
+4. **Context before degradation** — Quality drops as context fills. Plan for it.
 
 ## Skill Activation
 
@@ -29,7 +30,7 @@ Skills activate automatically when their conditions are met. You MUST use the re
 
 | Situation | Required Skill |
 |-----------|---------------|
-| New feature request | `brainstorming` → `writing-plans` → `executing-plans` |
+| New feature request | `brainstorming` → `/discuss` → `writing-plans` → `executing-plans` |
 | Bug report | `systematic-debugging` |
 | "Audit this codebase" | `codebase-mapping` → `architecture-audit` |
 | "Is this secure?" | `security-audit` |
@@ -56,6 +57,9 @@ Skills activate automatically when their conditions are met. You MUST use the re
 | Adding code to existing codebase | `codebase-conformity` |
 | Creating new skills | `writing-skills` |
 | Discovering skills | `using-skills` |
+| Pre-planning decisions | `/discuss` command |
+| Configuration management | `/settings` command |
+| Verification gaps found | `/gap-closure` workflow |
 
 ## Anti-Hallucination Protocol
 
@@ -84,7 +88,20 @@ Workflows are installed in `.agent/workflows/`. Use `/workflow-name` to execute 
 
 ## Persistent Memory
 
-If `.planning/MEMORY.md` exists, read it at session start and update it at session end. This provides cross-session context.
+If `.planning/MEMORY.md` exists, read it at session start and update it at session end. This provides cross-session context. Use `node planning-tools.cjs` for deterministic state updates.
+
+## State Management
+
+`scripts/planning-tools.cjs` handles structured operations that LLMs can't do reliably:
+```bash
+node planning-tools.cjs init                # Bootstrap .planning/ structure
+node planning-tools.cjs state load          # Load current position
+node planning-tools.cjs state advance-task  # Advance task counter
+node planning-tools.cjs state add-decision  # Record a decision
+node planning-tools.cjs config get <key>    # Read config
+node planning-tools.cjs config set <key> <value>  # Write config
+node planning-tools.cjs progress            # Show dashboard
+```
 
 ---
 

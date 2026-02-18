@@ -48,6 +48,37 @@ If you haven't understood what you're building and why, you cannot start writing
 
 ---
 
+## Context Engineering — The Quality Degradation Curve
+
+```
+QUALITY DEGRADES AS CONTEXT FILLS. PLAN FOR THIS.
+```
+
+As the context window fills during long execution sessions, output quality drops predictably:
+
+| Context Usage | Quality Level | Behavior |
+|---------------|---------------|----------|
+| 0-30% | 🟢 PEAK | Thorough, comprehensive, catches edge cases |
+| 30-50% | 🟡 GOOD | Confident, solid work, minimal shortcuts |
+| 50-70% | 🟠 DEGRADING | Efficiency mode — starts cutting corners |
+| 70%+ | 🔴 POOR | Rushed, minimal, misses important details |
+
+### Context Budget Rules
+
+1. **Plans must be small enough to complete within ~50% context** — if a plan would fill the context window, it's too big. Split it.
+2. **2-3 tasks per plan maximum** — More plans, smaller scope, consistent quality.
+3. **Fresh context for each plan** — When using subagents, each gets a clean context window.
+4. **Orchestrators stay lightweight** — Coordinators should use ≤15% context. They route, not implement.
+5. **If you feel yourself rushing, STOP** — This is the degradation curve talking. Checkpoint and hand off.
+
+### The Litmus Test
+
+> "Could this plan be completed with peak-quality output in a single fresh context window?"
+>
+> If NO → Split the plan. Always split.
+
+---
+
 ## Verification Protocol
 
 Before ANY claim of success, completion, or correctness:

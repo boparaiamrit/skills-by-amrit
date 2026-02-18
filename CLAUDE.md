@@ -18,10 +18,11 @@ You have a library of composable skills. Before any task, check if a relevant sk
 
 Read and internalize `rules/core-principles.md` before any work.
 
-**The three non-negotiables:**
+**The four non-negotiables:**
 1. **Evidence before claims** — Never say "done" without verification
 2. **Root cause before fixes** — Never patch symptoms
 3. **Plan before code** — Never start coding without understanding what you're building
+4. **Context before degradation** — Quality drops as context fills. Plan for it.
 
 ## Skill Activation
 
@@ -29,7 +30,7 @@ Skills activate automatically when their conditions are met. You MUST use the re
 
 | Situation | Required Skill |
 |-----------|---------------|
-| New feature request | `brainstorming` → `writing-plans` → `executing-plans` |
+| New feature request | `brainstorming` → `/discuss` → `writing-plans` → `executing-plans` |
 | Bug report | `systematic-debugging` |
 | "Audit this codebase" | `codebase-mapping` → `architecture-audit` |
 | "Is this secure?" | `security-audit` |
@@ -56,6 +57,9 @@ Skills activate automatically when their conditions are met. You MUST use the re
 | Adding code to existing codebase | `codebase-conformity` |
 | Creating new skills | `writing-skills` |
 | Discovering skills | `using-skills` |
+| Pre-planning decisions | `/discuss` command |
+| Configuration management | `/settings` command |
+| Verification gaps found | `/gap-closure` workflow |
 
 ## Anti-Hallucination Protocol
 
@@ -87,9 +91,11 @@ Slash commands are available in `commands/`. Key commands:
 | `/audit` | Run security, performance, architecture, or database audit |
 | `/debug` | Systematic debugging with root cause analysis |
 | `/deep-audit` | Brutal 5-pass exhaustive audit |
-| `/execute` | Execute implementation plans with wave-based parallelization |
+| `/discuss` | Lock user preferences BEFORE planning — prevents rework |
+| `/plan` | Create executable prompt plans with task anatomy |
+| `/execute` | Execute plans with deviation protocol and checkpoints |
+| `/settings` | View/modify project config (mode, depth, preferences) |
 | `/verify` | Validate implementations against plans |
-| `/plan` | Create granular implementation plans |
 | `/quick` | Execute small tasks without full planning |
 | `/commit` | Create conventional commits |
 | `/team` | Multi-agent team coordination |
@@ -123,7 +129,9 @@ skills-by-amrit/
 │   ├── severity-framework.md
 │   ├── memory-protocol.md
 │   └── team-protocol.md
-├── commands/              ← Slash commands (25 commands)
+├── scripts/
+│   └── planning-tools.cjs  ← Deterministic state management CLI
+├── commands/              ← Slash commands
 │   ├── audit.md
 │   ├── debug.md
 │   ├── deep-audit.md

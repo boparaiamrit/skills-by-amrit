@@ -1,177 +1,172 @@
 ---
-name: execute
-description: "Execute an implementation plan with wave-based parallelization, inline verification, and state tracking."
-disable-model-invocation: true
-argument-hint: "[plan-name or phase-number]"
-allowed-tools:
-  - Read
-  - Write
-  - Edit
-  - Grep
-  - Glob
-  - Bash
-  - Task
+description: "Execute an implementation plan with wave-based parallelization, deviation handling, checkpoints, and deterministic state tracking."
 ---
 
-# /execute — Plan Execution
+# `/execute` — Plan Execution
 
-Execute an implementation plan using structured task execution with verification at each step.
+> Execute an implementation plan task by task. Uses the `executing-plans` skill with deviation protocol, checkpoint system, and `planning-tools.cjs` for state management.
+
+## Usage
+
+```
+/execute                  — Execute the current plan (from STATE.md position)
+/execute [plan-name]      — Execute a specific plan
+/execute --continue       — Continue from last checkpoint
+```
 
 ## Prerequisites
-- `.planning/plans/` must contain at least one plan (created by `/plan`)
-- `.planning/STATE.md` must exist (created by `/init-project`)
+
+Before execution:
+1. A plan exists in `.planning/plans/` with proper task anatomy (`<files>`, `<action>`, `<verify>`, `<done>`)
+2. `.planning/STATE.md` exists (run `/init-project` first)
+3. The project builds and tests pass (pre-flight check)
 
 ## Instructions
 
-### Step 1: Load Plan
-
-Determine which plan to execute from `$ARGUMENTS`:
-- If a plan name is given: Load `.planning/plans/[plan-name].md`
-- If a phase number is given: Load all plans for that phase
-- If nothing is given: Check `.planning/STATE.md` for the next incomplete plan
+### Step 1: Load Plan and State
 
 ```bash
-# List available plans
-ls .planning/plans/*.md 2>/dev/null
+# Load current state
+node planning-tools.cjs state load
 
-# Check current state
-cat .planning/STATE.md
+# Verify structure
+node planning-tools.cjs verify structure
 ```
 
-### Step 2: Pre-Flight Verification
+Read the plan file. If `$ARGUMENTS` specifies a plan, load that. Otherwise, find the current plan from STATE.md position.
 
-Before executing ANY tasks:
+### Step 2: Pre-Flight Checks
 
+// turbo
 ```bash
-# 1. Clean working directory?
-git status --short
-
-# 2. Project builds?
-npm run build 2>&1 | tail -10
-
-# 3. Tests pass?
-npm test 2>&1 | tail -10
+git status
 ```
 
-If pre-flight fails, STOP. Report the failure and suggest fixing before proceeding.
+Verify:
+- [ ] Working tree is clean (no uncommitted changes)
+- [ ] Build passes
+- [ ] Existing tests pass
 
-### Step 3: Analyze Dependencies and Create Waves
+If pre-flight fails, STOP. Fix before executing.
 
-Read all tasks from the plan. Group into execution waves:
+### Step 3: Announce and Confirm
 
-**Wave Rules:**
-- Tasks with no dependencies → Wave 1 (can all run in parallel)
-- Tasks depending only on Wave 1 → Wave 2
-- And so on...
-- Tasks within the same wave have NO dependencies on each other
+```
+"Plan: [name]
+Tasks: [N] tasks, estimated [M] minutes
+Context budget: [2-3 tasks, should complete in ~50% context]
 
-```markdown
-## Execution Plan
-
-### Wave 1 (Parallel)
-- Task 1: [title]
-- Task 3: [title]
-
-### Wave 2 (After Wave 1)
-- Task 2: [title] ← depends on Task 1
-- Task 4: [title] ← depends on Task 3
-
-### Wave 3 (After Wave 2)
-- Task 5: [title] ← depends on Task 2, 4
+Starting Task 1. Ready?"
 ```
 
-### Step 4: Execute Each Wave
+In auto mode (config.mode = "auto"), skip confirmation.
 
-For each wave, execute tasks sequentially (or spawn subagents for parallel execution if using Claude Code):
+### Step 4: Execute Tasks
 
-#### For Each Task:
+Use the `executing-plans` skill. For each task:
 
-**4a. Read the task definition** from the plan.
-
-**4b. Understand context** — Read all files listed in the task. Understand existing patterns.
-
-**4c. Implement** — Write production-quality code following:
-- Match existing code patterns and conventions
-- Full type safety (no `any` without justification)
-- Error handling on all paths
-- Logging using the project's logging pattern
-- No hardcoded config values
-- Functions < 50 lines each
-
-**4d. Verify inline** — After EACH task:
-```bash
-# Build check
-npm run build 2>&1 | tail -5
-
-# Test check
-npm test 2>&1 | tail -10
-
-# Lint check
-npm run lint 2>&1 | tail -5
-```
-
-**4e. Update state** — After EACH completed task:
-Update `.planning/STATE.md`:
-```markdown
-### Task [N]: [Title]
-- **Status:** ✅ Complete
-- **Files:** [created/modified files]
-- **Verified:** Build ✅, Tests ✅, Lint ✅
-- **Completed:** [timestamp]
-```
-
-### Step 5: Wave Completion Check
-
-After each wave completes:
-1. Run the FULL test suite (not just the new tests)
-2. Verify no regressions from the wave
-3. Check that integration points between wave tasks work
-4. Update `.planning/STATE.md` with wave status
-
-### Step 6: Post-Execution Summary
-
-After all waves complete:
-
-```markdown
-## Execution Summary
-
-### Plan: [plan-name]
-- **Total tasks:** [N]
-- **Completed:** [N]
-- **Failed:** [N]
-- **Skipped:** [N]
-
-### Build Status
-- Compilation: ✅/❌
-- Tests: ✅/❌ ([X] passing, [Y] failing)
-- Lint: ✅/❌
-
-### Files Created
-- `path/to/file.ts` — [purpose]
-
-### Files Modified
-- `path/to/file.ts` — [what changed]
-
-### Next Steps
-- Run `/verify` to validate the implementation
-- Run `/commit` to commit the changes
-- Run `/progress` to see overall project state
-```
-
-### Step 7: Handle Failures
-
-If a task fails:
-
-1. **Don't proceed to dependent tasks** — They will fail too
-2. **Document the failure** in `.planning/STATE.md`:
-   ```markdown
-   ### Task [N]: [Title]
-   - **Status:** ❌ Failed
-   - **Error:** [What went wrong]
-   - **Attempted fixes:** [What you tried]
-   - **Impact:** [Which dependent tasks are blocked]
+1. **Read** task fully: `<files>`, `<action>`, `<verify>`, `<done>`
+2. **Check context** — if > 70%, checkpoint before starting
+3. **Implement** per `<action>` (including DON'T/AVOID rules)
+4. **Verify** by running every `<verify>` command
+5. **Confirm** every `<done>` criterion
+6. **Commit** atomically
+7. **Advance state**:
+   ```bash
+   node planning-tools.cjs state advance-task
    ```
-3. **Report to the user** with options:
-   - "Skip and continue" — Execute non-dependent tasks
-   - "Debug" — Switch to `/debug` mode
-   - "Abort" — Stop execution, preserve state
+
+### Step 5: Handle Deviations
+
+If the plan doesn't match reality:
+
+| Category | Action |
+|----------|--------|
+| **Cosmetic** | Fix silently, note in commit |
+| **Minor** | Document in commit, proceed |
+| **Moderate** | STOP → Report → Get approval → Proceed |
+| **Major** | STOP → Return to planning |
+
+### Step 6: Checkpoint Every 3 Tasks
+
+After every 3 tasks:
+
+```bash
+# Run full test suite
+npm test  # or project's test command
+
+# Record metrics
+node planning-tools.cjs state record-metric "[plan]" "[duration]" "[tasks]" "[files]"
+```
+
+Report:
+```
+"Checkpoint: Tasks 1-3 complete.
+Tests: X/Y passing
+Deviations: [None or details]
+Context: ~[X]% used
+Continue?"
+```
+
+### Step 7: Plan Completion
+
+When all tasks are done:
+
+```bash
+# Update progress
+node planning-tools.cjs state update-progress
+
+# Record final metrics
+node planning-tools.cjs state record-metric "[plan]" "[total-duration]" "[total-tasks]" "[total-files]"
+```
+
+Create summary:
+```
+.planning/plans/[phase]-[N]-SUMMARY.md
+```
+
+### Step 8: Gap Closure (If Needed)
+
+If verification reveals gaps:
+1. Run `/gap-closure` workflow
+2. Create mini-plan (1-2 tasks)
+3. Execute and re-verify
+4. Max 2 attempts, then escalate to replanning
+
+### Step 9: Next Steps
+
+```
+"Plan [name] complete.
+Results: [N/M] tasks ✅, [X] tests passing, [deviations/none]
+
+Next:
+1. Run /execute [next-plan] — Continue to next plan
+2. Run /plan Phase [N+1] — Plan the next phase
+3. Run /progress — View overall progress
+4. Run /verify — Deep verification of completed work"
+```
+
+## Error Recovery
+
+### Context Exhaustion
+```
+"Context reaching limit. Saving checkpoint.
+Completed: Tasks 1-[N]
+Resume with: /execute --continue"
+```
+
+### Test Failures
+```
+"Task [N] verification failed:
+[exact error output]
+
+Options:
+1. Fix and retry current task
+2. Run /gap-closure to close the gap
+3. Run /plan to redesign this section"
+```
+
+### Blocker
+```bash
+node planning-tools.cjs state add-blocker "description"
+```

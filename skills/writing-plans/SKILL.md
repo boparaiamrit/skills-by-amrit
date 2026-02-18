@@ -7,24 +7,42 @@ description: "Use when you have a spec or requirements for a multi-step task and
 
 ## Overview
 
-Write comprehensive implementation plans assuming the engineer executing them has zero codebase context and follows instructions literally. Every task is bite-sized (2-5 minutes), every step has exact file paths, complete code, and verification commands.
+Write implementation plans that are **executable prompts**, not documents that become prompts. Every word in the plan is read directly by the executor as its instruction set. There is no translation layer.
 
-**Core principle:** A plan so clear that an enthusiastic junior engineer with no project context could follow it flawlessly.
+**Core principle:** Plans are prompts. If a different agent executed this plan verbatim, they would produce identical results without asking a single clarifying question.
 
-## The Iron Law
+## The Iron Laws
 
 ```
-NO VAGUE STEPS — EVERY TASK HAS EXACT FILES, EXACT CODE, EXACT VERIFICATION
+1. NO VAGUE STEPS — EVERY TASK HAS <files>, <action>, <verify>, <done>
+2. PLANS MUST COMPLETE WITHIN ~50% CONTEXT — if too big, SPLIT
+3. 2-3 TASKS PER PLAN MAXIMUM — more plans, smaller scope, consistent quality
 ```
 
-"Add validation" is not a step. "Add email format validation using regex `^[^\s@]+@[^\s@]+\.[^\s@]+$` to `src/validators/user.ts:validateEmail()`, returning `{ valid: false, error: 'Invalid email format' }` on failure" is a step.
+## Context Engineering (CRITICAL)
+
+Quality degrades as context fills. Plan for this.
+
+| Context Usage | Quality Level | Action |
+|---------------|---------------|--------|
+| 0-30% | 🟢 PEAK | Full thoroughness |
+| 30-50% | 🟡 GOOD | Still solid |
+| 50-70% | 🟠 DEGRADING | Time to split/checkpoint |
+| 70%+ | 🔴 POOR | Quality collapse — STOP |
+
+**Rules:**
+- Each plan: **2-3 tasks maximum**
+- Each task: **15-60 minutes of execution time**
+- Total plan scope: **Completable in a fresh context window**
+- If you need 10 tasks, that's 4-5 plans, not 1 mega-plan
+- "Could this plan be completed with peak-quality output?" If NO → split
 
 ## When to Use
 
 **Always after:**
 - Brainstorming produces an approved design
 - A non-trivial feature request is understood
-- A refactoring scope is defined
+- `/discuss` captures user preferences (locked decisions)
 
 **Skip when:**
 - Single-file bug fix with clear cause
@@ -41,15 +59,16 @@ NO VAGUE STEPS — EVERY TASK HAS EXACT FILES, EXACT CODE, EXACT VERIFICATION
 
 ```
 YOU CANNOT:
-- Write a step without the exact file path — "update the config" is not a step
+- Write a task without <files>, <action>, <verify>, <done> fields
 - Include "..." or "TODO" in code blocks — complete, copy-pasteable code always
-- Write a step that takes > 5 minutes — break it down further
+- Write a task that takes > 60 minutes — break it down further
 - Skip verification commands — every step has "Run: X, Expected: Y"
-- Assume the executor knows the project structure — include exact paths
+- Assume the executor knows the project — include exact paths and anti-patterns
 - Write pseudocode — write real, compilable/runnable code
 - Leave the test step as "write appropriate tests" — write the actual tests
 - Plan more than what was designed — scope is defined by the design document
-- Use relative descriptions — "in the same folder" is vague; use full paths
+- Create a plan with more than 3 tasks — SPLIT into multiple plans
+- Ignore user decisions from discuss-phase — locked decisions are NON-NEGOTIABLE
 ```
 
 ## Common Rationalizations (Don't Accept These)
@@ -57,39 +76,103 @@ YOU CANNOT:
 | Rationalization | Reality |
 |----------------|---------|
 | "The executor will figure it out" | They won't. That's planning, not execution. |
-| "The code is too long for the plan" | Include the complete code. Plans that skip code create implementation gaps. |
-| "This step is obvious" | Nothing is obvious without context. Spell it out. |
-| "I'll add the test details during execution" | No. The test is part of the plan. Write it now. |
-| "The verification is self-evident" | Include the exact command and expected output. Always. |
-| "5 tasks is enough for this feature" | Count the actual steps. A "simple" feature often has 10+ tasks. |
+| "The code is too long for the plan" | Include the complete code. Plans that skip code create gaps. |
+| "This step is obvious" | Nothing is obvious without context. |
+| "I'll add the test details during execution" | No. The test is part of the plan. |
+| "The verification is self-evident" | Include exact command and expected output. |
+| "3 tasks is too few for this feature" | Then create multiple plans. Quality > quantity per plan. |
+| "All 8 tasks fit naturally in one plan" | Context will degrade. Split into 3 plans. Always split. |
 
 ## Iron Questions
 
 ```
 1. Could someone with ZERO project knowledge follow this plan?
-2. Is every code block complete and copy-pasteable? (no "..." or "TODO")
-3. Does every task have a verification command with expected output?
-4. Is each task doable in 2-5 minutes?
-5. Are the tasks ordered correctly? (dependencies respected)
-6. Does the plan cover error handling, not just happy path?
-7. Does the plan include tests for every new behavior?
-8. Does the plan match the approved design? (no extra scope)
-9. Would the TDD cycle (RED → GREEN → REFACTOR) work for each task?
-10. If I hand this plan to a different agent/developer, would they produce identical results?
+2. Does every task have <files>, <action>, <verify>, <done>?
+3. Is every code block complete and copy-pasteable? (no "..." or "TODO")
+4. Is each task doable in 15-60 minutes?
+5. Are there 2-3 tasks per plan maximum?
+6. Does every <action> include WHAT TO AVOID and WHY?
+7. Does every <verify> have an exact command with expected output?
+8. Does every <done> have measurable acceptance criteria?
+9. Would a different agent produce identical results from this plan?
+10. Can this plan complete in ~50% of a fresh context window?
+```
+
+## Task Anatomy — The Four Required Fields
+
+Every task MUST have these four fields. No exceptions.
+
+### 1. `<files>` — Exact file paths created or modified
+
+```markdown
+**Files:**
+- Create: `src/auth/jwt-handler.ts`
+- Modify: `src/routes/auth.ts` (add login endpoint)
+- Create: `tests/auth/jwt-handler.test.ts`
+```
+
+Not "the auth files." Not "relevant files." EXACT PATHS.
+
+### 2. `<action>` — Specific implementation with anti-patterns
+
+```markdown
+**Action:**
+Create JWT handler using the `jose` library (NOT `jsonwebtoken` — CommonJS
+incompatible with Edge runtime). Implement:
+- `generateAccessToken(userId)` — 15min expiry, RS256 algorithm
+- `generateRefreshToken(userId)` — 7day expiry, stored in httpOnly cookie
+- `verifyToken(token)` — Returns decoded payload or throws `TokenExpiredError`
+
+DO NOT:
+- Use symmetric algorithms (HS256) — we need key rotation
+- Store tokens in localStorage — XSS vulnerability
+- Use `any` type for token payload — define `TokenPayload` interface
+```
+
+The `<action>` tells the executor what to build AND what to avoid. The anti-patterns prevent common mistakes.
+
+### 3. `<verify>` — Exact commands to prove it works
+
+```markdown
+**Verify:**
+```bash
+# Tests pass
+npm test -- tests/auth/jwt-handler.test.ts
+# Expected: PASS — 5/5 tests passing
+
+# Build passes
+npm run build 2>&1 | tail -5
+# Expected: Build successful
+
+# Manual verification
+curl -X POST http://localhost:3000/api/auth/login \
+  -d '{"email":"test@test.com","password":"test123"}' \
+  -H "Content-Type: application/json"
+# Expected: 200 with Set-Cookie header containing refresh token
+```
+```
+
+### 4. `<done>` — Measurable acceptance criteria
+
+```markdown
+**Done when:**
+- [ ] Valid credentials return 200 + JWT access token in body
+- [ ] Refresh token set as httpOnly cookie (not in response body)
+- [ ] Invalid credentials return 401 with generic error message
+- [ ] Expired token verification throws `TokenExpiredError`
+- [ ] All 5 tests pass, build green, no lint errors
 ```
 
 ## Plan Document Structure
 
-Every plan MUST use this format:
-
 ```markdown
-# [Feature Name] Implementation Plan
+# Plan: [Feature Name]
 
-**Goal:** [One sentence]
-**Architecture:** [2-3 sentences about approach]
-**Tech Stack:** [Key technologies/libraries]
-**Estimated Tasks:** [N tasks, ~M minutes each]
-**Prerequisites:** [What must be true before starting]
+**Goal:** [One sentence — what this plan achieves]
+**Phase:** [Phase number from ROADMAP.md]
+**Requires:** [Plans that must complete before this one, or "None"]
+**Provides:** [What this plan gives to dependent plans]
+**Context budget:** [2-3 tasks, ~X minutes total]
 
 ---
 
@@ -98,146 +181,126 @@ Every plan MUST use this format:
 **Files:**
 - Create: `exact/path/to/file.ts`
 - Modify: `exact/path/to/existing.ts`
-- Test: `tests/exact/path/to/test.ts`
+- Create: `tests/exact/path/to/test.ts`
 
-**Step 1: Write the failing test**
+**Action:**
+[Specific implementation instructions — what to build, how to build it,
+what to avoid and WHY. Include complete code blocks.]
 
-\`\`\`typescript
-// tests/exact/path/to/test.ts
-describe('ComponentName', () => {
-  it('should do specific thing', () => {
-    const result = functionName(input);
-    expect(result).toBe(expected);
-  });
-});
-\`\`\`
-
-**Step 2: Run test — verify it fails**
-
-Run: `npm test -- tests/exact/path/to/test.ts`
-Expected: FAIL — "functionName is not defined"
-
-**Step 3: Write minimal implementation**
-
-\`\`\`typescript
+```typescript
 // exact/path/to/file.ts
 export function functionName(input: InputType): OutputType {
-  return expected;
+  // Complete implementation — no TODOs, no placeholders
+  return result;
 }
-\`\`\`
+```
 
-**Step 4: Run test — verify it passes**
+**Verify:**
+```bash
+npm test -- tests/exact/path/to/test.ts
+# Expected: PASS — 3/3 tests passing
+```
 
-Run: `npm test -- tests/exact/path/to/test.ts`
-Expected: PASS — 1/1 tests passing
-
-**Step 5: Commit**
-
-\`\`\`bash
-git add tests/exact/path/to/test.ts exact/path/to/file.ts
-git commit -m "feat: add specific feature"
-\`\`\`
+**Done when:**
+- [ ] Function returns correct output for valid input
+- [ ] Error thrown for invalid input
+- [ ] All 3 tests pass, build green
 
 ---
 
 ### Task 2: [Next Component]
-...
+[Same four-field structure]
+
+---
+
+## Dependencies
+- This plan depends on: [Plan X — provides database models]
+- This plan is required by: [Plan Y — needs these endpoints]
 ```
 
-## Task Granularity Rules
+## Task Sizing Rules
 
-**Each task is ONE action (2-5 minutes):**
+| Duration | Verdict |
+|----------|---------|
+| < 15 min | Too small — combine with another task |
+| 15-60 min | ✅ Perfect size |
+| 60-120 min | Borderline — consider splitting |
+| > 120 min | Too big — MUST split |
 
-| ✅ Correct Granularity | ❌ Too Coarse |
-|------------------------|---------------|
-| "Write the failing test for user validation" | "Implement user management" |
-| "Add the email column to users table" | "Set up the database" |
-| "Create the API route handler" | "Build the API" |
-| "Add input sanitization to search endpoint" | "Make it secure" |
-| "Write error response for duplicate email" | "Handle errors" |
+## Plan Sizing Rules
 
-**Each task must have all of these:**
+| Tasks | Verdict |
+|-------|---------|
+| 1 task | Acceptable for simple plans |
+| 2-3 tasks | ✅ Ideal plan size |
+| 4-5 tasks | Too many — split into 2 plans |
+| 6+ tasks | Way too many — split into 3+ plans |
 
-| Required | Why |
-|----------|-----|
-| Exact file paths | Executor shouldn't search for files |
-| Complete code blocks | No guessing, no interpretation |
-| Verification command | Prove it works before moving on |
-| Expected output | Know what success looks like |
-| Commit instruction | Atomic commits per task |
+## Handling User Decisions (from /discuss)
 
-## Code in Plans
-
-**Always include:**
-- Complete, copy-pasteable code blocks
-- Exact import statements
-- Type annotations (if applicable)
-- Error handling
-- The full function, not just the changed lines
-
-**Never include:**
-- `// ... rest of the code` (complete code always)
-- `// TODO: implement` (implement it in the plan)
-- Pseudocode without real syntax
-- Hand-wavy descriptions like "add appropriate validation"
-- `// Add your logic here` placeholders
-
-## Verification Commands
-
-Every step that produces a testable result needs:
+If a `CONTEXT.md` exists for this phase, it contains **locked decisions**:
 
 ```markdown
-**Verify:** `<exact command>`
-**Expected:** <exact expected output or pattern>
+## Locked Decisions (NON-NEGOTIABLE)
+- Card layout (not table) for dashboard
+- Use jose library for JWT (not jsonwebtoken)
+- Infinite scroll (not pagination)
 ```
 
-Examples:
-```markdown
-**Verify:** `npm test -- tests/validators/email.test.ts`
-**Expected:** PASS — 3/3 tests passing
-
-**Verify:** `curl -X POST http://localhost:3000/api/users -d '{"email":"bad"}' -H "Content-Type: application/json"`
-**Expected:** HTTP 422 — {"error":{"code":"VALIDATION_ERROR","details":[{"field":"email","message":"Invalid email format"}]}}
-```
+These are **non-negotiable**. The plan MUST implement exactly what the user chose. Don't substitute, don't "improve," don't second-guess.
 
 ## Save Location
 
 ```
-docs/plans/YYYY-MM-DD-<feature-name>.md
+.planning/plans/[phase]-[N]-PLAN.md
+# Example: .planning/plans/01-01-PLAN.md
 ```
 
-Commit the plan before execution begins.
+For phase-based project:
+```
+.planning/phases/01-auth/01-01-PLAN.md
+```
+
+Commit the plan before execution begins:
+```bash
+node planning-tools.cjs state add-decision "Created plan [name]" --rationale "Covers [scope]"
+git add .planning/plans/
+git commit -m "docs: create plan [name]"
+```
 
 ## Execution Handoff
 
 After writing the plan:
 
 ```
-"Plan complete and saved. Two execution options:
+"Plan complete: [N] tasks, ~[M] minutes estimated.
 
-1. **Subagent-Driven** — I dispatch fresh agents per task, review between tasks
-2. **Sequential** — I execute tasks one by one with verification between each
+Ready to execute? Options:
+1. Execute now — I'll run the tasks in sequence with verification
+2. Review first — Check the plan before executing
+3. Split further — If any task feels too large
 
-Which approach?"
+Run /execute [plan-name] to begin."
 ```
 
 Then use `executing-plans` skill.
 
 ## Red Flags — STOP
 
-- Writing steps without exact file paths
-- Steps that take more than 5 minutes
-- Missing verification commands
+- Task missing any of the 4 required fields (files/action/verify/done)
+- Plan has more than 3 tasks
+- Task estimated at > 60 minutes
 - Code snippets with `...` or `TODO`
+- Anti-patterns not documented in `<action>`
+- No verification commands
+- Ignoring locked decisions from `/discuss`
 - Assuming knowledge of project structure
 - Planning more than what was designed
-- No error handling in the plan
-- No tests in the plan
-- Steps that depend on unstated prerequisites
 
 ## Integration
 
-- **Before:** `brainstorming` produces the design
+- **Before:** `brainstorming` produces the design, `/discuss` captures user preferences
 - **After:** `executing-plans` implements the plan
 - **During:** `test-driven-development` governs each task
 - **Throughout:** `git-workflow` for commit conventions
+- **Tools:** `planning-tools.js` for state management

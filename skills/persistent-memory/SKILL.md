@@ -23,6 +23,7 @@ Unlike `claude-mem` (which requires Claude Code hooks and a worker service), thi
 | Workflow | `workflows/memory-sync.md` | End-to-end memory sync workflow |
 | Cursor Rule | `cursor-rules/memory-protocol.mdc` | Auto-enforced memory protocol for Cursor |
 | Universal Rule | `rules/memory-protocol.md` | Memory protocol for any agent |
+| State Tool | `scripts/planning-tools.cjs` | Deterministic state management CLI |
 
 ---
 

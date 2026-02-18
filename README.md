@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">🧠 Skills by Amrit</h1>
   <p align="center">
-    <strong>The ultimate AI agent skills framework — 31 skills · 26 commands · 30 workflows · 9 agents · 10 cursor rules</strong>
+    <strong>The ultimate AI agent skills framework — 31 skills · 28 commands · 32 workflows · 9 agents · 10 cursor rules</strong>
   </p>
   <p align="center">
     Make your AI coding assistant think like a staff engineer.
