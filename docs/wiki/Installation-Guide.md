@@ -16,7 +16,7 @@ npx skills-by-amrit add
 This will:
 1. ✅ Auto-detect installed agents on your system
 2. ✅ Let you select which agents to install for
-3. ✅ Install all 96 assets to the correct directories
+3. ✅ Install all 116 assets to the correct directories
 4. ✅ Show a detailed summary of what was installed
 
 ---
@@ -30,9 +30,9 @@ npx skills-by-amrit add --agent claude-code
 **Installs to:**
 | Asset | Directory |
 |:---|:---|
-| Skills (26) | `.claude/skills/{skill-name}/SKILL.md` |
-| Commands (22) | `.claude/commands/{name}.md` |
-| Agents (7) | `.claude/agents/{name}.md` |
+| Skills (31) | `.claude/skills/{skill-name}/SKILL.md` |
+| Commands (28) | `.claude/commands/{name}.md` |
+| Agents (9) | `.claude/agents/{name}.md` |
 | Rules (5) | CLAUDE.md (appended) |
 
 ### 🔵 Cursor
@@ -42,7 +42,7 @@ npx skills-by-amrit add --agent cursor
 **Installs to:**
 | Asset | Directory |
 |:---|:---|
-| Skills (26) | `.cursor/skills/{skill-name}/SKILL.md` |
+| Skills (31) | `.cursor/skills/{skill-name}/SKILL.md` |
 | Cursor Rules (10) | `.cursor/rules/{name}.mdc` |
 
 ### 🟢 Antigravity (Gemini)
@@ -52,8 +52,8 @@ npx skills-by-amrit add --agent antigravity
 **Installs to:**
 | Asset | Directory |
 |:---|:---|
-| Skills (26) | `.agent/skills/{skill-name}/SKILL.md` |
-| Workflows (26) | `.agent/workflows/{name}.md` |
+| Skills (31) | `.agent/skills/{skill-name}/SKILL.md` |
+| Workflows (32) | `.agent/workflows/{name}.md` |
 
 ---
 

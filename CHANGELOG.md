@@ -2,6 +2,64 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.5.0] — 2026-02-18 — GSD Planning System 🚀
+
+### 🆕 GSD Planning System — Deterministic State Management
+- **`planning-tools.cjs`** — New CLI tool for deterministic state operations. Handles init, state advance, decisions, blockers, config, and progress dashboard. No more trusting LLMs with JSON file edits.
+- **Deviation Protocol** — 4-tier deviation handling during execution:
+  - Cosmetic → fix silently
+  - Minor → document, keep going
+  - Moderate → STOP and ask user
+  - Major → STOP, go back to planning
+- **Context Engineering** — Plans limited to 2-3 tasks to prevent quality degradation at high context usage. Checkpoint every 3 tasks with handoff to `LATEST.md`.
+- **Quality Degradation Curve** — Explicit guidance on plan sizing to avoid LLM token-saturation errors.
+
+### 🆕 MCQ `/discuss` Command
+- **Multiple-choice format** — Questions presented with lettered options (A, B, C, D), each with a 1-line trade-off description
+- **Recommendations** — Each question includes 🏆 Recommended option with rationale
+- **Quick-answer sequence** — Answer all questions in one line: `1A 2B 3C 4A 5:"use Redis"`
+- **Confirmation table** — Shows which choices match recommendation (🏆), differ (⚠️), or are custom (✏️)
+- **✏️ Custom** option always available as last choice
+
+### 🆕 New Commands
+- `/discuss` — MCQ pre-planning decision capture with quick-answer
+- `/settings` — View and modify planning config (mode, depth, preferences)
+
+### 🆕 New Workflows
+- `/discuss` — Structured preference capture with locked decisions
+- `/settings` — Configuration management workflow
+
+### 📚 Documentation — Getting Started Overhaul
+- **[Getting Started Guide](docs/wiki/Getting-Started.md)** — Comprehensive plain English guide explaining greenfield vs brownfield workflows, what each step does and WHY, where `planning-tools.cjs` and memory fit in the flow
+- **[Greenfield Walkthrough](docs/wiki/examples-Getting-Started-Greenfield.md)** — Full conversation transcript: building a crypto trading dashboard from scratch
+- **[Brownfield Walkthrough](docs/wiki/examples-Getting-Started-Brownfield.md)** — Full conversation transcript: adding user preferences to an existing Python trading bot with pattern conformity
+- **Wiki sidebar** updated with Getting Started section at top
+- **Quick-Start** rewritten with greenfield/brownfield path selection
+- **Examples index** updated with Getting Started walkthroughs and new commands
+
+### 📝 README Updates
+- New "Getting Started — Greenfield vs Brownfield" section with complete workflows
+- Key Differences table (first step, context source, pattern adherence, risk level)
+- Recent Releases section includes v3.5.0
+- Updated asset counts throughout
+
+### 🔧 Fixes
+- `planning-tools.js` → `planning-tools.cjs` — renamed throughout to respect ES module setup
+- Stale wiki counts updated (96 → 116 assets, 22 → 28 commands, 26 → 32 workflows, 7 → 9 agents)
+- `docs/index.html` OG description updated (105 → 116 assets)
+- `Agents-Reference.md` updated (7 → 9 specialist agents)
+
+### 📊 By the Numbers
+- 31 skills
+- 28 commands (+2 new: `/discuss`, `/settings`)
+- 32 workflows (+2 new: `/discuss`, `/settings`)
+- 9 agents
+- 10 cursor rules, 5 universal rules
+- **116 total assets**
+- 5 new wiki pages
+
+---
+
 ## [3.4.0] — 2026-02-10 — Brutal Audit Edition 🔬
 
 ### 💎 Major Overhaul: LLM Council + Memory Module

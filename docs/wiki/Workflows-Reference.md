@@ -1,6 +1,6 @@
 # 🔄 Workflows Reference
 
-> 26 Antigravity workflows with turbo-mode auto-execution
+> 32 Antigravity workflows with turbo-mode auto-execution
 
 Workflows are `.md` files installed to `.agent/workflows/`. They provide step-by-step execution guides that Antigravity follows. Steps marked `// turbo` are auto-executed without user confirmation.
 

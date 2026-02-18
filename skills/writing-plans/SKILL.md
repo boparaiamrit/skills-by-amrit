@@ -303,4 +303,4 @@ Then use `executing-plans` skill.
 - **After:** `executing-plans` implements the plan
 - **During:** `test-driven-development` governs each task
 - **Throughout:** `git-workflow` for commit conventions
-- **Tools:** `planning-tools.js` for state management
+- **Tools:** `planning-tools.cjs` for state management

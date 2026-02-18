@@ -1,6 +1,6 @@
 # 🤖 Agents Reference
 
-> 7 specialist agent definitions for Claude Code agent teams
+> 9 specialist agent definitions for Claude Code agent teams
 
 Agent definitions are `.md` files installed to `.claude/agents/`. Each defines a specialist AI persona with focused protocols, principles, and anti-patterns.
 

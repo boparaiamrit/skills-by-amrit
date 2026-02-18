@@ -1,6 +1,6 @@
 # ⚡ Commands Reference
 
-> 22 Claude Code slash commands for the complete project lifecycle
+> 28 Claude Code slash commands for the complete project lifecycle
 
 Commands are `.md` files installed to `.claude/commands/`. They provide structured protocols that Claude Code invokes when you type the slash command.
 
