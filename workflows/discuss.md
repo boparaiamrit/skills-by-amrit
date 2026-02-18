@@ -1,5 +1,5 @@
 ---
-description: "Full discussion workflow — structured preference capture with locked decisions and transition to planning."
+description: "Full discussion workflow — multiple-choice preference capture with recommendations, quick-answer, and locked decisions."
 ---
 
 # `/discuss` Workflow
@@ -17,35 +17,47 @@ Read any existing CONTEXT.md in .planning/research/ or current phase directory.
 
 ### 2. Identify Decision Points
 
-Analyze the user's request and list 3-8 decision points where multiple valid approaches exist:
+Analyze the user's request and list 3-8 decision points where multiple valid approaches exist. For each, identify 2-4 concrete options and your recommendation.
 
-| # | Decision Point | Options |
-|---|---------------|---------|
-| 1 | [Category] | Option A, Option B, Option C |
-| 2 | [Category] | Option A, Option B |
+### 3. Present Multiple-Choice Questions
 
-### 3. Ask Deep Questions
+Present ALL questions in the MCQ format with recommendations. Include a quick-answer line at the bottom.
 
-Present **5-10 specific either/or questions** — not open-ended:
+**Each question must have:**
+- Lettered options (A, B, C, D) in a table
+- 1-line trade-off per option
+- A "✏️ Custom" option as the last choice
+- 🏆 **Recommended** highlighted with rationale
 
+**At the bottom of ALL questions, include:**
+
+```markdown
+### ⚡ Quick Answer
+
+Answer all questions in one line:
+
+> **All recommended:** `1A 2B 3A 4B 5A`
+>
+> **Example custom:** `1A 2B 3:"your custom preference here"`
+
+**Your answer:**
 ```
-1. [Specific A] or [Specific B]?
-2. [Approach X] or [Approach Y]?
-```
 
-Wait for ALL answers before proceeding.
+Wait for the user's answer before proceeding.
 
-### 4. Confirm Understanding
+### 4. Parse and Confirm
 
-Summarize back to the user:
+Parse the quick-answer sequence (e.g., `1A 2B 3C 4A 5:"Redis"`) and present the confirmation table:
 
-```
-"Based on your answers:
-1. You want [X] not [Y]
-2. You prefer [A] over [B]
-3. [Constraint C] applies
+```markdown
+## ✅ Decisions Locked
 
-Is this correct? Anything to change?"
+| # | Decision | Your Choice | Notes |
+|---|----------|-------------|-------|
+| 1 | [Category] | A: [Choice] | 🏆 Matches recommendation |
+| 2 | [Category] | B: [Choice] | ⚠️ Differs from recommendation |
+
+> **Confirm these are correct?** Say "change Q3 to B" to modify.
 ```
 
 ### 5. Write CONTEXT.md
@@ -54,14 +66,19 @@ Create the locked decisions file at:
 - Phase project: `.planning/phases/[NN]-[name]/CONTEXT.md`
 - Standalone: `.planning/research/[feature]-context.md`
 
+Include the quick-answer sequence in the file for reference.
+
 ### 6. Commit and Transition
 // turbo
 ```bash
+node planning-tools.cjs state add-decision "Discussed [feature] — locked [N] decisions"
 git add .planning/
 git commit -m "docs: lock decisions for [feature]"
 ```
 
 Output:
 ```
-"Decisions locked. Run /plan to create the implementation plan."
+"Decisions locked: [N] choices captured. Ready to plan.
+
+Run /plan to create the implementation plan, or review the locked decisions first?"
 ```

@@ -65,25 +65,27 @@
 
 ### 🏆 Recent Releases
 
+#### v3.5.0 — GSD Planning System ⚡
+
+- 🧠 **Deterministic state management** — `planning-tools.cjs` CLI for structured operations (init, state, config, verify, progress)
+- 💬 **`/discuss` command** — Pre-planning MCQ decision capture with quick-answer (`1A 2B 3C`), prevents rework from misaligned assumptions
+- 📐 **Context engineering** — Quality Degradation Curve, context budget rules, plans limited to 2-3 tasks max
+- ⚙️ **Deviation protocol** — 4-category system (Cosmetic → Major) with auth gates for plan changes during execution
+- 📊 **31 skills · 28 commands · 32 workflows · 9 agents**
+
 #### v3.4.0 — Brutal Audit Edition 🔬
 
 - 🔬 **38 audit issues fixed** across persistent-memory and agent-team-coordination modules
 - 🆕 **2 new agents** — `investigator.md` and `fixer.md` for Debug Council preset
 - 🧠 **Operational protocols** — message numbering, council resume, staleness detection, error recovery, watchdog, archival
-- 📊 **9 agents · 31 skills · 26 commands · 30 workflows**
+- 📊 **9 agents · 31 skills · 28 commands · 32 workflows**
 
 #### v3.3.0 — UI/UX Redesign & Database Deep Dive 🎨🗄️
 
 - 🆕 **ui-ux-redesign** skill — Full-stack visual audit: backend inventory, component census, design token extraction, UX flow analysis, layered redesign plan
 - 🧠 **database-audit** overhaul — Deep indexing for high-volume tables (logs, activity, notifications), partial indexes, partitioning, query pattern analysis
 - 🔧 **Version sync system** — Automated version + counts sync across all docs on every release
-- 📊 **31 skills · 26 commands · 30 workflows**
-
-#### v3.2.0 — Examples & Conformity 📚
-
-- 🆕 **codebase-conformity** skill — Enforces pattern uniformity across frontend and backend
-- 📚 **106 usage examples** with interactive examples page, wiki integration, and search/filter
-- 🌐 Website improvements — logos, examples link, agent-specific syntax
+- 📊 **31 skills · 28 commands · 32 workflows**
 
 ---
 
@@ -120,7 +122,142 @@ npx skills-by-amrit list
 
 ---
 
-## 🏗️ Supported Agents
+## � Getting Started — Greenfield vs Brownfield
+
+After installing skills, your workflow depends on whether you're starting fresh or joining an existing codebase.
+
+### 🟢 New Project (Greenfield)
+
+> You're building something from scratch. No existing code, no legacy decisions.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  GREENFIELD WORKFLOW                                            │
+│                                                                 │
+│  Step 1 ─ /init-project                                         │
+│           Creates .planning/ structure, ROADMAP, REQUIREMENTS    │
+│           Bootstraps memory system + config.json                 │
+│           (Uses: node planning-tools.cjs init)                   │
+│                          ▼                                      │
+│  Step 2 ─ /discuss                                              │
+│           Multiple-choice questions with recommendations         │
+│           Quick-answer: "1A 2B 3C 4A 5A"                        │
+│           Locks decisions in CONTEXT.md                          │
+│                          ▼                                      │
+│  Step 3 ─ /plan                                                 │
+│           Creates 2-3 task plan respecting locked decisions      │
+│           Each task has <files> <action> <verify> <done>         │
+│                          ▼                                      │
+│  Step 4 ─ /execute                                              │
+│           Task-by-task execution with checkpoints                │
+│           Deviation protocol for plan changes                    │
+│           State tracked by planning-tools.cjs                    │
+│                          ▼                                      │
+│  Step 5 ─ /verify                                               │
+│           Validates implementation against the plan              │
+│           Gap closure if anything was missed                     │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Quick start for greenfield:**
+```bash
+# 1. Install skills
+npx skills-by-amrit add
+
+# 2. Tell your AI agent:
+/init-project
+
+# 3. The agent will walk you through:
+#    → Project context gathering
+#    → Requirements capture
+#    → Roadmap phases
+#    → Then suggest /discuss to lock decisions
+```
+
+### 🟡 Existing Codebase (Brownfield)
+
+> You're joining a project that already has code, patterns, and decisions. The AI needs to learn the codebase BEFORE making changes.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  BROWNFIELD WORKFLOW                                            │
+│                                                                 │
+│  Step 1 ─ /memory init                                          │
+│           Creates .planning/ structure for the existing project  │
+│           (Uses: node planning-tools.cjs init)                   │
+│                          ▼                                      │
+│  Step 2 ─ Codebase Mapping (automatic)                          │
+│           Agent scans: file structure, patterns, tech stack      │
+│           Writes: MEMORY.md with project brain                   │
+│           Captures: architecture, conventions, known issues      │
+│                          ▼                                      │
+│  Step 3 ─ /discuss                                              │
+│           "I want to add [feature] to this existing project"     │
+│           Agent asks MCQ questions considering existing patterns  │
+│           Quick-answer: "1A 2B 3C 4A"                           │
+│                          ▼                                      │
+│  Step 4 ─ /plan                                                 │
+│           Creates plan that respects existing architecture       │
+│           References real files, real patterns, real conventions  │
+│                          ▼                                      │
+│  Step 5 ─ /execute                                              │
+│           Implements following existing patterns                 │
+│           codebase-conformity skill ensures consistency           │
+│                          ▼                                      │
+│  Step 6 ─ /verify                                               │
+│           Validates against plan + existing test suite            │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+**Quick start for brownfield:**
+```bash
+# 1. Install skills into your existing project
+npx skills-by-amrit add
+
+# 2. Tell your AI agent:
+/memory init
+
+# 3. Let the agent scan your codebase, then:
+/discuss add user preferences feature
+
+# 4. Answer the MCQ questions, then:
+/plan
+/execute
+```
+
+### Key Differences
+
+| | 🟢 Greenfield | 🟡 Brownfield |
+|:---|:---|:---|
+| **First step** | `/init-project` (full setup) | `/memory init` (lightweight) |
+| **Context source** | Your answers to questions | Codebase scanning → MEMORY.md |
+| **Patterns** | You define them | Agent discovers existing patterns |
+| **Planning** | Free to choose any approach | Must respect existing architecture |
+| **Risk** | Low (no breaking changes) | Higher (must be compatible) |
+| **Skills activated** | `writing-plans`, `executing-plans` | + `codebase-mapping`, `codebase-conformity` |
+
+### The `/discuss` Quick-Answer Format
+
+When the agent presents multiple-choice questions, you can answer everything in one line:
+
+```
+### ⚡ Quick Answer
+
+> All recommended: 1A 2B 3A 4B 5A
+>
+> Your answer: 1A 2B 3C 4A 5:"use Redis for sessions"
+```
+
+| Format | Meaning |
+|:---|:---|
+| `1A` | Question 1, Option A |
+| `2B` | Question 2, Option B |
+| `5:"custom text"` | Question 5, Custom answer |
+| Just press Enter | Accept all recommendations |
+
+---
+
+## �🏗️ Supported Agents
 
 Skills by Amrit works with **30+ AI coding agents**. Each agent gets assets installed to its native directory:
 
@@ -232,7 +369,7 @@ Skills are deep instructional documents that teach AI agents HOW to think about 
 
 ---
 
-### ⚡ Commands (26)
+### ⚡ Commands (28)
 
 Commands are Claude Code slash commands (`.md` files installed to `.claude/commands/`). They provide structured workflows for common project tasks.
 
@@ -240,11 +377,13 @@ Commands are Claude Code slash commands (`.md` files installed to `.claude/comma
 
 | Command | Description |
 |:---|:---|
-| `/init-project` | 🏗️ Initialize a new project with `.planning/` directory — `PROJECT.md`, `REQUIREMENTS.md`, `ROADMAP.md`, `STATE.md`, `config.json` |
-| `/plan` | 📋 Create a detailed implementation plan with task decomposition, dependencies, and effort estimates |
-| `/execute` | ⚙️ Execute an implementation plan with wave-based parallelization, checkpoints, and inline verification |
+| `/init-project` | 🏗️ Initialize a new project with `.planning/` directory — `PROJECT.md`, `REQUIREMENTS.md`, `ROADMAP.md`, `STATE.md`, `config.json`. Uses `planning-tools.cjs` for deterministic bootstrapping. |
+| `/discuss` | 💬 Pre-planning MCQ decision capture — presents multiple-choice questions with recommendations, quick-answer format (`1A 2B 3C`), locks decisions in CONTEXT.md — ✨ NEW |
+| `/plan` | 📋 Create a 2-3 task implementation plan with task anatomy (`<files>` `<action>` `<verify>` `<done>`), context budgets, and locked decision enforcement |
+| `/execute` | ⚙️ Execute an implementation plan with deviation protocol (4 categories), checkpoint system, and `planning-tools.cjs` state management |
 | `/verify` | ✅ Validate implementations against plans — automated checks, compliance verification, regression testing, conversational UAT |
 | `/progress` | 📊 Display project progress, phase status, and task completion from `.planning/` state files |
+| `/settings` | ⚙️ View/modify project config — mode (interactive/auto), depth (quick/standard/comprehensive), workflow preferences — ✨ NEW |
 
 #### 🔷 Research & Documentation
 
@@ -299,13 +438,14 @@ Commands are Claude Code slash commands (`.md` files installed to `.claude/comma
 
 ---
 
-### 🔄 Workflows (30)
+### 🔄 Workflows (32)
 
 Workflows are Antigravity step-by-step execution scripts (`.md` files installed to `.agent/workflows/`). Many include `// turbo` annotations for auto-execution.
 
 | Workflow | Description |
 |:---|:---|
 | `/init-project` | 🏗️ Initialize project with `.planning/` structure |
+| `/discuss` | 💬 Pre-planning MCQ discussion with quick-answer —  ✨ NEW |
 | `/plan-feature` | 📋 Plan a feature with research, design, and task decomposition |
 | `/execute` | ⚙️ Execute plans with wave-based steps and verification |
 | `/verify` | ✅ Validate implementation against plans |
@@ -335,22 +475,25 @@ Workflows are Antigravity step-by-step execution scripts (`.md` files installed 
 | `/product-health-check` | 🏥 Product completeness audit workflow — ✨ NEW |
 | `/deep-audit` | 🔬 Brutal exhaustive audit workflow — ✨ NEW |
 | `/redesign` | 🎨 Full UI/UX redesign workflow — ✨ NEW |
+| `/gap-closure` | 🔧 Close execution gaps with focused mini-plans — ✨ NEW |
 
 ---
 
-### 🤖 Agents (7)
+### 🤖 Agents (9)
 
 Agent definitions are specialist AI personas (`.md` files installed to `.claude/agents/`). Each agent has detailed protocols, principles, and anti-patterns.
 
 | Agent | Emoji | Description |
 |:---|:---:|:---|
 | **researcher** | 🔬 | Deep codebase and domain research — gathers comprehensive evidence and context before planning. Emphasizes accuracy, exhaustive search, and source attribution. |
-| **planner** | 📋 | Task decomposition and implementation planning — generates dependency-aware plans with effort estimates, risk assessments, and implementation waves. |
-| **executor** | ⚙️ | Plan execution with quality gates — implements tasks from plans with checkpoint handling, inline verification, and state updates. Fails fast on blockers. |
+| **planner** | 📋 | Plans-as-prompts — generates dependency-aware plans with task anatomy (`<files>` `<action>` `<verify>` `<done>`), context budgets, locked decision enforcement, and multi-plan sequencing. |
+| **executor** | ⚙️ | Plan execution with deviation protocol — implements tasks with checkpoint handling (standard/context/blocker), DON'T/AVOID instruction enforcement, and `planning-tools.cjs` state management. |
 | **reviewer** | 🔍 | Structured code review — examines changes for correctness, security, performance, patterns, and maintainability. Provides severity-based feedback. |
 | **debugger** | 🐛 | Scientific debugging with hypothesis tracking — investigates issues using hypothesis-driven methodology with evidence chains and persistent state. |
 | **verifier** | ✅ | Work verification and gap analysis — validates implementation against plans, runs comprehensive checks, identifies gaps, and generates fix plans. |
 | **mapper** | 🗺️ | Codebase mapping and dependency analysis — analyzes project structure, module boundaries, dependencies, patterns, and health metrics. |
+| **investigator** | 🕵️ | Deep investigation for Debug Council — forensic analysis of complex bugs with evidence chains and timeline reconstruction. |
+| **fixer** | 🔧 | Targeted fix implementation for Debug Council — minimal, surgical fixes with regression prevention and rollback strategies. |
 
 ---
 
@@ -387,19 +530,23 @@ Universal rules (`.md` files) that can be appended to `GEMINI.md`, `CLAUDE.md`, 
 
 ---
 
-## 💾 Persistent Memory System — ✨ NEW in v3
+## 💾 Persistent Memory + State Management
 
 ### The Problem
 Every AI session starts from scratch. You explain the same architecture, repeat the same decisions, and lose context.
 
 ### The Solution
-File-based memory protocol — no hooks, no databases, no external services. Works in **ANY** agent.
+File-based memory protocol + deterministic state management — no hooks, no databases, no external services. Works in **ANY** agent.
 
 ```
 .planning/
 ├── MEMORY.md                    # 🧠 Project brain (~300 lines max)
+├── STATE.md                     # 📍 Current position (phase/plan/task)
+├── config.json                  # ⚙️ Mode, depth, preferences
 ├── sessions/                    # 📝 Session logs
 ├── decisions/DECISIONS.md       # 📋 Decision log (append-only)
+├── plans/                       # 📋 Implementation plans
+├── research/                    # 🔬 Research + CONTEXT.md from /discuss
 ├── context/
 │   ├── architecture.md          # 🏗️ Architecture decisions
 │   ├── patterns.md              # 🔄 Established patterns
@@ -408,16 +555,39 @@ File-based memory protocol — no hooks, no databases, no external services. Wor
 └── handoffs/LATEST.md           # 📤 Last session's handoff
 ```
 
-### How It Works
+### `planning-tools.cjs` — Deterministic State Management
+
+LLMs are unreliable at structured file operations. The `planning-tools.cjs` CLI handles these deterministically:
+
+```bash
+# Bootstrap the .planning/ directory
+node planning-tools.cjs init
+
+# Track execution progress
+node planning-tools.cjs state load              # Where am I?
+node planning-tools.cjs state advance-task      # Mark task complete
+node planning-tools.cjs state add-decision      # Record a decision
+node planning-tools.cjs state add-blocker       # Flag a blocker
+
+# Manage configuration
+node planning-tools.cjs config get mode         # interactive or auto?
+node planning-tools.cjs config set depth comprehensive
+
+# Validate and report
+node planning-tools.cjs verify structure        # Is .planning/ intact?
+node planning-tools.cjs progress                # Show dashboard
+```
+
+### How Memory Works
 
 ```
-SESSION START                    SESSION END
-┌────────────────────┐           ┌────────────────────┐
-│ 1. Read MEMORY.md  │           │ 8. Create session  │
-│ 2. Read LATEST.md  │           │    log              │
-│ 3. Full context!   │           │ 9. Write handoff   │
-└────────────────────┘           │ 10. Update memory  │
-                                 └────────────────────┘
+SESSION START                    DURING SESSION                  SESSION END
+┌────────────────────┐           ┌────────────────────────┐      ┌────────────────────┐
+│ 1. Read MEMORY.md  │           │ 4. planning-tools.cjs  │      │ 8. Create session  │
+│ 2. Read LATEST.md  │           │    tracks state changes│      │    log              │
+│ 3. Read config.json│           │ 5. Decisions → log     │      │ 9. Write handoff   │
+│    Full context!   │           │ 6. Blockers → flag     │      │ 10. Update memory  │
+└────────────────────┘           └────────────────────────┘      └────────────────────┘
 ```
 
 ### Setup
@@ -442,6 +612,7 @@ Use `/memory init` to initialize, `/memory write` to save.
 |:---|:---:|:---:|
 | Infrastructure | SQLite + Chroma + Bun | Zero ✅ |
 | Agent support | Claude Code only | ANY agent ✅ |
+| State management | None | `planning-tools.cjs` CLI ✅ |
 | Capture method | Lifecycle hooks | Instruction-based |
 | Storage | Database | Markdown files (git!) |
 | Setup | Plugin install + config | Add 4 lines to GEMINI.md |
@@ -494,50 +665,48 @@ AI coding tasks fail at scale because no single agent can hold all context: data
 
 ```
 skills-by-amrit/
-├── 📂 skills/                   # 29 deep instructional skills
+├── 📂 skills/                   # 31 deep instructional skills
 │   ├── brainstorming/SKILL.md
-│   ├── persistent-memory/SKILL.md      ✨ NEW
-│   ├── agent-team-coordination/SKILL.md ✨ NEW
-│   ├── full-stack-api-integration/SKILL.md ✨ NEW
-│   ├── product-completeness-audit/SKILL.md ✨ NEW
-│   ├── brutal-exhaustive-audit/SKILL.md    ✨ NEW
-│   └── ... (24 more)
-├── 📂 commands/                 # 25 Claude Code slash commands
+│   ├── writing-plans/SKILL.md          # Plans-as-prompts with task anatomy
+│   ├── executing-plans/SKILL.md        # Deviation protocol + checkpoints
+│   ├── persistent-memory/SKILL.md
+│   ├── agent-team-coordination/SKILL.md
+│   └── ... (26 more)
+├── 📂 commands/                 # 28 Claude Code slash commands
 │   ├── init-project.md
-│   ├── memory.md                        ✨ NEW
-│   ├── team.md                          ✨ NEW
-│   ├── integrate.md                     ✨ NEW
-│   ├── health-check.md                  ✨ NEW
-│   ├── deep-audit.md                    ✨ NEW
-│   └── ... (20 more)
-├── 📂 workflows/                # 29 Antigravity workflows
+│   ├── discuss.md                       ✨ MCQ decision capture
+│   ├── settings.md                      ✨ Config management
+│   ├── memory.md
+│   ├── team.md
+│   └── ... (23 more)
+├── 📂 workflows/                # 32 Antigravity workflows
 │   ├── init-project.md
-│   ├── memory-sync.md                   ✨ NEW
-│   ├── team-session.md                  ✨ NEW
-│   ├── integrate-api.md                 ✨ NEW
-│   ├── product-health-check.md          ✨ NEW
-│   ├── deep-audit.md                    ✨ NEW
-│   └── ... (24 more)
-├── 📂 agents/                   # 7 specialist agent definitions
-│   ├── researcher.md
-│   ├── executor.md
+│   ├── discuss.md                       ✨ MCQ discussion workflow
+│   ├── gap-closure.md                   ✨ Execution gap closure
+│   ├── memory-sync.md
+│   ├── team-session.md
+│   └── ... (27 more)
+├── 📂 agents/                   # 9 specialist agent definitions
+│   ├── planner.md                       # Plans-as-prompts, locked decisions
+│   ├── executor.md                      # Deviation protocol, context awareness
+│   ├── investigator.md                  # Debug Council forensics
+│   ├── fixer.md                         # Debug Council surgical fixes
 │   └── ... (5 more)
+├── 📂 scripts/                  # Deterministic tooling
+│   └── planning-tools.cjs              # State management CLI
 ├── 📂 cursor-rules/             # 10 Cursor .mdc rules
 │   ├── core-development.mdc
-│   ├── memory-protocol.mdc             ✨ NEW
-│   ├── team-protocol.mdc               ✨ NEW
+│   ├── memory-protocol.mdc
 │   └── ... (8 more)
 ├── 📂 rules/                    # 5 universal agent rules
-│   ├── core-principles.md
-│   ├── memory-protocol.md              ✨ NEW
-│   ├── team-protocol.md                ✨ NEW
+│   ├── core-principles.md               # + Context Engineering principle
+│   ├── memory-protocol.md              # + planning-tools.cjs integration
 │   └── ... (3 more)
 ├── 📂 docs/                     # Documentation
-│   ├── AGENT-TEAMS-AND-MEMORY.md
-│   └── COMPETITIVE_ANALYSIS.md
 ├── 📂 src/                      # CLI source
 │   └── cli.ts
 ├── CLAUDE.md                    # Claude Code integration
+├── GEMINI.md                    # Gemini/Antigravity integration
 ├── package.json
 └── README.md                    # You are here!
 ```
@@ -702,13 +871,14 @@ npx skills-by-amrit help
 | Metric | Count |
 |:---:|:---:|
 | 🧠 Skills | **31** |
-| ⚡ Commands | **26** |
-| 🔄 Workflows | **30** |
-| 🤖 Agents | **7** |
+| ⚡ Commands | **28** |
+| 🔄 Workflows | **32** |
+| 🤖 Agents | **9** |
 | 🎯 Cursor Rules | **10** |
 | 📏 Rules | **5** |
+| 🛠️ CLI Tools | **1** (`planning-tools.cjs`) |
 | 🤖 Supported Agents | **34** |
-| 📄 Total Assets | **109** |
+| 📄 Total Assets | **116** |
 
 ---
 

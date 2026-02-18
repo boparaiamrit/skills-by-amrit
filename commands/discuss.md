@@ -16,9 +16,9 @@ Without this, the planning cycle looks like:
 
 With `/discuss`, decisions are locked BEFORE planning:
 1. User says "add auth"
-2. Agent asks 5 targeted questions
-3. User locks decisions: "magic links, no passwords, Resend for email"
-4. Agent plans exactly what was requested — zero rework
+2. Agent presents 5 multiple-choice questions with recommendations
+3. User answers in one line: `1A 2B 3C 4A 5A`
+4. Agent locks decisions and plans exactly what was requested — zero rework
 
 ## When to Use
 
@@ -38,41 +38,102 @@ With `/discuss`, decisions are locked BEFORE planning:
 
 ### Step 1: Understand the Scope
 
-Read the user's request and identify the **decision points** — places where multiple valid approaches exist.
+Read the user's request and identify the **decision points** — places where multiple valid approaches exist. Group them by category.
+
+### Step 2: Present Multiple-Choice Questions
+
+Present each question as a **lettered multiple-choice** with your **recommendation** highlighted. Always include a "Custom" option.
+
+**Format (MANDATORY):**
 
 ```markdown
-## Decision Points Identified
+---
 
-For "[feature name]", I need your preference on:
+## 📋 Discussion: [Feature Name]
 
-1. **[Category 1]:** [Option A] vs [Option B] vs [Option C]
-2. **[Category 2]:** [Option A] vs [Option B]
-3. **[Category 3]:** [Approach A] vs [Approach B]
+I've identified [N] decisions we need to lock before planning. Here are your options:
+
+---
+
+### Q1: [Decision Category] 🏗️
+
+| | Option | What It Means |
+|:---:|:---|:---|
+| **A** | [Option A name] | [1-line impact/trade-off] |
+| **B** | [Option B name] | [1-line impact/trade-off] |
+| **C** | [Option C name] | [1-line impact/trade-off] |
+| **D** | ✏️ Custom | Describe your preference |
+
+> 🏆 **Recommended: A** — [Why this is the best default]
+
+---
+
+### Q2: [Decision Category] 🔒
+
+| | Option | What It Means |
+|:---:|:---|:---|
+| **A** | [Option A name] | [1-line impact/trade-off] |
+| **B** | [Option B name] | [1-line impact/trade-off] |
+| **C** | ✏️ Custom | Describe your preference |
+
+> 🏆 **Recommended: B** — [Why this is the best default]
+
+---
+
+### Q3: [Decision Category] 🎨
+
+| | Option | What It Means |
+|:---:|:---|:---|
+| **A** | [Option A name] | [1-line impact/trade-off] |
+| **B** | [Option B name] | [1-line impact/trade-off] |
+| **C** | ✏️ Custom | Describe your preference |
+
+> 🏆 **Recommended: A** — [Why this is the best default]
+
+---
+
+### ⚡ Quick Answer
+
+Answer all questions in one line. Use the letter for your choice, or quotes for custom answers.
+
+> **All recommended:** `1A 2B 3A`
+>
+> **Example custom:** `1A 2B 3:"infinite scroll with cursor pagination"`
+
+**Your answer:**
 ```
 
-### Step 2: Deep Questions (5-10 Questions Maximum)
+**Question Design Rules:**
 
-Ask targeted questions. Not "what do you want?" but specific either/or questions:
+| Rule | Why |
+|------|-----|
+| 3-4 options max per question | More causes decision fatigue |
+| Always include "Custom" as last option | Respect user's creativity |
+| Always show your recommendation | Save user's time |
+| 1-line trade-off per option | Don't overwhelm with paragraphs |
+| 5-8 questions max total | Keep discussion focused |
+| Group related decisions | Reduce cognitive load |
 
-**Good Questions:**
+### Step 3: Parse the Quick Answer
+
+When the user responds, parse their answer sequence:
+
 ```
-1. Dashboard layout: Cards (Trello-style) or Table (spreadsheet-style)?
-2. Auth provider: Supabase Auth, NextAuth, or custom JWT?
-3. Data fetching: Server-side with page reload, or client-side with loading states?
-4. Mobile: Responsive CSS only, or dedicated mobile components?
-5. Error handling: Toast notifications, inline errors, or error pages?
+Input: "1A 2B 3C 4A 5:'use Redis for caching'"
+
+Parsed:
+- Q1: Option A (Auth Method → Magic Links)
+- Q2: Option B (Database → PostgreSQL)
+- Q3: Option C (Deployment → Docker)
+- Q4: Option A (CSS → Tailwind)
+- Q5: Custom ("use Redis for caching")
 ```
 
-**Bad Questions (DON'T ASK THESE):**
+If the user gives a natural language response instead, map it to the options:
 ```
-- "What kind of auth do you want?" (too vague)
-- "How should the UI look?" (too open-ended)
-- "What should happen on error?" (no options given)
+User: "I want magic links, postgres, and tailwind. For Q3 I'm thinking Docker."
+→ 1A 2B 3C 4A
 ```
-
-### Step 3: Listen and Confirm
-
-Let the user answer. Don't argue with their choices. Your job is to capture, not to convince.
 
 If the user says something technically risky, note it but still respect their choice:
 
@@ -81,49 +142,30 @@ If the user says something technically risky, note it but still respect their ch
 > But you've chosen localStorage — I'll implement it that way with appropriate XSS mitigations.
 ```
 
-### Step 4: Lock Decisions
+### Step 4: Confirm and Lock Decisions
 
-Create a `CONTEXT.md` for this phase/feature:
+Present a confirmation summary:
 
 ```markdown
-# Discussion Context: [Feature Name]
+## ✅ Decisions Locked
 
-## Date
-[YYYY-MM-DD]
+| # | Decision | Your Choice | Notes |
+|---|----------|-------------|-------|
+| 1 | Auth method | A: Magic Links | 🏆 Matches recommendation |
+| 2 | Database | B: PostgreSQL | 🏆 Matches recommendation |
+| 3 | Deployment | C: Docker | ⚠️ Differs from recommendation (Vercel) |
+| 4 | CSS framework | A: Tailwind | 🏆 Matches recommendation |
+| 5 | Caching | Custom: "Redis" | ✏️ Custom answer |
 
-## Locked Decisions (NON-NEGOTIABLE)
+### Constraints Captured
+- [Any constraints from the user's responses]
+- [Budget, timeline, browser support, etc.]
 
-These decisions are final. Do not revisit during planning or execution.
+### Anti-Preferences (Things You Do NOT Want)
+- [Anything the user explicitly rejected or expressed dislike for]
 
-| # | Decision | Choice | Notes |
-|---|----------|--------|-------|
-| 1 | Dashboard layout | Cards (Trello-style) | User prefers visual density |
-| 2 | Auth provider | Supabase Auth | Already using Supabase for DB |
-| 3 | Data fetching | Server-side (SSR) | SEO is important |
-| 4 | Mobile approach | Responsive CSS only | No budget for native |
-| 5 | Error handling | Toast notifications | User prefers non-blocking UX |
-
-## Constraints Captured
-
-- Must work in Chrome, Firefox, Safari (no IE)
-- Must support dark mode (user preference)
-- Must load in < 2 seconds on 3G
-- Budget: 2 days maximum
-
-## User's Exact Words
-
-> "[Copy user's key statements here — their words, not your interpretation]"
-
-## Anti-Preferences (Things the User Does NOT Want)
-
-- No modals — user hates modals
-- No pagination — user prefers infinite scroll
-- No skeleton loaders — user prefers spinner
-
-## Unanswered (Deferred to Planning)
-
-- Exact card fields (planner decides based on data model)
-- Toast library choice (implementation detail)
+> **Confirm these are correct?** Then I'll create the plan.
+> To change anything, just say "change Q3 to B" or "change Q3 to 'Kubernetes instead'"
 ```
 
 ### Step 5: Save and Proceed
@@ -150,6 +192,54 @@ Then transition:
 "Decisions locked: [N] choices captured. Ready to plan.
 
 Run /plan to create the implementation plan, or review the locked decisions first?"
+```
+
+## CONTEXT.md Format
+
+The locked decisions file should follow this structure:
+
+```markdown
+# Discussion Context: [Feature Name]
+
+## Date
+[YYYY-MM-DD]
+
+## Quick Answer Sequence
+`1A 2B 3C 4A 5:"Redis for caching"`
+
+## Locked Decisions (NON-NEGOTIABLE)
+
+These decisions are final. Do not revisit during planning or execution.
+
+| # | Decision | Choice | Notes |
+|---|----------|--------|-------|
+| 1 | Auth method | Magic Links | User prefers passwordless UX |
+| 2 | Database | PostgreSQL | Already in stack |
+| 3 | Deployment | Docker | Team uses Docker Compose |
+| 4 | CSS framework | Tailwind v4 | User's preference |
+| 5 | Caching | Redis | Custom: user specified |
+
+## Constraints Captured
+
+- Must work in Chrome, Firefox, Safari (no IE)
+- Must support dark mode (user preference)
+- Must load in < 2 seconds on 3G
+- Budget: 2 days maximum
+
+## User's Exact Words
+
+> "[Copy user's key statements here — their words, not your interpretation]"
+
+## Anti-Preferences (Things the User Does NOT Want)
+
+- No modals — user hates modals
+- No pagination — user prefers infinite scroll
+- No skeleton loaders — user prefers spinner
+
+## Unanswered (Deferred to Planning)
+
+- Exact card fields (planner decides based on data model)
+- Toast library choice (implementation detail)
 ```
 
 ## What Makes Decisions "Locked"
