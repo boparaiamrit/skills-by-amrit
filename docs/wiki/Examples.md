@@ -6,12 +6,23 @@
 
 | Category | Examples | Coverage |
 |----------|----------|----------|
+| Getting Started | 3 | 100% ✅ |
 | Skills | 31 | 100% ✅ |
-| Commands | 26 | 100% ✅ |
-| Workflows | 30 | 100% ✅ |
-| Agents | 7 | 100% ✅ |
+| Commands | 28 | 100% ✅ |
+| Workflows | 32 | 100% ✅ |
+| Agents | 9 | 100% ✅ |
 | Rules | 15 | 100% ✅ |
-| **Total** | **109** | **100%** ✅ |
+| **Total** | **118** | **100%** ✅ |
+
+---
+
+## 🏁 Getting Started Walkthroughs
+
+| Guide | Description |
+|-------|-------------|
+| [Getting Started Guide](Getting-Started) | Greenfield vs Brownfield explained in plain English |
+| [Greenfield Walkthrough](examples-Getting-Started-Greenfield) | Build a real-time trading dashboard from scratch — full conversation flow |
+| [Brownfield Walkthrough](examples-Getting-Started-Brownfield) | Add user preferences to an existing Python trading bot — full conversation flow |
 
 ---
 
@@ -74,6 +85,8 @@
 
 | Command | Description |
 |---------|-------------|
+| [/discuss](examples-commands-discuss) | MCQ decision capture ✨ NEW |
+| [/settings](examples-commands-settings) | Project configuration ✨ NEW |
 | [/debug](examples-commands-debug) | Systematic debugging |
 | [/plan](examples-commands-plan) | Feature planning |
 | [/execute](examples-commands-execute) | Plan execution |

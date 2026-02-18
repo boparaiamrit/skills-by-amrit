@@ -4,6 +4,14 @@
 
 ---
 
+## 🏁 Getting Started
+
+- **[Getting Started Guide](Getting-Started)** — Greenfield vs Brownfield explained in plain English
+- [Greenfield Walkthrough](examples-Getting-Started-Greenfield) — Build a project from scratch (full example)
+- [Brownfield Walkthrough](examples-Getting-Started-Brownfield) — Add features to existing code (full example)
+
+---
+
 ## 📚 Examples
 
 ### 🧠 Skills
@@ -40,6 +48,8 @@
 - [ui-ux-redesign](examples-skills-ui-ux-redesign)
 
 ### ⚡ Commands
+- [discuss](examples-commands-discuss) ✨ NEW
+- [settings](examples-commands-settings) ✨ NEW
 - [debug](examples-commands-debug)
 - [plan](examples-commands-plan)
 - [execute](examples-commands-execute)
@@ -47,14 +57,14 @@
 - [team](examples-commands-team)
 - [audit](examples-commands-audit)
 - [redesign](examples-commands-redesign)
-- [View all 26 commands...](Examples#commands-examples)
+- [View all 28 commands...](Examples#commands-examples)
 
 ### 🔄 Workflows
 - [debug](examples-workflows-debug)
 - [audit](examples-workflows-audit)
 - [commit](examples-workflows-commit)
 - [redesign](examples-workflows-redesign)
-- [View all 30 workflows...](Examples#workflows-examples)
+- [View all 32 workflows...](Examples#workflows-examples)
 
 ### 🎭 Agents
 - [debugger](examples-agents-debugger)

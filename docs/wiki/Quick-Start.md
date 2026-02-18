@@ -13,23 +13,68 @@ npx skills-by-amrit add
 That's it. The CLI will:
 - ✅ Auto-detect your installed agents
 - ✅ Let you select which ones to install for
-- ✅ Install all 96 assets to the correct directories
+- ✅ Install all 116 assets to the correct directories
 
 ---
 
-## Step 2: Use Skills
+## Step 2: Choose Your Path
 
-Skills are automatically available to your AI agent. Just ask it to use a skill:
+### 🟢 Starting a New Project?
+
+Tell your AI agent:
+```
+/init-project
+```
+
+The agent will:
+1. Create the `.planning/` directory (memory, state, config)
+2. Ask you about the project scope, tech stack, and requirements
+3. Create a ROADMAP with phases
+4. Then suggest `/discuss` to lock your preferences
+
+Full guide: [Getting Started — Greenfield](Getting-Started#-greenfield--building-from-scratch)
+
+### 🟡 Working on an Existing Codebase?
+
+Tell your AI agent:
+```
+/memory init
+```
+
+The agent will:
+1. Create the `.planning/` directory
+2. Scan your codebase automatically (patterns, conventions, tech stack)
+3. Write everything it learns into `MEMORY.md`
+4. Then you can `/discuss` your feature and `/plan` it
+
+Full guide: [Getting Started — Brownfield](Getting-Started#-brownfield--existing-codebase)
+
+### ⚡ Just a Quick Task?
 
 ```
-"Use the code-review skill to review my latest changes"
-"Use the systematic-debugging skill to investigate this bug"
-"Use the brainstorming skill to explore approaches for this feature"
+/quick fix the login button CSS
 ```
+
+No planning, no discussion. Just do the thing.
 
 ---
 
-## Step 3: Enable Persistent Memory (Optional)
+## Step 3: The Core Workflow
+
+```
+/discuss → /plan → /execute → /verify
+```
+
+| Step | What Happens |
+|:---|:---|
+| `/discuss` | AI asks multiple-choice questions, you answer in one line (`1A 2B 3C`) |
+| `/plan` | AI creates a 2-3 task plan respecting your locked decisions |
+| `/execute` | AI implements task by task with verification at each step |
+| `/verify` | AI proves the implementation actually works |
+
+---
+
+## Step 4: Enable Persistent Memory (Optional)
 
 Add these lines to your agent config to auto-enable memory:
 
@@ -50,7 +95,7 @@ The `memory-protocol.mdc` rule is already installed. No extra setup needed.
 
 ---
 
-## Step 4: Start a Team Session (Optional)
+## Step 5: Start a Team Session (Optional)
 
 For complex tasks, tell your agent:
 
@@ -65,7 +110,9 @@ The agent will switch through specialist roles:
 
 ## What's Next?
 
-- 📖 Read the [Skills Reference](Skills-Core-Development.md) for detailed skill docs
-- ⚡ Check the [Commands Reference](Commands-Reference.md) for all slash commands
-- 💾 Set up [Persistent Memory](Persistent-Memory.md) for cross-session context
-- 🤝 Learn about [Agent Teams](Agent-Teams.md) for structured work
+- 🏁 **[Getting Started Guide](Getting-Started)** — Full greenfield vs brownfield walkthrough in plain English
+- 📖 Read the [Skills Reference](Skills-Core-Development) for detailed skill docs
+- ⚡ Check the [Commands Reference](Commands-Reference) for all slash commands
+- 💬 See the [/discuss examples](examples-commands-discuss) for MCQ decision capture
+- 💾 Set up [Persistent Memory](Persistent-Memory) for cross-session context
+- 🤝 Learn about [Agent Teams](Agent-Teams) for structured work
