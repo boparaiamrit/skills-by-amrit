@@ -122,7 +122,7 @@ npx skills-by-amrit list
 
 ---
 
-## � Getting Started — Greenfield vs Brownfield
+## 🏁 Getting Started — Greenfield vs Brownfield
 
 After installing skills, your workflow depends on whether you're starting fresh or joining an existing codebase.
 
@@ -257,7 +257,7 @@ When the agent presents multiple-choice questions, you can answer everything in 
 
 ---
 
-## �🏗️ Supported Agents
+## 🏗️ Supported Agents
 
 Skills by Amrit works with **30+ AI coding agents**. Each agent gets assets installed to its native directory:
 

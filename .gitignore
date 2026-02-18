@@ -21,3 +21,4 @@ npm-debug.log*
 # Temp files
 .commit-msg.txt
 .git-log-temp.txt
+tmp/
