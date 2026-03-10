@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">🧠 Skills by Amrit</h1>
   <p align="center">
-    <strong>The ultimate AI agent skills framework — 31 skills · 28 commands · 32 workflows · 9 agents · 10 cursor rules</strong>
+    <strong>The ultimate AI agent skills framework — 31 skills · 28 commands · 32 workflows · 9 agents · 10 cursor rules · 5 hooks · 13 modules · 11 templates</strong>
   </p>
   <p align="center">
     Make your AI coding assistant think like a staff engineer.
@@ -29,41 +29,49 @@
 
 ---
 
-### 💎 The Gem: LLM Council + Memory Module
+### 💎 The Gem: LLM Council v2 + Memory Module
 
-> The most powerful pattern in AI-assisted development — and it works in ANY agent.
+> The most powerful pattern in AI-assisted development — real subagent spawning with deterministic orchestration.
 
 **The Memory Module** deeply scans your entire codebase BEFORE any work begins — databases, schemas, API routes, service dependencies, frontend components, tech stack — and creates a structured intelligence layer that persists across sessions.
 
-**The LLM Council** uses that intelligence to orchestrate a **Manager + Specialist** team:
+**Council v2** spawns **real subagents** via `Task()` — each specialist gets a fresh 200k context window. The orchestrator stays lean at ~10-15% context, coordinating through 13 deterministic CLI commands with code-enforced quality gates.
 
 ```
                     ╔═══════════════════════════════╗
-                    ║       🎯 MANAGER AGENT         ║
-                    ║  Full project knowledge         ║
-                    ║  Routes tasks dynamically        ║
-                    ║  Resolves conflicts              ║
+                    ║     🎯 ORCHESTRATOR (lean)      ║
+                    ║  13 CLI commands · Quality gates  ║
+                    ║  ~10-15% context · Task() spawn   ║
                     ╚════════════╦══════════════════╝
                                  ║
+                        Task() spawning
               ┌──────────────────┼──────────────────┐
-              │    Dynamic Routing + Escalation       │
        ┌──────▼──┐ ┌──────▼──┐ ┌──▼────┐ ┌──▼──────┐
-       │🔬Research│ │📐Architect│ │⚙️Exec │ │🔍Review │
-       └────┬─────┘ └────┬────┘ └──┬───┘ └────┬────┘
-            └─────────────┴────┬───┴───────────┘
-                     Peer-to-Peer Communication
+       │🔬Research│ │📐Planner│ │⚙️Exec │ │🔍Review │
+       │ Fresh    │ │ Fresh   │ │ Fresh │ │ Fresh   │
+       │ 200k ctx │ │ 200k   │ │ 200k  │ │ 200k   │
+       └──────────┘ └────────┘ └──────┘ └─────────┘
 ```
 
 **What makes it different:**
-- ✅ Manager has **full project context** via Memory Module (every table, every route, every service)
-- ✅ Sub-agents can **talk to each other** directly for quick alignment
-- ✅ Any agent can **escalate to the Manager** when stuck — Manager guides with deep context
-- ✅ **Dynamic routing** — not a fixed linear sequence, but an intelligent routing graph
+- ✅ **Real subagent spawning** — each agent gets a fresh 200k context via `Task()`, no context pollution
+- ✅ **13 deterministic CLI commands** — `council start`, `council next`, `council status`, etc.
+- ✅ **Code-enforced quality gates** — agents cannot advance phases without passing automated checks
+- ✅ **6 presets** — Full, Rapid, Debug, Architecture, Refactoring, Audit
+- ✅ **Lean orchestrator** — stays at ~10-15% context, delegates deep work to specialists
 - ✅ **Zero infrastructure** — pure file-based, works in ANY agent environment
 
 ---
 
 ### 🏆 Recent Releases
+
+#### v4.0.0 — Production Infrastructure & 12-Platform Parity
+
+- 🪝 **5 production hooks** — security-gate, statusline, context-monitor, update-check, memory-capture
+- ⚙️ **90+ CLI commands** across 13 modules — state, phase, roadmap, verify, config, frontmatter, template, milestone, init, model, council
+- 💎 **Council v2** — real subagent spawning via Task(), deterministic state machine (13 commands), code-enforced quality gates
+- 🌍 **12-platform parity** — full asset support for Claude Code, Copilot, Codex, Cursor, Windsurf, Cline, Roo, Amp, Augment, Continue, Kilo, Goose
+- 📐 **11 templates** — project, plan, summary, requirements, research, state, roadmap, context, verification + config + model profiles
 
 #### v3.5.0 — GSD Planning System ⚡
 
@@ -80,13 +88,6 @@
 - 🧠 **Operational protocols** — message numbering, council resume, staleness detection, error recovery, watchdog, archival
 - 📊 **9 agents · 31 skills · 28 commands · 32 workflows**
 
-#### v3.3.0 — UI/UX Redesign & Database Deep Dive 🎨🗄️
-
-- 🆕 **ui-ux-redesign** skill — Full-stack visual audit: backend inventory, component census, design token extraction, UX flow analysis, layered redesign plan
-- 🧠 **database-audit** overhaul — Deep indexing for high-volume tables (logs, activity, notifications), partial indexes, partitioning, query pattern analysis
-- 🔧 **Version sync system** — Automated version + counts sync across all docs on every release
-- 📊 **31 skills · 28 commands · 32 workflows**
-
 ---
 
 ## 🚀 Quick Start
@@ -98,6 +99,8 @@ npx skills-by-amrit add
 ```
 
 This auto-detects your installed agents and installs everything — skills, commands, workflows, agents, and rules — to the right directories.
+
+**New in v4.0.0:** Hooks (security-gate, statusline, context-monitor) are automatically registered during installation. Run `/team` to start a multi-agent council session.
 
 ### Install to a specific agent
 
@@ -259,7 +262,7 @@ When the agent presents multiple-choice questions, you can answer everything in 
 
 ## 🏗️ Supported Agents
 
-Skills by Amrit works with **30+ AI coding agents**. Each agent gets assets installed to its native directory:
+Skills by Amrit works with **30+ AI coding agents**. **12 platforms have full asset parity** (Claude Code, Copilot, Codex, Cursor, Windsurf, Cline, Roo, Amp, Augment, Continue, Kilo, Goose). Each agent gets assets installed to its native directory:
 
 | | Agent | Skills | Commands | Workflows | Rules |
 |:---:|:---|:---:|:---:|:---:|:---:|
@@ -619,45 +622,42 @@ Use `/memory init` to initialize, `/memory write` to save.
 
 ---
 
-## 💎 LLM Council — Agent Team Coordination
+## 💎 LLM Council v2 — Agent Team Coordination
 
 ### The Problem
-AI coding tasks fail at scale because no single agent can hold all context: database schemas, API routes, service dependencies, frontend components, and business logic — simultaneously. Linear handoffs lose context. Parallel chaos creates conflicts.
+AI coding tasks fail at scale because no single agent can hold all context: database schemas, API routes, service dependencies, frontend components, and business logic — simultaneously. Linear handoffs lose context. Role-switching in a single context window wastes tokens.
 
-### The Solution: Memory Module + Manager-Orchestrated Council
+### The Solution: Real Subagent Spawning + Deterministic Orchestration
 
-**Phase 0 — Memory Module**: Before any team work begins, deeply scan the entire codebase to create a structured intelligence layer: every table, every API route, every service dependency, every pattern.
-
-**Phase 1+ — LLM Council**: A Manager agent with full Memory Module knowledge orchestrates specialist sub-agents through dynamic routing.
+**Council v2** replaces the old role-switching pattern with **real subagent spawning** via `Task()`. Each specialist agent gets a fresh 200k context window — no shared context pollution. The orchestrator stays lean at ~10-15% context usage.
 
 ```
                     ╔═══════════════════════════════╗
-                    ║       🎯 MANAGER AGENT         ║
-                    ║  Has: Full Memory Module        ║
-                    ║  Knows: Every schema, route,    ║
-                    ║         service, pattern         ║
-                    ║  Does: Route, guide, resolve     ║
+                    ║     🎯 ORCHESTRATOR (lean)      ║
+                    ║  ~10-15% context usage           ║
+                    ║  13 deterministic CLI commands    ║
+                    ║  Code-enforced quality gates      ║
                     ╚════════════╦══════════════════╝
                                  ║
+                        Task() spawning
               ┌──────────────────┼──────────────────┐
-              │    Dynamic Routing + Escalation       │
        ┌──────▼──┐ ┌──────▼──┐ ┌──▼────┐ ┌──▼──────┐
-       │🔬Research│ │📐Architect│ │⚙️Exec │ │🔍Review │
-       └────┬─────┘ └────┬────┘ └──┬───┘ └────┬────┘
-            └─────────────┴────┬───┴───────────┘
-                     Peer-to-Peer Communication
+       │🔬Research│ │📐Planner│ │⚙️Exec │ │🔍Review │
+       │ Fresh    │ │ Fresh   │ │ Fresh │ │ Fresh   │
+       │ 200k ctx │ │ 200k   │ │ 200k  │ │ 200k   │
+       └──────────┘ └────────┘ └──────┘ └─────────┘
 ```
 
 ### Key Capabilities
 
 | Capability | Description |
 |:---|:---|
-| 🧠 **Memory Module** | Deep intelligence: schemas, routes, services, components, tech stack |
-| 🎯 **Manager routing** | Dynamic task routing based on context — not fixed linear sequence |
-| 💬 **Peer communication** | Sub-agents talk directly for quick specialist alignment |
-| 🚨 **Escalation** | Agents escalate to Manager who guides with full project context |
-| 🎛️ **6 presets** | Full, Rapid, Debug, Architecture, Refactoring, Audit councils |
-| 🚪 **Quality gates** | Manager enforces gates at every phase transition |
+| 🧠 **Real subagent spawning** | Each agent gets a fresh 200k context via `Task()` — no shared context pollution |
+| 🎛️ **13 CLI commands** | Deterministic state machine for council orchestration (`council start`, `council next`, `council status`, etc.) |
+| 🚪 **Code-enforced quality gates** | Agents cannot advance phases without passing automated gate checks |
+| 🎯 **6 presets** | Full, Rapid, Debug, Architecture, Refactoring, Audit councils |
+| 📐 **Lean orchestrator** | Orchestrator uses ~10-15% context — delegates deep work to specialists |
+| 🧠 **Memory Module** | Deep intelligence layer: schemas, routes, services, components, tech stack |
 
 ---
 
@@ -876,9 +876,12 @@ npx skills-by-amrit help
 | 🤖 Agents | **9** |
 | 🎯 Cursor Rules | **10** |
 | 📏 Rules | **5** |
-| 🛠️ CLI Tools | **1** (`planning-tools.cjs`) |
+| 🪝 Hooks | **5** |
+| 📦 CLI Modules | **13** |
+| 📐 Templates | **11** |
+| 📚 References | **2** |
+| 🎛️ Council Commands | **13** |
 | 🤖 Supported Agents | **34** |
-| 📄 Total Assets | **116** |
 
 ---
 

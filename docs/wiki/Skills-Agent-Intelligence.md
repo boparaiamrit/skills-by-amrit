@@ -86,28 +86,28 @@ When MEMORY.md exceeds 300 lines:
 **Use When:** Complex tasks that benefit from deep project knowledge and structured specialist coordination — research, design, plan, execute, review.
 
 **What It Does:**
-Implements the **LLM Council pattern** — a Manager agent with full project knowledge orchestrates specialist sub-agents through dynamic routing, peer communication, and structured escalation. The **Memory Module** deeply scans your codebase (schemas, routes, services, patterns) BEFORE any work begins, giving the Manager complete understanding.
+Implements the **Council v2 pattern** — an Orchestrator agent spawns real subagents via `Task()`, each getting a fresh 200k context window. No more role-switching within a single context. Backed by **13 council CLI commands** for deterministic state management and **code-enforced quality gates** at every agent transition.
 
 **The Problem It Solves:**
-AI coding tasks fail at scale because no single agent can hold all context simultaneously. Linear handoffs lose context. Parallel chaos creates conflicts. The LLM Council solves this with an intelligent routing graph where the Manager has deep project knowledge and dynamically routes work to specialists.
+AI coding tasks fail at scale because no single agent can hold all context simultaneously. Linear handoffs lose context. Role-switching dilutes focus. Council v2 solves this with real subagent spawning — each specialist gets dedicated context, communicates through file-based handoffs, and must pass quality gates before the next agent starts.
 
 **How It Works:**
 
 ```
               ╔═══════════════════════════════╗
-              ║       🎯 MANAGER AGENT         ║
-              ║  Has: Full Memory Module        ║
-              ║  Routes tasks dynamically        ║
-              ║  Resolves conflicts              ║
+              ║     🎯 ORCHESTRATOR AGENT      ║
+              ║  Spawns via Task()             ║
+              ║  13 CLI commands for state     ║
+              ║  Quality gates at transitions  ║
               ╚════════════╦══════════════════╝
-                           ║
+                           ║ Task() spawning
             ┌──────────────┼──────────────────┐
-            │  Dynamic Routing + Escalation     │
+            │  File-based handoffs + gates      │
      ┌──────▼──┐ ┌──────▼──┐ ┌──▼───┐ ┌──▼──────┐
      │🔬Research│ │📐Architect│ │⚙️Exec│ │🔍Review │
      └────┬─────┘ └────┬────┘ └──┬──┘ └────┬────┘
           └─────────────┴────┬───┴──────────┘
-                   Peer-to-Peer Communication
+                   File-based Handoff Documents
 ```
 
 **Memory Module Structure:**
@@ -150,12 +150,14 @@ AI coding tasks fail at scale because no single agent can hold all context simul
 | 🔍 Audit (4) | Security + Performance + Architecture → Synthesizer | System audits |
 
 **Key Differentiators:**
-| Feature | Linear Handoffs | LLM Council |
+| Feature | Role-Switching (v3) | Council v2 (v4) |
 |:---|:---:|:---:|
-| Project knowledge | Partial | Full (Memory Module) ✅ |
-| Routing | Fixed sequence | Dynamic (Manager decides) ✅ |
-| Feedback loops | None | Escalation + re-routing ✅ |
-| Peer communication | None | Direct specialist-to-specialist ✅ |
-| Quality gates | None | Enforced at every transition ✅ |
+| Agent isolation | Shared context | Fresh 200k per agent via `Task()` ✅ |
+| State management | LLM-managed | 13 CLI commands (deterministic) ✅ |
+| Quality gates | Honor system | Code-enforced at transitions ✅ |
+| Handoffs | In-context | File-based documents ✅ |
+| Routing | Fixed sequence | Orchestrator decides ✅ |
 | Infrastructure | Zero | Zero ✅ |
 | Agent support | Single agent | ANY agent ✅ |
+
+See [Council System](Council-System.md) for the full architecture, CLI commands, and quality gate details.

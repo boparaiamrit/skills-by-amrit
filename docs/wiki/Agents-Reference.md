@@ -12,6 +12,8 @@ Agent definitions are `.md` files installed to `.claude/agents/`. Each defines a
 🔬 Researcher ──▶ 📋 Planner ──▶ ⚙️ Executor ──▶ 🔍 Reviewer
                                        │
                          🐛 Debugger   ✅ Verifier   🗺️ Mapper
+                              │
+                    🔎 Investigator ──▶ 🔧 Fixer
 ```
 
 ---
@@ -73,6 +75,11 @@ Agent definitions are `.md` files installed to `.claude/agents/`. Each defines a
 - Effort estimation — T-shirt sizes (S/M/L/XL) or fibonacci
 - Wave planning — groups tasks into parallel execution waves
 
+**v4.0.0 Enhancements:**
+- Structured `PLAN.md` output with `<files>`, `<action>`, `<verify>`, `<done>` blocks per task
+- Automatic wave assignment based on dependency graph
+- Plans capped at 2-3 tasks per plan to stay within context quality limits
+
 ---
 
 ## ⚙️ Executor
@@ -92,6 +99,11 @@ Agent definitions are `.md` files installed to `.claude/agents/`. Each defines a
 - Checkpoint creation — saves state between waves
 - Fail-fast — stops on blockers rather than continuing with assumptions
 - Inline verification — tests after each task
+
+**v4.0.0 Enhancements:**
+- **Deviation protocol** — categorizes deviations as cosmetic/minor/moderate/major with escalation rules
+- **Context fidelity** — enforces locked decisions from `/discuss`, forbidden from overriding them
+- Atomic git commits per task with conventional commit format
 
 ---
 
@@ -161,6 +173,10 @@ Agent definitions are `.md` files installed to `.claude/agents/`. Each defines a
 - Fix plan generation — when gaps are found, generates a fix plan
 - Regression checking — ensures existing functionality still works
 
+**v4.0.0 Enhancements:**
+- **Goal-backward verification** — starts from the acceptance criteria and works backward to verify each was met
+- Gap closure generates a mini 1-2 task fix plan automatically
+
 ---
 
 ## 🗺️ Mapper
@@ -204,6 +220,46 @@ Agent definitions are `.md` files installed to `.claude/agents/`. Each defines a
 
 ---
 
+## 🔎 Investigator
+
+**File:** `agents/investigator.md`
+
+**Purpose:** Bug investigation specialist — systematically traces issues from symptoms to root cause through hypothesis generation, log analysis, and reproduction.
+
+**When to Use:**
+- As the first agent in the debug council preset
+- When a bug needs systematic investigation before fixing
+- When the root cause of an issue is unclear
+
+**Key Behaviors:**
+- Symptoms before hypotheses — documents exactly what's happening before theorizing why
+- Evidence-based — every hypothesis is testable, every finding cites specific files or logs
+- Systematic elimination — rules out possibilities methodically
+- Reproduction-focused — if it can't be reproduced, it can't be verified
+- Does NOT fix code — diagnoses, documents, and hands off to the Fixer
+
+---
+
+## 🔧 Fixer
+
+**File:** `agents/fixer.md`
+
+**Purpose:** Bug fix implementation — implements targeted, minimal fixes based on investigation findings with comprehensive verification.
+
+**When to Use:**
+- After the Investigator has identified the root cause
+- When a surgical, minimal-footprint fix is needed
+- As the second agent in the debug council preset
+
+**Key Behaviors:**
+- Minimal footprint — changes only what's necessary
+- Evidence-based fixes — addresses the documented root cause, not symptoms
+- Defense in depth — adds guards to prevent recurrence
+- Verify before done — runs tests, confirms the symptom is resolved
+- Documents the fix — future developers understand what was fixed and why
+
+---
+
 ## 🤝 Using Agents Together
 
 Agents are designed to work in sequence, with each agent's output feeding into the next:
@@ -224,4 +280,4 @@ For debugging:
 3. ✅ Verifier   ──▶  Verify the fix
 ```
 
-This mirrors the `agent-team-coordination` skill's sequential role-switching pattern.
+In v4.0.0, this is powered by the [Council System](Council-System.md) with real `Task()` subagent spawning — each agent gets a fresh 200k context window and communicates through file-based handoffs. See [Council System](Council-System.md) for the full architecture.

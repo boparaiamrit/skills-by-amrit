@@ -352,6 +352,31 @@ The **`codebase-conformity` skill** activates during execution to ensure:
 
 ---
 
+## 🏛️ Council Path — Complex Multi-Step Tasks
+
+For complex tasks that benefit from multiple specialist perspectives, use `/team` to spawn a multi-agent council:
+
+```
+/team start "implement user auth with OAuth2" --preset full
+```
+
+**How it works:**
+1. The Orchestrator spawns real subagents via `Task()` — each gets a fresh 200k context
+2. Agents execute in sequence: Researcher → Architect → Planner → Executor → Reviewer
+3. Each agent produces a file-based handoff document for the next agent
+4. Quality gates enforce criteria at every transition (no skipping ahead)
+5. 13 CLI commands handle all state management deterministically
+
+Choose a preset based on your task complexity:
+- `full` — Complex features (5 agents)
+- `rapid` — Quick implementations (3 agents)
+- `debug` — Bug fixes (3 agents)
+- `architecture` — Design decisions (3 agents)
+
+See [Council System](Council-System.md) for the full reference.
+
+---
+
 ## ⚡ Quick Path — One-Off Tasks
 
 For small, self-contained tasks that don't need full planning:

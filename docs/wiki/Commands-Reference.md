@@ -235,13 +235,33 @@ Sub-commands:
 | `/memory status` | Show memory file sizes and health |
 
 ### `/team`
-**Agent team coordination.**
+**Agent team coordination with real subagent spawning.**
 
-Sub-commands:
+In v4.0.0, `/team` uses real `Task()` spawning — each agent gets a fresh 200k context window via Claude Code's subagent system. No more role-switching within a single context.
+
+Backed by **13 council CLI commands** for deterministic state management (init, assign, advance, handoff, gate, etc.).
+
+**Sub-commands:**
 | Sub-command | Description |
 |:---|:---|
-| `/team start [goal]` | Start a new team session |
+| `/team start [goal]` | Start a new team session with a goal |
 | `/team resume` | Resume an existing team session |
-| `/team next` | Switch to the next role |
 | `/team board` | Display the current task board |
-| `/team status` | Show team session status |
+| `/team status` | Show team session status and agent progress |
+
+**Presets (6):**
+| Preset | Agents | Use Case |
+|:---|:---|:---|
+| `full` | researcher → architect → planner → executor → reviewer | Complex features |
+| `rapid` | researcher → executor → reviewer | Quick implementations |
+| `debug` | investigator → fixer → verifier | Bug fixes |
+| `architecture` | researcher → architect → reviewer | Design decisions |
+| `refactoring` | researcher → planner → executor → reviewer | Code restructuring |
+| `audit` | researcher → mapper → reviewer | Codebase analysis |
+
+**Usage:**
+```
+/team start "implement user auth" --preset full
+```
+
+See [Council System](Council-System.md) for the full architecture and CLI command reference.

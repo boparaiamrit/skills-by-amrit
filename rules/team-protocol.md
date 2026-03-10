@@ -1,111 +1,162 @@
-## 🎯 LLM Council Protocol
+## Multi-Agent Council Protocol
 
-> Installed by skills-by-amrit. Enables Manager-orchestrated multi-agent coordination.
+> Installed by skills-by-amrit. Deterministic CLI-driven multi-agent coordination with file-based handoffs.
+
+### Core Principle
+
+Agents reason and write. The CLI manages structure. Never mix these responsibilities.
 
 ### When to Activate Council Mode
 
-Activate the LLM Council when:
-- Task spans multiple systems or modules
+Activate the council when:
+- Task spans 3+ files or 2+ systems
 - Task requires research before implementation
-- Task is complex enough to need structured phases
-- User requests: "start a council", "use team mode", "team session", etc.
+- Task benefits from independent specialist perspectives
+- User requests: "start a council", "use team mode", "team session"
 
-### The LLM Council Pattern
-
-Unlike simple role-switching, the Council has a **Manager** with full project knowledge who orchestrates **specialist sub-agents**:
+### Architecture
 
 ```
-🎯 MANAGER (orchestrator)
-  ├── 🔬 Researcher
-  ├── 📐 Architect
-  ├── 📋 Planner
-  ├── ⚙️ Executor
-  └── 🔍 Reviewer
+ORCHESTRATOR (main session, stays lean ~10-15% context)
+  │
+  ├── council CLI ──── STATE.md, BOARD.md, messages/, handoffs/, gates/
+  │
+  └── Task() spawns ── researcher, architect, planner, executor, reviewer
+                        (each in fresh 200k context)
 ```
+
+- Orchestrator uses CLI for all structural operations
+- Orchestrator spawns agents via Task() with file paths
+- Agents read files, execute their role, write handoff files
+- CLI validates everything between agent runs
 
 ### Council Presets
 
 | Preset | Agents | Use When |
 |--------|--------|----------|
-| **Full Council** | Researcher → Architect → Planner → Executor → Reviewer | Complex multi-module features |
-| **Rapid Council** | Researcher → Executor → Reviewer | Small features, clear requirements |
-| **Debug Council** | Investigator → Fixer → Verifier | Bug investigation, production issues |
-| **Architecture** | Researcher → Architect → Reviewer | Design decisions, tech evaluation |
-| **Refactoring** | Researcher → Planner → Executor → Reviewer | Large-scale refactoring |
+| **Full** (5) | researcher -> architect -> planner -> executor -> reviewer | Complex multi-module features |
+| **Rapid** (3) | researcher -> executor -> reviewer | Small features, clear requirements |
+| **Debug** (3) | investigator -> fixer -> verifier | Bug investigation |
+| **Architecture** (3) | researcher -> architect -> reviewer | Design decisions |
+| **Refactoring** (4) | researcher -> planner -> executor -> reviewer | Large-scale refactoring |
+| **Audit** (3) | researcher -> mapper -> reviewer | Codebase audit |
 
-### Directory Structure
+### Message Protocol
 
-```
-.planning/
-├── MEMORY.md                    # Project brain (persistent memory)
-├── memory/                      # Memory Module (codebase intelligence)
-│   ├── codebase-map.md
-│   ├── database-schemas.md
-│   ├── api-routes.md
-│   ├── service-graph.md
-│   ├── frontend-map.md
-│   └── tech-stack.md
-├── council/                     # Active council state
-│   ├── council.json            # Configuration + routing log
-│   ├── BOARD.md                # Task board
-│   ├── messages/               # Agent communications
-│   ├── handoffs/               # Phase handoff documents
-│   ├── tasks/                  # Task definitions
-│   └── reviews/                # Review feedback
-└── decisions/DECISIONS.md       # Decision log
+All messages created via CLI. No manual creation.
+
+```bash
+council message --to <agent> --task "<description>" --context "<file1>,<file2>"
 ```
 
-### Protocol
+- CLI assigns sequential numbering (`msg-001.md`, `msg-002.md`, ...)
+- CLI enforces message format (From, To, Task, Context Files)
+- Messages live in `.planning/council/messages/`
+- Orchestrator creates messages; agents read them
 
-#### Starting a Council
-1. **Check Memory Module** — Create if missing, refresh if stale (>48h)
-2. **Create** `.planning/council/` with `council.json` and `BOARD.md`
-3. **Select preset** based on task complexity
-4. **Enter Manager role** and route first task
+### Handoff Protocol
 
-#### Manager Responsibilities
-- Load and consult Memory Module before every routing decision
-- Provide relevant context (schemas, routes, gotchas) in routing messages
-- Enforce quality gates at phase transitions
-- Handle escalations with specific guidance
-- Update BOARD.md after each routing
+Agents write handoffs. CLI validates them.
 
-#### Sub-Agent Responsibilities
-- Read Manager's routing message (includes Memory Module context)
-- Execute specialist work
-- Write structured message back to Manager (handoff, question, escalation, status)
-- Can peer-communicate with allowed agents for quick alignment
-
-#### Ending a Council
-- Manager verifies objective is complete
-- Update Memory Module with new schemas/routes/services
-- Update MEMORY.md with council outcomes
-- Update DECISIONS.md with key decisions
-- Archive council to `.planning/council/_archive/`
-
-### Message Format
-
-All communications go to `.planning/council/messages/msg-NNN.md`:
-
-```markdown
-# Message #NNN
-**From:** 🔬 researcher
-**To:** 🎯 manager
-**Type:** handoff | question | escalation | status | request
-**Timestamp:** [DATE]
-
-## Content
-[Message content]
-
-## Suggested Next Action
-[What should happen next]
+```bash
+# After agent completes and writes handoff file:
+council handoff --validate handoff-NNN-agent.md
 ```
 
-### Rules
+- Handoffs live in `.planning/council/handoffs/`
+- Required sections: Summary, Findings/Work Done, Recommendations for Next Agent
+- CLI checks: file exists, sections present, non-empty content
+- No advancement without validated handoff
 
-- ALWAYS create/refresh Memory Module before council work
-- ALWAYS route through Manager (except allowed peer-to-peer)
-- ALWAYS write structured messages between agents
-- ALWAYS enforce quality gates before phase transitions
-- NEVER skip the Reviewer phase
-- NEVER close council without updating Memory Module and MEMORY.md
+### Gate Protocol
+
+Quality gates checked by CLI between phases.
+
+```bash
+council gate-check --phase <phase>
+```
+
+- Gates are deterministic checks, not LLM judgment
+- Must pass before `council advance`
+- `--force` available for user override only (never self-override)
+- Gate results logged in `.planning/council/gates/`
+
+| Transition | Gate Checks |
+|------------|-------------|
+| Research -> Design | Findings documented, risks identified |
+| Design -> Planning | Architecture documented, interfaces defined |
+| Planning -> Execution | Tasks atomic, dependencies explicit |
+| Execution -> Review | Tasks addressed, no unresolved TODOs |
+| Review -> Complete | Critical issues resolved |
+
+### State Protocol
+
+State machine managed exclusively by CLI.
+
+```bash
+council advance        # Move to next agent (requires gate pass)
+council advance --force --reason "..."  # Override (user permission only)
+```
+
+- STATE.md is CLI-managed — never hand-edit
+- State transitions are: init -> agent1 -> agent2 -> ... -> complete
+- Cannot skip agents in sequence
+- Cannot go backwards (start new council instead)
+
+### Board Protocol
+
+Board is generated output, never manually edited.
+
+```bash
+council board          # Regenerate from current state
+```
+
+- Run after every `council advance`
+- Shows: completed phases, current agent, remaining work
+- BOARD.md is in `.planning/council/`
+
+### Agent Spawning Protocol
+
+Spawn each agent via Task() with explicit instructions:
+
+```
+Task("You are the [ROLE] agent for this council.
+
+READ: [list of specific file paths]
+EXECUTE: [clear task description]
+WRITE: [exact output file path]
+FORMAT: [required sections]")
+```
+
+Rules:
+- Pass file paths, not file contents
+- One agent per Task() call
+- Wait for agent to complete before advancing
+- Never do agent work in the orchestrator session
+
+### Hard Rules
+
+1. **ALL structural operations go through CLI** — messages, handoffs, gates, state, board
+2. **ALL agent work happens in spawned Task() calls** — never role-switch in main session
+3. **ALL handoffs are validated before advancement** — no exceptions without `--force`
+4. **ALL gates are checked before advancement** — no exceptions without `--force`
+5. **NEVER manually create or edit files in `.planning/council/`**
+6. **NEVER skip the reviewer agent** — every preset ends with review
+7. **NEVER let orchestrator context exceed 50%** — spawn agents for heavy work
+
+### Memory Module
+
+- Lives in `.planning/memory/`
+- Created by mapper agent if missing
+- Refreshed if >48 hours old
+- Passed to agents as context file paths
+- Updated after council if codebase changed
+
+### Error Recovery
+
+| Issue | Recovery |
+|-------|----------|
+| Agent produces bad handoff | Respawn with clearer instructions |
+| Gate fails | Fix handoff or `--force` with user permission |
+| STATE.md corrupted | `council init --recover` |
+| Memory Module stale | Spawn mapper agent to refresh |

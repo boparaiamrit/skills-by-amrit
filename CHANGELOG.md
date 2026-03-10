@@ -2,6 +2,98 @@
 
 All notable changes to this project will be documented in this file.
 
+## 4.0.0 — 2026-03-10 — Production Infrastructure & 12-Platform Parity
+
+### 🚀 Major Features
+
+**Production-Grade Hooks System (5 hooks)**
+- `security-gate.js` — PostToolUse scanning for secrets, API keys, injection patterns (9 secret patterns + 6 anti-patterns)
+- `statusline.js` — PreInputSanitization display: model + context % bar + current task
+- `context-monitor.js` — PostToolUse context warnings at 65%/75% with debounce and severity escalation
+- `update-check.js` — SessionStart npm version check with 24-hour cache
+- `memory-capture.md` — PreCompact weighted memory persistence (W1-W5)
+
+**Expanded CLI Tool (90+ commands across 13 modules)**
+- `scripts/lib/core.cjs` — 20 shared utilities, MODEL_PROFILES
+- `scripts/lib/state.cjs` — 13 STATE.md CRUD operations (load, json, update, get, patch, add-decision, add-blocker, record-session, advance-task, update-progress)
+- `scripts/lib/phase.cjs` — 7 phase operations including plan-index with wave grouping
+- `scripts/lib/roadmap.cjs` — ROADMAP.md parsing and progress updates
+- `scripts/lib/verify.cjs` — 4 validators (summary, plan-structure, phase-completeness, references)
+- `scripts/lib/config.cjs` — Config management with gates, safety, parallelization toggles
+- `scripts/lib/template.cjs` — Template rendering with {{variable}} substitution
+- `scripts/lib/milestone.cjs` — Milestone archive/complete/list
+- `scripts/lib/init.cjs` — 5 compound init commands (execute-phase, plan-phase, new-project, quick, verify-work)
+- `scripts/lib/frontmatter.cjs` — 8 YAML frontmatter CRUD operations
+- `scripts/lib/model.cjs` — Model profile resolution (quality/balanced/budget)
+- `scripts/lib/council.cjs` — 13 council state machine commands
+
+**Council Infrastructure (LLM Council v2)**
+- Real subagent spawning via Task() — each agent gets fresh 200k context
+- Deterministic state machine: `council init/status/advance/message/handoff/gate-check/board/task-add/task-update/reset/summary/close/resume`
+- Code-enforced quality gates between agent transitions
+- Auto-generated task board (BOARD.md) with progress tracking
+- 6 presets: full (5), rapid (3), debug (3), architecture (3), refactoring (4), audit (3)
+- Orchestrator stays lean (~10-15% context), delegates to specialist agents
+
+**12-Platform Parity**
+- GitHub Copilot: agents (.agent.md), prompts, instructions, hooks.json, AGENTS.md
+- Cursor: commands, AGENTS.md, hooks.json
+- Windsurf: rules, AGENTS.md, hooks.json
+- Codex: AGENTS.md entry point
+- Cline: .clinerules/ with path frontmatter, AGENTS.md
+- Roo Code: .roo/rules-code/, .roomodes with 3 custom modes
+- Amp: AGENTS.md entry point
+- Augment: .augment/rules/, AGENTS.md
+- Continue: .continue/prompts/, .continue/rules/
+- Kilo Code: .kilocode/rules/, AGENTS.md
+- Goose: .goosehints plain text entry point
+
+**Template System (11 templates)**
+- 9 markdown templates: project, plan, summary, requirements, research, state, roadmap, context, verification
+- config-defaults.json with all workflow toggles
+- model-profiles.json with quality/balanced/budget
+
+**Reference Documents**
+- questioning.md — Adaptive questioning framework (70/25/5 decision distribution)
+- deviation-rules.md — Deviation protocol (auto-fix rules 1-3, permission rules 4-5)
+
+### 🔧 Improvements
+
+**Workflow Upgrades (7 workflows)**
+- `execute.md` — Wave-based parallel execution with compound init and atomic commits
+- `plan-feature.md` — Compound init, structured PLAN.md output, plan-checker revision loop
+- `verify.md` — Goal-backward verification methodology, VERIFICATION.md output
+- `init-project.md` — Compound init, template-based project creation
+- `quick.md` — Scope guard, atomic commit protocol
+- `commit.md` — Attribution config, specific file staging (never git add -A)
+- `team-session.md` — Real Task() spawning, CLI orchestration, quality gates, parallel audit
+
+**Agent Upgrades (3 agents)**
+- `executor.md` — Deviation protocol (4 rules), context fidelity, mandatory file read
+- `planner.md` — Structured PLAN.md output, wave assignment, context budget awareness
+- `verifier.md` — Goal-backward verification, VERIFICATION.md structured output
+
+**Installer Upgrades**
+- SHA-256 file manifest generation (skills-file-manifest.json)
+- Idempotent hook registration with uninstall support
+- Attribution handling (--attribution / --no-attribution flags)
+- Statusline configuration (--force-statusline flag)
+- Copilot conversion functions (agents, prompts, instructions, hooks)
+- Universal AGENTS.md generation for 8+ platforms
+- Platform-specific rules conversion (Windsurf, Cline, Roo, Augment, Continue, Kilo)
+
+### 📊 Stats
+- **New files:** 30
+- **Modified files:** 21
+- **Total CLI commands:** 90+
+- **Platforms supported:** 12 (at full parity)
+- **Council commands:** 13
+- **Hooks:** 5
+- **Templates:** 11
+- **Audit score:** 100/100 (post-fix)
+
+---
+
 ## [3.5.0] — 2026-02-18 — GSD Planning System 🚀
 
 ### 🆕 GSD Planning System — Deterministic State Management

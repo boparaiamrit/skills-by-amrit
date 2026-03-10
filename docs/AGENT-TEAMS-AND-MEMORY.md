@@ -1,317 +1,306 @@
-# 🤖 Agent Teams & Persistent Memory
+# Multi-Agent Council System — Architecture & Implementation
 
-> How skills-by-amrit brings Claude Code-style agent teams and session memory to **every** AI coding agent.
-
-## The Problem
-
-### Agent Teams
-Claude Code introduced [Agent Teams](https://code.claude.com/docs/en/agent-teams) — multiple AI instances working in parallel via tmux, with shared task lists and inter-agent messaging. It's powerful, but it **only works in Claude Code**. Most developers use Antigravity, Cursor, or other agents that run single sessions.
-
-### Session Memory
-[claude-mem](https://github.com/thedotmack/claude-mem) is a Claude Code plugin that auto-captures session context using lifecycle hooks and SQLite. It's brilliant, but it requires:
-- Claude Code (hooks-based)
-- Bun runtime
-- SQLite + Chroma vector database
-- HTTP worker service on port 37777
-
-That's a lot of infrastructure just for memory.
-
-## Our Solution
-
-### Agent Teams → Sequential Role-Switching
-Instead of parallel agents, we use **sequential role-switching** with a **file-based blackboard**:
-
-```
-Claude Code Agent Teams:           Our Approach:
-┌─────┐ ┌─────┐ ┌─────┐          ┌────────────────────────┐
-│Agent│ │Agent│ │Agent│          │     Single Agent        │
-│  1  │ │  2  │ │  3  │          │                        │
-└──┬──┘ └──┬──┘ └──┬──┘          │ Phase 1: 🔬 Researcher │
-   │       │       │              │ Phase 2: 📐 Architect  │
-   └───┬───┘───────┘              │ Phase 3: ⚙️ Executor   │
-       │                          │ Phase 4: 🔍 Reviewer   │
-  Shared Files                    └────────────────────────┘
-                                          │
-                                    Shared Files
-                                   (.planning/team/)
-```
-
-**Why this works just as well:**
-- Same quality output through structured phases
-- Handoff documents preserve full context between roles
-- No tmux, no parallel sessions, no infrastructure
-- Works in ANY agent (Antigravity, Cursor, Claude Code, Gemini CLI, etc.)
-- The blackboard (`.planning/team/`) is human-readable
-
-### Session Memory → Instruction-Based Memory
-Instead of hooks and databases, we use **instruction-based memory** through agent rules:
-
-```
-claude-mem:                        Our Approach:
-┌────────────────────┐            ┌────────────────────┐
-│ Lifecycle Hooks    │            │ Agent Rules        │
-│ (SessionStart,     │            │ (GEMINI.md,        │
-│  PostToolUse,      │            │  .cursorrules,     │
-│  Stop, SessionEnd) │            │  CLAUDE.md)        │
-├────────────────────┤            ├────────────────────┤
-│ SQLite + Chroma    │            │ Markdown files     │
-│ (database)         │            │ (.planning/)       │
-├────────────────────┤            ├────────────────────┤
-│ Bun Worker Service │            │ Nothing extra      │
-│ (port 37777)       │            │ (zero infra)       │
-├────────────────────┤            ├────────────────────┤
-│ AI Compression     │            │ AI Compression     │
-│ (Agent SDK)        │            │ (built into agent) │
-└────────────────────┘            └────────────────────┘
-```
-
-**Why this works just as well:**
-- Same persistent memory across sessions
-- Same handoff notes for continuity
-- No external services, no databases, no ports
-- Version-controlled in git (searchable history!)
-- Works in ANY agent
-- Token-efficient (~1,650 tokens per session start)
+> Production-grade multi-agent coordination via deterministic CLI state machine. Works in any AI coding agent.
 
 ---
 
-## Quick Start
+## Architecture Overview
 
-### For Antigravity (Gemini)
+The council system uses an **orchestrator-delegate pattern**, not peer-to-peer communication:
 
-1. Install the skills:
 ```
-npx skills add persistent-memory agent-team-coordination
-```
-
-2. Add to your project's `GEMINI.md` (or `~/.gemini/GEMINI.md` for global):
-```markdown
-## 🧠 Automatic Memory Protocol
-
-ALWAYS at the START of every conversation:
-1. Check if `.planning/MEMORY.md` exists
-2. If yes, read it FIRST before doing anything else
-3. Also read `.planning/handoffs/LATEST.md` if it exists
-
-ALWAYS at the END of significant work:
-1. Update `.planning/MEMORY.md` with new learnings
-2. Write `.planning/handoffs/LATEST.md` for the next session
-3. Append decisions to `.planning/decisions/DECISIONS.md`
-4. Keep MEMORY.md under 300 lines
+                    ┌─────────────────────────────┐
+                    │     ORCHESTRATOR (you)       │
+                    │  Runs CLI commands            │
+                    │  Manages state machine        │
+                    │  Enforces quality gates       │
+                    └──────────────┬──────────────┘
+                                   │
+              ┌────────────────────┼────────────────────┐
+              │  Task() spawning — fresh 200k context    │
+       ┌──────▼──┐  ┌──────▼──┐  ┌──▼────┐  ┌──▼──────┐
+       │Researcher│  │Architect│  │Executor│  │Reviewer │
+       └────┬─────┘  └────┬────┘  └──┬───┘  └────┬────┘
+            │              │          │            │
+            └──── File-based handoffs ─────────────┘
+                  (.planning/council/)
 ```
 
-3. Initialize memory:
+**Key design decisions:**
+
+- **Each agent gets fresh context** via `Task()` spawning — no shared session, no context pollution
+- **CLI handles all structural operations** deterministically — no LLM creating JSON or managing state
+- **File-based handoffs** — agents communicate through numbered markdown files, not direct messages
+- **Quality gates are code-enforced** — the CLI validates handoff content before allowing transitions
+
+---
+
+## Council State Machine
+
+### States
+
 ```
-Tell the agent: "Initialize project memory using the persistent-memory skill"
+initialized ──► executing ──► agent-active ──► gate-check ──► advancing ──► complete
+     │                              │               │
+     │                              │               ▼
+     │                              │          gate-failed
+     │                              │          (blocks advance)
+     │                              ▼
+     │                         handoff written
+     │                              │
+     └──────────────────────────────┘
+                (council reset)
 ```
 
-### For Cursor
+### State Transitions
 
-1. Install the skills:
-```
-npx skills add persistent-memory agent-team-coordination
-```
+| From | To | Trigger | Condition |
+|------|----|---------|-----------|
+| `initialized` | `active` | `council advance` | First call activates agent[0] |
+| `active` | `active` | `council advance` | Gate check passes, next agent activated |
+| `active` | `active` (blocked) | `council advance` | Gate check fails, stays on current agent |
+| `active` | `completed` | `council advance` | Last agent finished, no more agents |
+| Any | `initialized` | `council reset` | Archives current state, fresh start |
 
-2. The `memory-protocol.mdc` and `team-protocol.mdc` rules are automatically installed to `.cursor/rules/`.
+### State Storage
 
-3. Initialize memory:
-```
-Tell Cursor: "Initialize project memory following the memory-protocol rule"
-```
+All state lives in `council.json`:
 
-### For Claude Code
-
-1. Install the skills:
-```
-npx skills add persistent-memory agent-team-coordination
-```
-
-2. Use the commands:
-```
-/memory init    — Initialize memory
-/memory read    — Read current memory
-/memory write   — Save session learnings
-/team start     — Start a team session
+```json
+{
+  "objective": "Implement OAuth2 login flow",
+  "preset": "rapid",
+  "agents": ["researcher", "executor", "reviewer"],
+  "current_phase": 1,
+  "current_agent": "executor",
+  "status": "active",
+  "messages_count": 3,
+  "tasks_count": 4,
+  "handoffs_count": 1,
+  "gates_passed": [{"gate": "researcher->executor", "at": "..."}],
+  "gates_failed": [],
+  "history": [...]
+}
 ```
 
 ---
 
-## Memory System Details
+## CLI Commands Reference
 
-### What Gets Captured
+All commands run via `node planning-tools.cjs council <subcommand>`.
 
-| What | Where | When |
-|------|-------|------|
-| Project overview | `MEMORY.md` | On init, updated each session |
-| Architecture decisions | `context/architecture.md` | On architecture changes |
-| Key decisions | `decisions/DECISIONS.md` | On significant decisions |
-| Code patterns | `context/patterns.md` | On pattern discovery |
-| Known bugs/gotchas | `context/gotchas.md` | On bug discovery |
-| Technical debt | `context/tech-debt.md` | On debt identification |
-| Session summaries | `sessions/*.md` | End of each session |
-| Handoff notes | `handoffs/LATEST.md` | End of each session |
-
-### Token Budget
-
-| File | Lines | Tokens | Loaded |
-|------|-------|--------|--------|
-| MEMORY.md | ~300 | ~1,500 | Always |
-| LATEST.md | ~30 | ~150 | Always |
-| Context files | Varies | Varies | On demand |
-| Session logs | Varies | Varies | Never (unless asked) |
-| **Total automatic** | **~330** | **~1,650** | **Per session** |
-
-### Compression Strategy
-
-When MEMORY.md exceeds 300 lines:
-1. Recent sessions → keep last 5
-2. Key decisions → keep last 10
-3. Resolved issues → remove
-4. Detailed entries → move to context/ files
-5. Old session logs → move to `_archive/`
+| Command | Purpose | Key Flags |
+|---------|---------|-----------|
+| `council init <objective>` | Initialize council state machine | `--preset full\|rapid\|debug\|architecture\|refactoring\|audit` |
+| `council status` | Show current council state as JSON | |
+| `council advance` | Move to next agent (runs gate validation) | `--force` to skip gate check |
+| `council message <from> <to> <type>` | Create numbered handoff message | `--content "..."` |
+| `council handoff <agent>` | Record agent completion with handoff doc | `--summary "..."` |
+| `council gate-check` | Validate transition quality gate | `--from <agent> --to <agent>` |
+| `council board` | Regenerate BOARD.md from current state | |
+| `council task-add <description>` | Add a task to the council board | `--assignee <agent> --depends-on <id>` |
+| `council task-update <id>` | Update task status | `--status pending\|in-progress\|done\|blocked --result "..."` |
+| `council reset` | Archive current council and start fresh | |
 
 ---
 
-## Team System Details
+## Presets
 
-### Role Presets
+| Preset | Agent Sequence | Use Case |
+|--------|---------------|----------|
+| `full` | Researcher, Architect, Planner, Executor, Reviewer | Complex multi-module features |
+| `rapid` | Researcher, Executor, Reviewer | Small features, clear requirements |
+| `debug` | Investigator, Fixer, Verifier | Bug investigation, production issues |
+| `architecture` | Researcher, Architect, Reviewer | Design decisions, tech evaluation |
+| `refactoring` | Researcher, Planner, Executor, Reviewer | Large-scale code refactoring |
+| `audit` | Researcher, Mapper, Reviewer | Codebase analysis, system audits |
 
-| Preset | Roles | Best For |
-|--------|-------|----------|
-| Quick (3) | Researcher → Executor → Reviewer | Small features, bug fixes |
-| Full (5) | Researcher → Architect → Planner → Executor → Reviewer | Complex features |
-| Debug (3) | Investigator → Fixer → Verifier | Bug investigations |
-| Research (3) | Researcher-A → Researcher-B → Synthesizer | Multi-angle research |
+---
 
-### Handoff Documents
+## Quality Gates
 
-The most important part of the team system. Each role writes a handoff for the next:
+Gate checks run automatically on `council advance` (skip with `--force`). Each transition has required criteria:
+
+| Gate Transition | Required Criteria |
+|----------------|-------------------|
+| `researcher -> architect` | Handoff from researcher exists, contains `findings` section |
+| `researcher -> executor` | Handoff from researcher exists |
+| `architect -> planner` | Handoff from architect exists, contains `design` section |
+| `planner -> executor` | Handoff from planner exists, task files created in `tasks/` |
+| `executor -> reviewer` | Handoff from executor exists, contains `commits` section |
+| `investigator -> fixer` | Handoff from investigator exists, contains `root cause` section |
+| `fixer -> verifier` | Handoff from fixer exists, contains `fix` section |
+| `* -> reviewer` | At least 1 handoff exists from any previous agent |
+
+**What happens on gate failure:** The CLI returns `advanced: false` with a `missing` array describing what the agent still needs to produce. The orchestrator stays on the current agent and instructs it to fill in the gaps.
+
+---
+
+## Memory Module
+
+### Purpose
+
+Persistent codebase intelligence that gives every council agent deep project context without burning tokens re-scanning files.
+
+### Files
+
+Located in `.planning/memory/`:
+
+| File | Contents |
+|------|----------|
+| `codebase-map.md` | Directory structure, module purposes, entry points |
+| `database-schemas.md` | All tables, columns, types, relationships, indexes |
+| `api-routes.md` | All endpoints, controllers, middleware, auth requirements |
+| `service-graph.md` | Service dependencies, business logic flows |
+| `frontend-map.md` | Components, state management, routing (if applicable) |
+| `tech-stack.md` | Languages, frameworks, tools, configuration |
+
+### Lifecycle
+
+- **Creation:** The mapper agent scans the entire codebase at council start and populates all 6 files
+- **Refresh:** When files are older than 48 hours, they are regenerated before council work begins
+- **Updates:** After each council session, the Memory Module is updated with new schemas, routes, or services discovered during work
+- **Consumption:** The orchestrator includes relevant Memory Module context in each agent's routing message
+
+---
+
+## File Structure
 
 ```
-Phase 1: Researcher writes → phase-1-research.md
-  │
-  ▼ (Architect reads research.md)
-Phase 2: Architect writes → phase-2-architect.md
-  │
-  ▼ (Planner reads architect.md)
-Phase 3: Planner writes → phase-3-plan.md + task files
-  │
-  ▼ (Executor reads plan.md + tasks)
-Phase 4: Executor writes → phase-4-execute.md
-  │
-  ▼ (Reviewer reads ALL handoffs)
-Phase 5: Reviewer writes → review-report.md
-```
-
-### Task Board
-
-Visual progress tracking in `.planning/team/BOARD.md`:
-
-```markdown
-# 📋 Team Board: auth-refactor
-> Phase 3 — ⚙️ Executor
-
-## 🔴 Blocked
-- [ ] #005 — Integration tests (blocked by #003, #004)
-
-## 🟡 In Progress
-- [ ] #003 — Implement token refresh
-
-## 🟢 Done
-- [x] #001 — Research OAuth2 providers
-- [x] #002 — Design auth schema
-- [x] #004 — Database migration
-
-## 📊 Progress
-[██████░░░░] 60% — 3/5 tasks
+.planning/council/
+├── council.json              # State machine (JSON)
+├── BOARD.md                  # Auto-generated task board
+├── messages/
+│   ├── msg-001.md            # Numbered inter-agent messages
+│   ├── msg-002.md
+│   └── msg-NNN.md
+├── handoffs/
+│   ├── handoff-001-researcher.md   # Agent completion documents
+│   ├── handoff-002-executor.md
+│   └── handoff-NNN-agent.md
+├── tasks/
+│   ├── 001-setup-oauth-client.md   # Task files with frontmatter
+│   ├── 002-implement-token-flow.md
+│   └── NNN-slug.md
+└── reviews/                  # Review feedback documents
 ```
 
 ---
 
-## Comparison with Alternatives
+## Comparison: Before vs After
 
-### vs Claude Code Agent Teams
-
-| Feature | Claude Code Teams | Our Approach |
-|---------|-------------------|--------------|
-| Parallelism | True parallel (tmux) | Sequential role-switching |
-| Infrastructure | tmux required | Zero infrastructure |
-| Agent compatibility | Claude Code only | Any agent |
-| Communication | Inter-agent messaging | Handoff documents |
-| Task tracking | Shared task list | Shared task board |
-| Quality gates | Hooks (TeammateIdle) | Review role + criteria |
-| Context preservation | Session memory | File-based blackboard |
-
-### vs claude-mem
-
-| Feature | claude-mem | Our Approach |
-|---------|-----------|--------------|
-| Capture method | Lifecycle hooks | Instruction-based |
-| Storage | SQLite + Chroma | Markdown files |
-| Infrastructure | Bun worker + HTTP | Zero infrastructure |
-| Search | MCP tools (semantic) | File reading (exact) |
-| Agent compatibility | Claude Code only | Any agent |
-| Version control | Not git-native | Git-native |
-| Token cost | Progressive disclosure | ~1,650 tokens flat |
-| Setup complexity | Plugin install + config | Add rules to GEMINI.md |
+| Aspect | Before (v3.4) | After (v3.6+) |
+|--------|--------------|----------------|
+| **Spawning** | Role-switching (single session) | Real `Task()` spawning (fresh context) |
+| **Context** | Single shared session (degrades) | Fresh 200k context per agent |
+| **State** | Manual LLM file creation | Deterministic CLI (`council.json`) |
+| **Gates** | LLM self-check (unreliable) | CLI validation (code-enforced) |
+| **Parallelism** | None | Wave-capable (multiple agents per phase) |
+| **Reliability** | Depends on instruction-following | Code-enforced transitions |
+| **Board** | LLM-generated markdown (inconsistent) | Auto-generated from state machine |
+| **Messages** | Freeform files | Numbered, typed, timestamped |
+| **Reset/Archive** | Manual cleanup | One command: `council reset` |
 
 ---
 
-## Advanced Usage
+## Example Session Transcript
 
-### Cross-Agent Memory
+A rapid council to add a caching layer to an API:
 
-The same `.planning/` directory works across different agents:
+```bash
+# 1. Initialize the council
+$ node planning-tools.cjs council init "Add Redis caching to /api/products endpoint" --preset rapid
+{
+  "initialized": true,
+  "objective": "Add Redis caching to /api/products endpoint",
+  "preset": "rapid",
+  "agents": ["researcher", "executor", "reviewer"],
+  "council_dir": ".planning/council/"
+}
 
-```
-Monday morning (Antigravity):
-  → Reads MEMORY.md, works on feature
-  → Writes session log + handoff
+# 2. Advance to first agent (researcher)
+$ node planning-tools.cjs council advance
+{
+  "advanced": true,
+  "from": null,
+  "to": "researcher",
+  "phase": 0
+}
 
-Monday afternoon (Cursor):
-  → Reads same MEMORY.md + same handoff
-  → Continues work seamlessly
-  → Updates memory files
+# >>> Orchestrator spawns researcher subagent with Task()
+# >>> Researcher reads Memory Module, investigates caching options
+# >>> Researcher writes findings
 
-Tuesday (Claude Code):
-  → Same memory, same context
-  → Use /memory read to see everything
-```
+# 3. Record researcher handoff
+$ node planning-tools.cjs council handoff researcher --summary "Analyzed /api/products. 240ms avg response. Redis recommended with 5min TTL. Cache key: products:{category}:{page}."
 
-This is **impossible** with claude-mem (Claude Code only) or Claude Code teams (single-agent-type).
+# 4. Advance to executor (gate check runs automatically)
+$ node planning-tools.cjs council advance
+{
+  "advanced": true,
+  "from": "researcher",
+  "to": "executor",
+  "gate_result": "passed",
+  "phase": 1
+}
 
-### Multi-Project Memory
+# >>> Orchestrator spawns executor subagent with Task()
+# >>> Executor reads researcher handoff, implements caching
+# >>> Executor adds tasks and marks them done
 
-Each project has its own `.planning/` directory, so memories never leak between projects. For cross-project knowledge, use the global `~/.gemini/GEMINI.md` (Antigravity) or global cursor rules.
+# 5. Add and track tasks
+$ node planning-tools.cjs council task-add "Install ioredis and configure connection" --assignee executor
+$ node planning-tools.cjs council task-add "Add cache middleware to /api/products" --assignee executor
+$ node planning-tools.cjs council task-update 1 --status done --result "Added ioredis 5.3.2, config in lib/redis.js"
+$ node planning-tools.cjs council task-update 2 --status done --result "Cache middleware in middleware/cache.js, 5min TTL"
 
-### Team Sessions Across Conversations
+# 6. Record executor handoff and advance to reviewer
+$ node planning-tools.cjs council handoff executor --summary "Implemented Redis caching. 2 files added. Cache hit reduces response to 12ms."
+$ node planning-tools.cjs council advance
+{
+  "advanced": true,
+  "from": "executor",
+  "to": "reviewer",
+  "gate_result": "passed",
+  "phase": 2
+}
 
-A team session can span multiple conversations:
+# >>> Orchestrator spawns reviewer subagent with Task()
+# >>> Reviewer reads ALL handoffs, verifies implementation
 
-```
-Conversation 1:
-  → Start team, complete Phase 1 (Research)
-  → Handoff written, config saved
+# 7. Complete the council
+$ node planning-tools.cjs council handoff reviewer --summary "Implementation verified. Cache invalidation tested. No issues found."
+$ node planning-tools.cjs council advance
+{
+  "advanced": false,
+  "reason": "Council completed — no more agents in sequence.",
+  "status": "completed"
+}
 
-Conversation 2 (hours later):
-  → "Resume team session"
-  → Reads config.json → Phase 2 (Architect)
-  → Reads research handoff
-  → Continues naturally
+# 8. Check final board
+$ node planning-tools.cjs council board
+{
+  "path": ".planning/council/BOARD.md",
+  "tasks_total": 2,
+  "tasks_done": 2
+}
 ```
 
 ---
 
 ## FAQ
 
-**Q: Does this actually work without hooks?**
-A: Yes. The key insight is that modern AI agents are instruction-followers. If you tell them "always read MEMORY.md first" in their rules, they will. claude-mem's hooks are just a programmatic way to ensure the same behavior — we achieve it through instructions.
+**Q: What happens if a gate check fails?**
+A: The CLI returns `advanced: false` with the specific missing items. The orchestrator keeps the current agent active and instructs it to produce the missing artifacts. No state corruption.
 
-**Q: What if the agent forgets to write memory?**
-A: The handoff note reminder is baked into the rules. But if the session crashes, you lose that session's learnings (same as claude-mem if the hook fails). The solution: write memory incrementally during the session, not just at the end.
+**Q: Can I skip gate checks?**
+A: Yes, with `council advance --force`. Useful during development, not recommended for production work.
 
-**Q: Is the team system as good as real parallel agents?**
-A: For a single developer, often better. Sequential roles with handoffs produce more coherent output because each role has full context. Parallel agents can have coordination issues and file conflicts. The trade-off is speed — parallel is faster for truly independent tasks.
+**Q: How does this work across different AI agents?**
+A: The CLI is agent-agnostic. Any agent that can run `node planning-tools.cjs council ...` and read/write markdown files can participate. The orchestrator pattern works in Claude Code, Gemini CLI, Cursor, Windsurf, and others.
 
-**Q: Can I use this with claude-mem too?**
-A: Yes! They're complementary. claude-mem captures low-level observations; our system captures high-level decisions and context. Use both if you use Claude Code.
+**Q: What happens on `council reset`?**
+A: The entire `.planning/council/` directory is archived to `.planning/council-archive-<timestamp>/`, then a fresh empty council structure is created.
+
+**Q: How is context managed per agent?**
+A: Each agent is spawned with `Task()` which gives it a fresh 200k context window. The orchestrator includes relevant Memory Module excerpts and previous handoff content in the agent's prompt. No context degradation across phases.

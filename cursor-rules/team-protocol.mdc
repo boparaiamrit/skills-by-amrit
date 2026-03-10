@@ -1,139 +1,165 @@
 ---
-description: LLM Council protocol — Manager-orchestrated multi-agent coordination with Memory Module for complex tasks
-globs: *
+description: "Team protocol for multi-agent council coordination — deterministic CLI operations, quality gates, file-based handoffs"
+globs: ["*.md", "*.ts", "*.tsx", "*.js", "*.jsx", "*.py"]
+alwaysApply: true
 ---
 
-# LLM Council Protocol
+# Multi-Agent Council Protocol
 
-## Concept
+## Core Principle
 
-For complex tasks, use the LLM Council pattern: a **Manager** with full project knowledge orchestrates **specialist sub-agents**.
+Agents reason and write. The CLI manages structure. Never mix these responsibilities.
 
-```
-🎯 MANAGER (has Memory Module)
-  ├── 🔬 Researcher — codebase analysis, evidence gathering
-  ├── 📐 Architect — system design, patterns, interfaces
-  ├── 📋 Planner — task decomposition, wave planning
-  ├── ⚙️ Executor — implementation, testing
-  └── 🔍 Reviewer — code review, quality assurance
-```
+## When to Activate Council Mode
 
-## When to Activate
-
-Activate council coordination when:
-- Task involves multiple systems or modules
+Activate the council when:
+- Task spans 3+ files or 2+ systems
 - Task requires research before implementation
-- Task is complex enough to benefit from structured phases
-- User explicitly requests council/team approach
+- Task benefits from independent specialist perspectives
+- User requests: "start a council", "use team mode", "team session"
 
-## Directory Structure
-
-```
-.planning/
-├── MEMORY.md                    # Project brain
-├── memory/                      # Memory Module (codebase intelligence)
-│   ├── codebase-map.md
-│   ├── database-schemas.md
-│   ├── api-routes.md
-│   ├── service-graph.md
-│   └── tech-stack.md
-├── council/                     # Active council state
-│   ├── council.json            # Config + routing log
-│   ├── BOARD.md                # Task board
-│   ├── messages/               # msg-NNN.md files
-│   │   └── msg-001.md
-│   ├── handoffs/               # handoff-NNN-agent.md files
-│   │   └── handoff-001-researcher.md
-│   ├── tasks/                  # Task definitions
-│   │   └── 001-task-name.md
-│   └── reviews/
-└── decisions/DECISIONS.md
-```
-
-## Protocol
-
-### Starting a Council
-1. Check Memory Module exists and is current (<48h old)
-2. If missing/stale, scan codebase to create memory/*.md files
-3. Create `.planning/council/` with council.json, BOARD.md
-4. Select preset: Full (5) | Rapid (3) | Debug (3) | Architecture (3)
-5. Enter Manager role, make first routing decision
-
-### Manager Routing
-
-Manager, on receiving any message:
-1. Read the message carefully
-2. Consult Memory Module for relevant context
-3. Check quality gates for current phase
-4. Write routing message with:
-   - Context from Memory Module
-   - Task assignment
-   - Quality expectations
-   - "Watch out for" warnings
-5. Update BOARD.md and council.json
-
-### Sub-Agent Execution
-
-Each sub-agent:
-1. Reads Manager's routing message
-2. Reads relevant Memory Module files
-3. Performs specialist work
-4. Writes message back to Manager:
-   - Type: handoff, question, escalation, status, request
-   - Files produced
-   - Suggested next action
-5. Updates task board
-
-### Message Numbering
+## Architecture
 
 ```
-1. List .planning/council/messages/msg-*.md
-2. Find highest NNN
-3. New message = msg-{NNN+1 padded to 3 digits}.md
+ORCHESTRATOR (main session, stays lean ~10-15% context)
+  │
+  ├── council CLI ──── STATE.md, BOARD.md, messages/, handoffs/, gates/
+  │
+  └── Task() spawns ── researcher, architect, planner, executor, reviewer
+                        (each in fresh 200k context)
 ```
 
-### Quality Gates
-
-Check before advancing phases:
-- **Research → Design:** Areas identified, risks documented, alternatives compared
-- **Design → Planning:** Architecture documented, breaking changes identified
-- **Planning → Execution:** Tasks atomic (<30min), dependencies explicit
-- **Execution → Review:** All tasks done, tests pass, no unexplained TODOs
-- **Review → Close:** Critical issues resolved, Memory Module updated
-
-### Peer Communication
-
-Allowed direct communication (still goes to messages/):
-- 🔬 Researcher ↔ 📐 Architect
-- 📐 Architect ↔ 📋 Planner
-- 📐 Architect ↔ ⚙️ Executor
-- ⚙️ Executor ↔ 🔍 Reviewer
-
-For scope changes, blockers, or conflicts → escalate to Manager.
+- Orchestrator uses CLI for all structural operations
+- Orchestrator spawns agents via Task() with file paths
+- Agents read files, execute their role, write handoff files
+- CLI validates everything between agent runs
 
 ## Council Presets
 
-| Preset | Agents | Use Case |
+| Preset | Agents | Use When |
 |--------|--------|----------|
-| Full | Researcher → Architect → Planner → Executor → Reviewer | Complex features |
-| Rapid | Researcher → Executor → Reviewer | Small features |
-| Debug | Investigator → Fixer → Verifier | Bug investigation |
-| Architecture | Researcher → Architect → Reviewer | Design decisions |
+| **Full** (5) | researcher -> architect -> planner -> executor -> reviewer | Complex multi-module features |
+| **Rapid** (3) | researcher -> executor -> reviewer | Small features, clear requirements |
+| **Debug** (3) | investigator -> fixer -> verifier | Bug investigation |
+| **Architecture** (3) | researcher -> architect -> reviewer | Design decisions |
+| **Refactoring** (4) | researcher -> planner -> executor -> reviewer | Large-scale refactoring |
+| **Audit** (3) | researcher -> mapper -> reviewer | Codebase audit |
 
-## Rules
+## Message Protocol
 
-- ALWAYS create Memory Module before council work begins
-- ALWAYS route through Manager (except allowed peer-to-peer)
-- ALWAYS write structured messages between phases
-- ALWAYS update BOARD.md when task status changes
-- NEVER skip the review phase
-- NEVER close council without updating Memory Module + MEMORY.md
+All messages created via CLI. No manual creation.
+
+```bash
+council message --to <agent> --task "<description>" --context "<file1>,<file2>"
+```
+
+- CLI assigns sequential numbering (`msg-001.md`, `msg-002.md`, ...)
+- CLI enforces message format (From, To, Task, Context Files)
+- Messages live in `.planning/council/messages/`
+- Orchestrator creates messages; agents read them
+
+## Handoff Protocol
+
+Agents write handoffs. CLI validates them.
+
+```bash
+council handoff --validate handoff-NNN-agent.md
+```
+
+- Handoffs live in `.planning/council/handoffs/`
+- Required sections: Summary, Findings/Work Done, Recommendations for Next Agent
+- CLI checks: file exists, sections present, non-empty content
+- No advancement without validated handoff
+
+## Gate Protocol
+
+Quality gates checked by CLI between phases.
+
+```bash
+council gate-check --phase <phase>
+```
+
+- Gates are deterministic checks, not LLM judgment
+- Must pass before `council advance`
+- `--force` available for user override only (never self-override)
+- Gate results logged in `.planning/council/gates/`
+
+| Transition | Gate Checks |
+|------------|-------------|
+| Research -> Design | Findings documented, risks identified |
+| Design -> Planning | Architecture documented, interfaces defined |
+| Planning -> Execution | Tasks atomic, dependencies explicit |
+| Execution -> Review | Tasks addressed, no unresolved TODOs |
+| Review -> Complete | Critical issues resolved |
+
+## State Protocol
+
+State machine managed exclusively by CLI.
+
+```bash
+council advance        # Move to next agent (requires gate pass)
+council advance --force --reason "..."  # Override (user permission only)
+```
+
+- STATE.md is CLI-managed — never hand-edit
+- State transitions are: init -> agent1 -> agent2 -> ... -> complete
+- Cannot skip agents in sequence
+- Cannot go backwards (start new council instead)
+
+## Board Protocol
+
+Board is generated output, never manually edited.
+
+```bash
+council board          # Regenerate from current state
+```
+
+- Run after every `council advance`
+- Shows: completed phases, current agent, remaining work
+- BOARD.md is in `.planning/council/`
+
+## Agent Spawning Protocol
+
+Spawn each agent via Task() with explicit instructions:
+
+```
+Task("You are the [ROLE] agent for this council.
+
+READ: [list of specific file paths]
+EXECUTE: [clear task description]
+WRITE: [exact output file path]
+FORMAT: [required sections]")
+```
+
+Rules:
+- Pass file paths, not file contents
+- One agent per Task() call
+- Wait for agent to complete before advancing
+- Never do agent work in the orchestrator session
+
+## Hard Rules
+
+1. **ALL structural operations go through CLI** — messages, handoffs, gates, state, board
+2. **ALL agent work happens in spawned Task() calls** — never role-switch in main session
+3. **ALL handoffs are validated before advancement** — no exceptions without `--force`
+4. **ALL gates are checked before advancement** — no exceptions without `--force`
+5. **NEVER manually create or edit files in `.planning/council/`**
+6. **NEVER skip the reviewer agent** — every preset ends with review
+7. **NEVER let orchestrator context exceed 50%** — spawn agents for heavy work
+
+## Memory Module
+
+- Lives in `.planning/memory/`
+- Created by mapper agent if missing
+- Refreshed if >48 hours old
+- Passed to agents as context file paths
+- Updated after council if codebase changed
 
 ## Error Recovery
 
 | Issue | Recovery |
 |-------|----------|
-| council.json corrupted | Recreate from BOARD.md and messages/ |
-| Memory Module stale | Re-scan codebase before continuing |
-| Agent stuck (no message in 10+ min) | Manager sends status request |
-| Unhandled escalation | Resume by addressing escalation first |
+| Agent produces bad handoff | Respawn with clearer instructions |
+| Gate fails | Fix handoff or `--force` with user permission |
+| STATE.md corrupted | `council init --recover` |
+| Memory Module stale | Spawn mapper agent to refresh |

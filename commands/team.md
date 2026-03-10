@@ -1,134 +1,190 @@
-# /team — LLM Council Command
+---
+name: team
+description: "Start a multi-agent council session with real subagent spawning and deterministic state management"
+argument-hint: "[objective] [--preset full|rapid|debug|architecture|refactoring|audit] [--auto]"
+allowed-tools:
+  - Read
+  - Write
+  - Edit
+  - Bash
+  - Task
+  - Grep
+  - Glob
+  - AskUserQuestion
+---
 
-Start and manage an LLM Council session — a Manager-orchestrated multi-agent team with deep codebase intelligence via the Memory Module.
+# /team — Multi-Agent Council
+
+Start and manage a council session where each specialist agent runs in its own fresh 200k context, coordinated through CLI commands and file-based handoffs.
 
 ## Usage
-- `/team start [objective]` — Start a new council session
+
+- `/team [objective]` — Start a new council session (auto-selects preset)
+- `/team [objective] --preset full` — Start with a specific preset
+- `/team [objective] --auto` — Run autonomously (skip confirmations, auto-handle gate failures)
 - `/team resume` — Resume an existing council session
 - `/team board` — Show current council task board
-- `/team status` — Show council status, routing log, and agent states
-- `/team route [agent]` — Manually route next task to a specific agent
-- `/team memory` — Show Memory Module status and staleness
+- `/team status` — Show council status and agent states
 
 ## Protocol
 
-### Starting a Council (`start`)
-1. Ask the user for the objective if not provided
-2. **Initialize Memory Module** (if not exists):
-   - Scan codebase → `.planning/memory/codebase-map.md`
-   - Extract ALL database schemas → `.planning/memory/database-schemas.md`
-   - Map ALL API routes/controllers → `.planning/memory/api-routes.md`
-   - Map ALL services/dependencies → `.planning/memory/service-graph.md`
-   - Map frontend (if applicable) → `.planning/memory/frontend-map.md`
-   - Inventory tech stack → `.planning/memory/tech-stack.md`
-   - Compress into `.planning/MEMORY.md`
-3. **Select a council preset** based on complexity:
-   - 🏗️ **Full Council (5):** Researcher → Architect → Planner → Executor → Reviewer
-   - ⚡ **Rapid Council (3):** Researcher → Executor → Reviewer
-   - 🐛 **Debug Council (3):** Investigator → Fixer → Verifier
-   - 📐 **Architecture Council (3):** Researcher → Architect → Reviewer
-   - 🔄 **Refactoring Council (4):** Researcher → Planner → Executor → Reviewer
-   - 🔍 **Audit Council (4):** Security + Performance + Architecture → Synthesizer
-4. Create `.planning/council/` directory structure
-5. Write `council.json` with configuration
-6. Create `BOARD.md` task board
-7. Enter **Manager role** and make first routing decision
+### Parse Arguments
 
-### Resuming (`resume`)
-1. Read `.planning/council/council.json`
-2. Read `.planning/MEMORY.md` (project brain)
-3. Read last message in `.planning/council/messages/`
-4. Read the task board
-5. Enter **Manager role** and determine next action
+Extract from $ARGUMENTS:
+- **objective**: Everything that isn't a flag (required for `start`, not for `resume`/`board`/`status`)
+- **--preset**: Council preset (`full`, `rapid`, `debug`, `architecture`, `refactoring`, `audit`). Default: auto-select based on objective.
+- **--auto**: Autonomous mode — skip user confirmations, auto-retry on gate failures (once), auto-approve routing decisions.
 
-### Task Board (`board`)
-Display `.planning/council/BOARD.md` with:
-- Council members and their statuses
-- Blocked / In-progress / Done tasks
-- Recent routing decisions
-- Progress bar
+### Subcommand: `resume`
 
-### Status (`status`)
-Show:
-- Council name, objective, preset
-- Current active agent and task
-- All agents and their states (active / idle / done)
-- Routing log (last 10 decisions)
-- Message count
-- Memory Module staleness check
+If first argument is "resume":
 
-### Route (`route`)
-Manually override Manager routing:
-- Force-route next task to a specific agent
-- Manager still provides Memory Module context in the routing message
-- Useful for course-correcting or exploring alternatives
+```bash
+RESUME=$(node scripts/planning-tools.cjs council resume)
+if [[ "$RESUME" == @file:* ]]; then RESUME=$(cat "${RESUME#@file:}"); fi
+```
 
-### Memory (`memory`)
-Show Memory Module health:
-- Which intelligence files exist
-- Last updated timestamps
-- Staleness warnings (>24h since last update)
-- Missing coverage (tables/routes/services not documented)
+Parse JSON. Report where the session left off. Continue the workflow from `execute_agent_sequence` at the next uncompleted agent.
 
-## Manager Behavior
+### Subcommand: `board`
 
-When in Manager role, the agent:
+If first argument is "board":
 
-1. **Reads messages** from sub-agents (handoffs, questions, escalations)
-2. **Consults Memory Module** for relevant context
-3. **Makes routing decisions** — which agent should handle the next task
-4. **Provides context** — pulls relevant schemas, routes, gotchas into routing messages
-5. **Enforces quality gates** — verifies acceptance criteria before phase transitions
-6. **Handles escalations** — provides guidance using deep project knowledge
-7. **Updates the board** — maintains real-time task status
+```bash
+node scripts/planning-tools.cjs council board
+```
 
-## Sub-Agent Behaviors
+Display the board output. Done.
 
-### 🔬 Researcher
-- Search codebase in areas specified by Manager's routing
-- Research external documentation/best practices
-- Produce evidence-backed findings with file paths
-- Write handoff message to Manager
+### Subcommand: `status`
 
-### 📐 Architect
-- Read research findings (via Manager routing)
-- Design solution using Memory Module for schema/service context
-- Document interfaces, data flows, breaking changes
-- Can peer-communicate with Researcher for clarification
-- Write handoff message to Manager
+If first argument is "status":
 
-### 📋 Planner
-- Read architecture design (via Manager routing)
-- Decompose into atomic tasks with dependencies
-- Group into execution waves
-- Create task files in `.planning/council/tasks/`
-- Write handoff message to Manager
+```bash
+STATUS=$(node scripts/planning-tools.cjs council status)
+if [[ "$STATUS" == @file:* ]]; then STATUS=$(cat "${STATUS#@file:}"); fi
+```
 
-### ⚙️ Executor
-- Read task breakdown (via Manager routing)
-- Implement tasks in wave order, run tests
-- Can peer-communicate with Architect for design clarification
-- Escalate blockers to Manager
-- Write handoff message to Manager per wave
+Display council status including: objective, preset, active agent, completed agents, remaining agents, message count, gate results. Done.
 
-### 🔍 Reviewer
-- Read ALL previous handoffs for full context
-- Review code against architecture design
-- Check security, performance, correctness
-- Can peer-communicate with Executor and Architect
-- Write review report to Manager
+### Starting a New Council
 
-## Communication
+**1. Validate objective:**
 
-Sub-agents communicate via structured messages in `.planning/council/messages/`:
-- **📤 Handoff** — "I'm done, here's my work"
-- **❓ Question** — To Manager or allowed peers
-- **🚨 Escalation** — "I'm stuck" (always to Manager)
-- **📊 Status** — Progress update to Manager
-- **🔄 Request** — "I need specialist X" (to Manager for routing)
+If no objective provided, ask:
+```
+What do you want the council to work on?
+```
 
-## Integration
-- Memory Module persists across sessions in `.planning/memory/`
-- Works with `/memory` command for cross-session continuity
-- Council decisions logged to `.planning/decisions/DECISIONS.md`
-- Council state tracked in `council.json` for seamless resume
+Wait for response.
+
+**2. Auto-select preset (if --preset not provided):**
+
+Based on the objective text, select the best preset:
+
+| Objective signals | Preset |
+|-------------------|--------|
+| "bug", "fix", "broken", "error", "crash" | `debug` |
+| "audit", "review", "check", "scan" | `audit` |
+| "refactor", "reorganize", "restructure", "migrate" | `refactoring` |
+| "design", "architecture", "evaluate", "compare" | `architecture` |
+| Simple/small scope, single feature | `rapid` |
+| Complex, multi-module, unclear scope | `full` |
+
+If unclear, default to `full`.
+
+**If not `--auto`:** Confirm preset with user:
+
+```
+Recommended preset: **{preset}** ({agent_count} agents: {agent_list})
+
+Proceed? (yes / change preset)
+```
+
+**3. Execute the team-session workflow:**
+
+Follow `@workflows/team-session.md` — the workflow handles:
+- Council initialization via CLI
+- Memory module loading
+- Sequential/parallel agent spawning via Task()
+- Quality gate enforcement
+- Board updates
+- Council summary and close
+
+Pass through the `--auto` flag to the workflow if present.
+
+**4. Present results:**
+
+After workflow completes, display the council summary (generated by the workflow) and suggest next steps:
+
+```
+---
+
+## Next Steps
+
+Based on council findings:
+- [Actionable item 1]
+- [Actionable item 2]
+
+**Commands:**
+- `/team resume` — continue if session was paused
+- `/team board` — view the task board
+- `/team status` — check session state
+- `/execute` — if the council produced a plan, execute it
+- `/plan` — if the council produced architecture, plan implementation
+
+---
+```
+
+## Presets Reference
+
+### Full Council (complex features, multi-module impact)
+**Agents:** Researcher → Architect → Planner → Executor → Reviewer
+**When:** New features touching multiple systems, unclear requirements, high-risk changes.
+**Context per agent:** Fresh 200k each. Total: ~5 agent spawns.
+
+### Rapid Council (small features, clear requirements)
+**Agents:** Researcher → Executor → Reviewer
+**When:** Well-defined features, single module, low risk.
+**Context per agent:** Fresh 200k each. Total: ~3 agent spawns.
+
+### Debug Council (bug investigation, production issues)
+**Agents:** Investigator → Fixer → Verifier
+**When:** Bug reports, production incidents, test failures.
+**Context per agent:** Fresh 200k each. Total: ~3 agent spawns.
+
+### Architecture Council (design decisions, tech evaluation)
+**Agents:** Researcher → Architect → Reviewer
+**When:** Technology choices, system design, scaling decisions.
+**Context per agent:** Fresh 200k each. Total: ~3 agent spawns.
+
+### Refactoring Council (large-scale refactoring)
+**Agents:** Researcher → Planner → Executor → Reviewer
+**When:** Large refactors, module extraction, pattern migration.
+**Context per agent:** Fresh 200k each. Total: ~4 agent spawns.
+
+### Audit Council (system audit, pre-launch review)
+**Agents:** Security Auditor + Performance Auditor + Architecture Auditor → Synthesizer
+**When:** Pre-launch review, compliance check, health assessment.
+**Context per agent:** Fresh 200k each. Total: ~4 agent spawns (3 parallel + 1 sequential).
+**Note:** First 3 auditors run in PARALLEL, then Synthesizer runs sequentially with all findings.
+
+## Key Architecture Decisions
+
+### Why real subagents instead of role-switching?
+- **Fresh context:** Each agent gets a full 200k context window — no pollution from prior agents
+- **Parallelization:** Audit preset runs 3 agents simultaneously
+- **Reliability:** No "forget your role" drift that happens with sequential role-switching
+- **Resumability:** If a session breaks, handoff files on disk preserve all progress
+
+### Why file-based handoffs?
+- **Deterministic:** Files are written to disk, not held in chat context
+- **Resumable:** Pick up where you left off across sessions
+- **Inspectable:** User can read handoff files directly
+- **Size-unlimited:** Handoffs can be as detailed as needed without context pressure
+
+### Why CLI-driven state management?
+- **Orchestrator stays lean:** Only reads small JSON returns (~10-15% context)
+- **Consistent numbering:** CLI handles message/handoff IDs, not LLM
+- **Quality gates:** Enforced by code, not LLM judgment
+- **Board updates:** Deterministic, not generated

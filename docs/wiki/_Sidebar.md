@@ -84,6 +84,18 @@
 
 ---
 
+## 🔗 Hooks & Templates
+- [Hooks Reference](Hooks-Reference)
+- [Templates Reference](Templates-Reference)
+
+---
+
+## 🏛️ Council & CLI
+- [Council System](Council-System)
+- [CLI Reference](CLI-Reference)
+
+---
+
 ## 📖 References
 - [Examples Index](Examples)
 - [GitHub Repository](https://github.com/boparaiamrit/skills-by-amrit)

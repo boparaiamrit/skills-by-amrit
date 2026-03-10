@@ -1,0 +1,26 @@
+{
+  "quality": {
+    "planner": "opus",
+    "executor": "opus",
+    "researcher": "opus",
+    "verifier": "sonnet",
+    "reviewer": "sonnet",
+    "checker": "sonnet"
+  },
+  "balanced": {
+    "planner": "opus",
+    "executor": "sonnet",
+    "researcher": "sonnet",
+    "verifier": "sonnet",
+    "reviewer": "sonnet",
+    "checker": "sonnet"
+  },
+  "budget": {
+    "planner": "sonnet",
+    "executor": "sonnet",
+    "researcher": "haiku",
+    "verifier": "haiku",
+    "reviewer": "haiku",
+    "checker": "haiku"
+  }
+}
