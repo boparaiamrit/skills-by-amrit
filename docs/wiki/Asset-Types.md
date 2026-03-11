@@ -10,13 +10,13 @@ Skills by Amrit ships 11 distinct asset types, each targeting different agents a
 
 | Type | Format | Count | Target Agents | Purpose |
 |:---|:---:|:---:|:---|:---|
-| 🧠 **Skills** | `SKILL.md` in folder | 26 | All agents | Deep instructional knowledge |
-| ⚡ **Commands** | `.md` file | 28 | Claude Code | Slash commands for project lifecycle |
+| 🧠 **Skills** | `SKILL.md` in folder | 27 | All agents | Deep instructional knowledge |
+| ⚡ **Commands** | `.md` file | 34 | Claude Code | Slash commands for project lifecycle |
 | 🔄 **Workflows** | `.md` file | 32 | Antigravity | Step-by-step execution scripts |
 | 🤖 **Agents** | `.md` file | 9 | Claude Code | Specialist agent definitions |
 | 🎯 **Cursor Rules** | `.mdc` file | 10 | Cursor | AI behavior rules |
 | 📏 **Rules** | `.md` file | 5 | All agents | Universal agent instructions |
-| 🔗 **Hooks** | `.js` / `.md` file | 5 | Claude Code | Production lifecycle hooks |
+| 🔗 **Hooks** | `.js` / `.md` file | 8 | Claude Code | Production lifecycle hooks |
 | 📝 **Templates** | `.md` file | 11 | All agents | Structured markdown templates for planning |
 | 📚 **References** | `.md` file | 2 | All agents | Questioning framework, deviation rules |
 | ⚙️ **CLI Modules** | `.cjs` commands | 13 | Claude Code | Deterministic state management commands |
@@ -152,7 +152,10 @@ hooks/
 ├── statusline.js             # PreInputSanitization — model + context % display
 ├── context-monitor.js        # PostToolUse — warns at 65%/75% context usage
 ├── update-check.js           # SessionStart — checks npm for newer version
-└── memory-capture.md         # PreCompact — captures weighted memories
+├── memory-capture.md         # PreCompact — captures weighted memories
+├── hook-profiles.js          # Library — three-tier hook gating (minimal/standard/strict)
+├── suggest-compact.js        # PostToolUse — strategic compaction suggestions
+└── cost-tracker.js           # PostToolUse + Stop — session metrics tracking
 ```
 
 **Install Location:** Registered in Claude Code's `settings.json` hooks array

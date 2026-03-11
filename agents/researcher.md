@@ -7,6 +7,7 @@ allowed-tools:
   - Glob
   - Bash
   - WebSearch
+model: sonnet
 ---
 
 # Researcher Agent

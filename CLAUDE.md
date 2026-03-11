@@ -55,6 +55,9 @@ Skills activate automatically when their conditions are met. You MUST use the re
 | Cross-session memory | `persistent-memory` |
 | Complex multi-step task / LLM Council | `agent-team-coordination` |
 | Multi-agent team task | `agent-team-coordination` (uses real subagent spawning) |
+| Multi-step task with agents | `/orchestrate` with appropriate chain |
+| Session wrap-up | `/learn` to capture patterns |
+| Before commit/PR | `/quality-gate pre-commit` or `/quality-gate pre-pr` |
 | Adding code to existing codebase | `codebase-conformity` |
 | Creating new skills | `writing-skills` |
 | Discovering skills | `using-skills` |
@@ -106,6 +109,12 @@ Slash commands are available in `commands/`. Key commands:
 | `/memory` | Persistent memory management |
 | `/progress` | Project progress dashboard |
 | `/init-project` | Bootstrap `.planning/` directory |
+| `/learn` | Extract patterns from current session into `.planning/LEARNINGS.md` |
+| `/quality-gate` | Run build/lint/test/security pipeline (modes: quick, full, pre-commit, pre-pr) |
+| `/checkpoint` | Create or verify named progress checkpoints |
+| `/loop` | Repeat a task across targets with safety bounds |
+| `/orchestrate` | Chain agents: feature, bugfix, refactor, security, or custom |
+| `/context` | Switch mode: dev (code-first), research (read-widely), review (quality-first) |
 
 ## Agents
 
@@ -147,7 +156,7 @@ skills-by-amrit/
 │   ├── deep-audit.md
 │   ├── execute.md
 │   ├── verify.md
-│   └── ... (20 more)
+│   └── ... (28 more)
 ├── agents/                ← Specialist subagents (9 agents)
 │   ├── researcher.md
 │   ├── planner.md

@@ -57,7 +57,7 @@
 - [team](examples-commands-team)
 - [audit](examples-commands-audit)
 - [redesign](examples-commands-redesign)
-- [View all 28 commands...](Examples#commands-examples)
+- [View all 34 commands...](Examples#commands-examples)
 
 ### 🔄 Workflows
 - [debug](examples-workflows-debug)
@@ -81,6 +81,15 @@
 - [memory-protocol](examples-rules-memory-protocol)
 - [severity-framework](examples-rules-severity-framework)
 - [team-protocol](examples-rules-team-protocol)
+
+---
+
+## 🧠 Skills
+- [Core Development Skills](Skills-Core-Development) — 8 foundational
+- [Auditing Skills](Skills-Auditing) — 10 audits
+- [Evolution Skills](Skills-Evolution) — 4 evolution
+- [Agent Intelligence](Skills-Agent-Intelligence) — 2 team/memory
+- [Meta Skills](Skills-Meta) — 3 meta skills
 
 ---
 

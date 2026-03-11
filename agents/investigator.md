@@ -6,6 +6,7 @@ allowed-tools:
   - Grep
   - Glob
   - Bash
+model: opus
 ---
 
 # Investigator Agent

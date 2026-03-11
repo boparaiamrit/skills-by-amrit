@@ -1,6 +1,6 @@
 # ⚡ Commands Reference
 
-> 28 Claude Code slash commands for the complete project lifecycle
+> 34 Claude Code slash commands for the complete project lifecycle
 
 Commands are `.md` files installed to `.claude/commands/`. They provide structured protocols that Claude Code invokes when you type the slash command.
 
@@ -93,9 +93,34 @@ Provides detailed explanations at multiple levels:
 - Trade-offs and alternatives
 - Visual diagrams when helpful
 
+### `/learn`
+**Extract reusable patterns and learnings from current session.**
+
+Captures session knowledge for future reuse:
+- Identifies patterns, decisions, and solutions discovered during the session
+- Writes learnings to persistent memory
+- Tags learnings by category (architecture, debugging, performance, etc.)
+
 ---
 
 ## 🔧 Code Quality
+
+### `/quality-gate`
+**Run technical quality checks before commits/PRs.**
+
+Runs build, lint, test, and security checks in sequence:
+| Mode | Description |
+|:---|:---|
+| `quick` | Fast checks only (lint + type-check) |
+| `full` | All checks including tests and security scan |
+| `pre-commit` | Checks appropriate for a commit |
+| `pre-pr` | Full checks required before opening a PR |
+
+**Usage:**
+```
+/quality-gate quick
+/quality-gate pre-pr
+```
 
 ### `/review`
 **Structured code review with severity feedback.**
@@ -204,6 +229,43 @@ For well-defined, small tasks that don't need a formal plan:
 - Update a config value
 - Add a simple feature
 
+### `/checkpoint`
+**Create or verify named progress checkpoints.**
+
+Modes:
+| Mode | Description |
+|:---|:---|
+| `create` | Save a named checkpoint of current progress |
+| `verify` | Verify a checkpoint is still valid |
+| `list` | List all checkpoints in the current session |
+
+**Usage:**
+```
+/checkpoint create "auth module complete"
+/checkpoint verify "auth module complete"
+/checkpoint list
+```
+
+### `/loop`
+**Run repetitive tasks across multiple targets with safety bounds.**
+
+Executes the same operation across multiple files, modules, or targets:
+- Automatic safety limits to prevent runaway execution
+- Parallel execution support for independent targets
+- Progress tracking and failure reporting
+
+**Flags:**
+| Flag | Description |
+|:---|:---|
+| `--limit N` | Maximum number of iterations (safety bound) |
+| `--parallel` | Run iterations in parallel where safe |
+
+**Usage:**
+```
+/loop --limit 10 "add error handling to each controller"
+/loop --parallel --limit 5 "update imports in each module"
+```
+
 ### `/commit`
 **Create well-formatted Git commits.**
 
@@ -265,3 +327,39 @@ Backed by **13 council CLI commands** for deterministic state management (init, 
 ```
 
 See [Council System](Council-System.md) for the full architecture and CLI command reference.
+
+### `/orchestrate`
+**Chain agents with structured handoffs.**
+
+Defines and runs multi-agent chains with quality gates between each agent transition:
+
+**Built-in Chains:**
+| Chain | Agents | Use Case |
+|:---|:---|:---|
+| `feature` | researcher → architect → executor → reviewer | New features |
+| `bugfix` | investigator → fixer → verifier | Bug fixes |
+| `refactor` | mapper → planner → executor → reviewer | Code restructuring |
+| `security` | scanner → analyst → fixer → verifier | Security remediation |
+| `custom` | User-defined agent sequence | Custom workflows |
+
+**Usage:**
+```
+/orchestrate feature "add user authentication"
+/orchestrate custom "researcher → executor" "spike on caching options"
+```
+
+### `/context`
+**Switch context mode.**
+
+Changes the agent's operating mode to optimize behavior for the current task:
+| Mode | Description |
+|:---|:---|
+| `dev` | Default — full implementation capability |
+| `research` | Read-only exploration, no code changes |
+| `review` | Code review focus with severity feedback |
+
+**Usage:**
+```
+/context research
+/context dev
+```

@@ -8,6 +8,7 @@ allowed-tools:
   - Grep
   - Glob
   - Bash
+model: sonnet
 ---
 
 # Fixer Agent

@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">🧠 Skills by Amrit</h1>
   <p align="center">
-    <strong>The ultimate AI agent skills framework — 31 skills · 28 commands · 32 workflows · 9 agents · 10 cursor rules · 5 hooks · 13 modules · 11 templates</strong>
+    <strong>The ultimate AI agent skills framework — 32 skills · 34 commands · 37 workflows · 9 agents · 10 cursor rules · 8 hooks · 13 modules · 11 templates</strong>
   </p>
   <p align="center">
     Make your AI coding assistant think like a staff engineer.
@@ -65,6 +65,15 @@
 
 ### 🏆 Recent Releases
 
+#### v4.1.0 — Intelligence Expansion
+
+- 🤖 **Model routing for all 9 agents** (Opus/Sonnet cost optimization)
+- ⚡ **6 new commands:** `/learn`, `/quality-gate`, `/checkpoint`, `/loop`, `/orchestrate`, `/context`
+- 🔗 **Multi-agent orchestration** with structured handoffs
+- 🪝 **Hook profile system** (minimal/standard/strict)
+- 📦 **Plugin marketplace + Codex CLI support**
+- 📚 **4 stack-specific example projects**
+
 #### v4.0.0 — Production Infrastructure & 12-Platform Parity
 
 - 🪝 **5 production hooks** — security-gate, statusline, context-monitor, update-check, memory-capture
@@ -80,13 +89,6 @@
 - 📐 **Context engineering** — Quality Degradation Curve, context budget rules, plans limited to 2-3 tasks max
 - ⚙️ **Deviation protocol** — 4-category system (Cosmetic → Major) with auth gates for plan changes during execution
 - 📊 **31 skills · 28 commands · 32 workflows · 9 agents**
-
-#### v3.4.0 — Brutal Audit Edition 🔬
-
-- 🔬 **38 audit issues fixed** across persistent-memory and agent-team-coordination modules
-- 🆕 **2 new agents** — `investigator.md` and `fixer.md` for Debug Council preset
-- 🧠 **Operational protocols** — message numbering, council resume, staleness detection, error recovery, watchdog, archival
-- 📊 **9 agents · 31 skills · 28 commands · 32 workflows**
 
 ---
 
@@ -305,7 +307,7 @@ Skills by Amrit works with **30+ AI coding agents**. **12 platforms have full as
 
 ## 📚 Complete Asset Catalog
 
-### 🧠 Skills (31)
+### 🧠 Skills (32)
 
 Skills are deep instructional documents that teach AI agents HOW to think about specific engineering tasks. Each skill contains principles, protocols, anti-patterns, and quality criteria.
 
@@ -361,7 +363,7 @@ Skills are deep instructional documents that teach AI agents HOW to think about 
 | 26 | 🏥 **product-completeness-audit** | Functional completeness verification — 5-level completeness spectrum, placeholder detection, broken flow identification, and API connection validation |
 | 27 | 🔬 **brutal-exhaustive-audit** | No-shortcuts 5-pass audit — build verification, route checking, data flow tracing, user flow testing, and edge case validation with anti-shortcut rules |
 
-#### 🔸 Meta (3 skills)
+#### 🔸 Meta (4 skills)
 
 | # | Skill | Description |
 |:---:|:---|:---|
@@ -369,10 +371,11 @@ Skills are deep instructional documents that teach AI agents HOW to think about 
 | 29 | ✍️ **writing-skills** | How to create new skills — format, quality standards, and testing requirements |
 | 30 | 🔄 **codebase-conformity** | Pattern uniformity enforcement — read existing patterns before writing, match them exactly, double-verify conformity before claiming done |
 | 31 | 🎨 **ui-ux-redesign** | Full-stack visual audit — inventories backend APIs, audits every component and design token, analyzes user flows, and produces layered redesign recommendations |
+| 32 | 📏 **_rules** | Master rules skill — consolidates core principles, anti-hallucination protocol, severity framework, and skill activation table |
 
 ---
 
-### ⚡ Commands (28)
+### ⚡ Commands (34)
 
 Commands are Claude Code slash commands (`.md` files installed to `.claude/commands/`). They provide structured workflows for common project tasks.
 
@@ -439,9 +442,20 @@ Commands are Claude Code slash commands (`.md` files installed to `.claude/comma
 | `/deep-audit` | 🔬 Brutal exhaustive 5-pass audit — build, routes, data flow, user flows, and edge cases with anti-shortcut rules |
 | `/redesign` | 🎨 Full UI/UX redesign audit — visual audit, component census, token extraction, UX analysis, layered redesign plan |
 
+#### 🟡 Intelligence & Orchestration — ✨ NEW in v4.1
+
+| Command | Description |
+|:---|:---|
+| `/learn` | 📚 Extract reusable patterns from sessions across 8 categories with deduplication, persisted to `.planning/LEARNINGS.md` |
+| `/quality-gate` | ✅ 6-step quality pipeline (Build → Type Check → Lint → Test → Security → Diff) with 4 modes: quick, full, pre-commit, pre-pr |
+| `/checkpoint` | 📍 Named progress snapshots with create/verify/list modes stored in `.planning/checkpoints/` |
+| `/loop` | 🔁 Bounded loop execution — repetitive tasks with safety bounds (max iterations, stall detection, test-between-iterations) |
+| `/orchestrate` | 🔗 Multi-agent orchestration — chain agents in predefined sequences (feature, bugfix, refactor, security) with structured handoffs |
+| `/context` | 🎯 Context mode switching — dev (code-first), research (read-widely), review (quality-first) modes that change workflow behavior |
+
 ---
 
-### 🔄 Workflows (32)
+### 🔄 Workflows (37)
 
 Workflows are Antigravity step-by-step execution scripts (`.md` files installed to `.agent/workflows/`). Many include `// turbo` annotations for auto-execution.
 
@@ -665,21 +679,21 @@ AI coding tasks fail at scale because no single agent can hold all context: data
 
 ```
 skills-by-amrit/
-├── 📂 skills/                   # 31 deep instructional skills
+├── 📂 skills/                   # 32 deep instructional skills
 │   ├── brainstorming/SKILL.md
 │   ├── writing-plans/SKILL.md          # Plans-as-prompts with task anatomy
 │   ├── executing-plans/SKILL.md        # Deviation protocol + checkpoints
 │   ├── persistent-memory/SKILL.md
 │   ├── agent-team-coordination/SKILL.md
 │   └── ... (26 more)
-├── 📂 commands/                 # 28 Claude Code slash commands
+├── 📂 commands/                 # 34 Claude Code slash commands
 │   ├── init-project.md
 │   ├── discuss.md                       ✨ MCQ decision capture
 │   ├── settings.md                      ✨ Config management
 │   ├── memory.md
 │   ├── team.md
 │   └── ... (23 more)
-├── 📂 workflows/                # 32 Antigravity workflows
+├── 📂 workflows/                # 37 Antigravity workflows
 │   ├── init-project.md
 │   ├── discuss.md                       ✨ MCQ discussion workflow
 │   ├── gap-closure.md                   ✨ Execution gap closure
@@ -870,13 +884,13 @@ npx skills-by-amrit help
 
 | Metric | Count |
 |:---:|:---:|
-| 🧠 Skills | **31** |
-| ⚡ Commands | **28** |
-| 🔄 Workflows | **32** |
+| 🧠 Skills | **32** |
+| ⚡ Commands | **34** |
+| 🔄 Workflows | **37** |
 | 🤖 Agents | **9** |
 | 🎯 Cursor Rules | **10** |
 | 📏 Rules | **5** |
-| 🪝 Hooks | **5** |
+| 🪝 Hooks | **8** |
 | 📦 CLI Modules | **13** |
 | 📐 Templates | **11** |
 | 📚 References | **2** |

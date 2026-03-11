@@ -1,12 +1,12 @@
 # 🧠 Skills by Amrit — Wiki Home
 
-Welcome to the **Skills by Amrit v4.0.0** documentation wiki. This is the comprehensive reference for all **147 assets** across 11 categories — skills, commands, workflows, agents, rules, hooks, templates, references, and CLI modules.
+Welcome to the **Skills by Amrit v4.0.0** documentation wiki. This is the comprehensive reference for all **157 assets** across 11 categories — skills, commands, workflows, agents, rules, hooks, templates, references, and CLI modules.
 
 ---
 
 ## 🆕 What's New in v4.0.0
 
-- **🔗 Production Hooks System** — 5 lifecycle hooks for Claude Code (security gate, statusline, context monitor, update check, memory capture)
+- **🔗 Production Hooks System** — 8 lifecycle hooks for Claude Code (security gate, statusline, context monitor, update check, memory capture, hook profiles, suggest compact, cost tracker)
 - **⚙️ 90+ CLI Commands** — 13 deterministic CLI modules backing the council and state management
 - **🏛️ Council v2** — Real subagent spawning via `Task()`, not role-switching. 6 presets, code-enforced quality gates
 - **🌐 12-Platform Parity** — Skills install to 12 AI coding agents with native formats
@@ -32,10 +32,10 @@ Welcome to the **Skills by Amrit v4.0.0** documentation wiki. This is the compre
 - [Auditing Skills](Skills-Auditing.md) — 10 audit skills
 - [Evolution Skills](Skills-Evolution.md) — 4 evolution skills
 - [Agent Intelligence Skills](Skills-Agent-Intelligence.md) — 2 team/memory skills
-- [Meta Skills](Skills-Meta.md) — 2 meta skills
+- [Meta Skills](Skills-Meta.md) — 3 meta skills
 
 ### ⚡ Commands Reference
-- [All Commands](Commands-Reference.md) — 28 Claude Code slash commands
+- [All Commands](Commands-Reference.md) — 34 Claude Code slash commands
 
 ### 🔄 Workflows Reference
 - [All Workflows](Workflows-Reference.md) — 32 Antigravity workflows
@@ -48,7 +48,7 @@ Welcome to the **Skills by Amrit v4.0.0** documentation wiki. This is the compre
 - [Universal Rules](Universal-Rules-Reference.md) — 5 agent rules
 
 ### 🔗 Hooks & Templates
-- [Hooks Reference](Hooks-Reference.md) — 5 production lifecycle hooks
+- [Hooks Reference](Hooks-Reference.md) — 8 production lifecycle hooks
 - [Templates Reference](Templates-Reference.md) — 11 structured markdown templates
 
 ### 🏛️ Council & CLI

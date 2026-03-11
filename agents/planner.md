@@ -7,6 +7,7 @@ allowed-tools:
   - Glob
   - Bash
   - Write
+model: opus
 ---
 
 # Planner Agent

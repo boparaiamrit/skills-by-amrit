@@ -11,6 +11,8 @@ Skills are the building blocks of this system. A well-written skill makes AI ass
 
 **Core principle:** If following the skill doesn't produce measurably better results, the skill shouldn't exist.
 
+**Master reference:** All skills inherit from `_rules/SKILL.md`. Read it before writing any skill.
+
 ## The Iron Law
 
 ```
@@ -28,19 +30,22 @@ EVERY SKILL MUST HAVE A CLEAR IRON LAW, DEFINED ACTIVATION CONDITIONS, AND A VER
 
 - Applying an existing skill (use `using-skills`)
 - The intended behavior is better captured as a workflow, not a skill
+- The behavior is a one-off checklist, not a repeatable process
 
 ## Anti-Shortcut Rules
 
 ```
 YOU CANNOT:
-- Create a skill without an Iron Law — if it has no non-negotiable rule, it's advice, not a skill
-- Write "Use when..." descriptions that are vague — "Use when coding" activates for everything
-- Include "it depends" in a skill — skills are prescriptive, not suggestive
-- Skip the Common Rationalizations section — every process has excuses people make to skip it
-- Write a process with vague steps — "make sure it's good" is not a verifiable step
-- Create a skill that duplicates another skill's scope — check existing skills first
-- Skip the Anti-Shortcut Rules — they prevent the most common ways the skill gets bypassed
-- Write Iron Questions that can be answered without evidence — "Did you check?" ≠ "What was the output?"
+- Create a skill without an Iron Law -- if it has no non-negotiable rule, it's advice, not a skill
+- Write "Use when..." descriptions that are vague -- "Use when coding" activates for everything
+- Include "it depends" in a skill -- skills are prescriptive, not suggestive
+- Skip the Common Rationalizations section -- every process has excuses people make to skip it
+- Write a process with vague steps -- "make sure it's good" is not a verifiable step
+- Create a skill that duplicates another skill's scope -- check existing skills first
+- Skip the Anti-Shortcut Rules -- they prevent the most common ways the skill gets bypassed
+- Write Iron Questions that can be answered without evidence -- "Did you check?" != "What was the output?"
+- Omit the Red Flags section -- without observable violation indicators, the skill cannot self-enforce
+- Skip the Integration section -- isolated skills are broken skills
 ```
 
 ## Common Rationalizations (Don't Accept These)
@@ -53,6 +58,8 @@ YOU CANNOT:
 | "Not every skill needs rationalizations" | Every process has excuses for skipping it. Document them. |
 | "I'll add the missing sections later" | Later never comes. Complete the skill now. |
 | "This is a simple skill" | Simple skills with poor structure produce poor results. |
+| "I'll just copy another skill and modify it" | Copying without understanding produces cargo-cult skills. Understand the WHY. |
+| "The Red Flags are obvious" | If they were obvious, people wouldn't violate them. Write them down. |
 
 ## Iron Questions
 
@@ -60,143 +67,443 @@ YOU CANNOT:
 1. Does this skill have an Iron Law? (absolute, falsifiable, concise)
 2. Does the description start with "Use when..."? (enables automatic activation)
 3. Does every process step have a verifiable outcome? (not just "do X")
-4. Are there Anti-Shortcut Rules? (preventing bypass)
-5. Are there Common Rationalizations with rebuttals? (preventing excuses)
-6. Are there Iron Questions that require evidence-based answers? (accountability)
-7. Does it have When NOT to Use? (preventing misapplication)
+4. Are there Anti-Shortcut Rules? (preventing bypass -- at least 6 specific prohibitions)
+5. Are there Common Rationalizations with rebuttals? (preventing excuses -- at least 5)
+6. Are there Iron Questions that require evidence-based answers? (accountability -- at least 8)
+7. Does it have When NOT to Use? (preventing misapplication -- with redirects to correct skills)
 8. Does it integrate with other skills? (skills compose, they don't standalone)
 9. Could someone follow this skill LITERALLY and produce good results?
 10. Is there an existing skill that already covers this? (check for duplication)
+11. Does the skill have a Red Flags section with observable violations?
+12. Does the skill conform to the _rules master reference?
 ```
 
-## Skill Directory Structure
+---
+
+## Skill File Anatomy
+
+### Frontmatter Fields
+
+Every `SKILL.md` begins with YAML frontmatter:
+
+```yaml
+---
+name: skill-name          # Required. kebab-case, matches directory name
+description: "Use when..." # Required. MUST start with "Use when" for activation
+---
+```
+
+**Rules for `name`:**
+- Must match the directory name exactly
+- kebab-case only: `code-review`, `systematic-debugging`
+- Verb-first or noun-phrase: `writing-plans`, `security-audit`
+- Never generic: no `best-practices`, `tips`, `misc`, `utils`
+
+**Rules for `description`:**
+- Must start with "Use when" -- this is how activation matching works
+- One sentence, specific enough to trigger on the right tasks
+- Include example triggers after the dash: "Use when debugging any technical issue -- test failures, build errors, unexpected behavior."
+
+### Body Structure (Required Sections)
+
+Every skill MUST contain these sections in this order:
+
+| Section | Purpose | Required? |
+|---------|---------|-----------|
+| `# [Title]` | Human-readable skill name | Yes |
+| `## Overview` | 2-3 sentences + core principle | Yes |
+| `## The Iron Law` | Non-negotiable rule in code block | Yes |
+| `## When to Use` | Specific activation conditions | Yes |
+| `## When NOT to Use` | Counter-examples with skill redirects | Yes |
+| `## Anti-Shortcut Rules` | "YOU CANNOT:" prohibitions in code block | Yes |
+| `## Common Rationalizations` | Table of excuses with rebuttals | Yes |
+| `## Iron Questions` | Numbered evidence-requiring questions in code block | Yes |
+| `## The Process` | Phased, sequential, verifiable steps | Yes |
+| `## Output Format` | Template for skill output | If applicable |
+| `## Red Flags -- STOP` | Observable violation indicators | Yes |
+| `## Integration` | Cross-references to related skills | Yes |
+
+### What Each Section Must Contain
+
+**Overview:** Exactly 2-3 sentences describing what the skill does and why it matters, followed by a bold "Core principle:" statement. Some skills add "Violating the letter of this rule is violating the spirit of this rule." for emphasis.
+
+**The Iron Law:** A single non-negotiable rule inside a code block. Must be SCREAMING_CASE. Must be absolute (no "try to" or "when possible"). Must be falsifiable (you can determine if it's being followed).
+
+**When to Use:** Bullet list with specific, measurable conditions. Split into "Always" and "Optional" sub-sections if some conditions are mandatory and others are discretionary.
+
+**When NOT to Use:** Bullet list with specific redirects. Each item should say what to do instead: "The task is a bug fix with clear reproduction steps (use `systematic-debugging`)".
+
+**Anti-Shortcut Rules:** Code block starting with "YOU CANNOT:" followed by 6-8 specific prohibitions. Each prohibition names the exact shortcut and explains why it's wrong.
+
+**Common Rationalizations:** Table with two columns: `Rationalization` and `Reality`. At least 5 rows. Each rebuttal is a one-line shutdown, not a paragraph.
+
+**Iron Questions:** Numbered list inside a code block. At least 8 questions. Each question must require evidence to answer -- not just "yes" or "no". Include parenthetical guidance: `(what was the output?)`.
+
+**The Process:** Broken into numbered phases (Phase 1, Phase 2, etc.) with numbered steps inside each phase. Steps use action verbs in CAPS: READ, VERIFY, CHECK, RUN, TRACE. Each step has a clear "done" condition.
+
+**Red Flags:** Bullet list of observable behaviors that indicate the skill is being violated. These are the "stop and course-correct" triggers.
+
+**Integration:** Bullet list showing how this skill connects to others. Uses format: `**After:** skill-name completes X` or `**Before:** skill-name starts Y`.
+
+---
+
+## Quality Checklist for New Skills
+
+Run this checklist against every new skill before considering it complete:
+
+### Iron Law Check
+- [ ] Is there exactly one Iron Law?
+- [ ] Is it in a code block?
+- [ ] Is it SCREAMING_CASE?
+- [ ] Is it absolute (no "try", "should", "when possible")?
+- [ ] Is it falsifiable (can you determine violation)?
+- [ ] Is it one sentence?
+
+### Iron Questions Check
+- [ ] Are there at least 8 questions?
+- [ ] Are they in a numbered code block?
+- [ ] Does each question require evidence (not just "yes/no")?
+- [ ] Do questions have parenthetical guidance?
+- [ ] Do questions cover the most common failure modes?
+
+### Anti-Shortcut Rules Check
+- [ ] Are there at least 6 prohibitions?
+- [ ] Are they in a "YOU CANNOT:" code block?
+- [ ] Does each name a specific shortcut?
+- [ ] Does each explain why it's wrong?
+- [ ] Do they cover the most tempting shortcuts?
+
+### Common Rationalizations Check
+- [ ] Are there at least 5 rationalizations?
+- [ ] Is each rebuttal one line?
+- [ ] Are the rationalizations realistic (things people actually say)?
+- [ ] Is the format a table?
+
+### Process Check
+- [ ] Is the process broken into phases?
+- [ ] Does each phase have numbered steps?
+- [ ] Does each step use an action verb?
+- [ ] Does each step have a verifiable outcome?
+- [ ] Are there decision points (IF/THEN)?
+- [ ] Could someone follow this literally and succeed?
+
+### When to Use / When NOT to Use Check
+- [ ] Are activation conditions specific and measurable?
+- [ ] Do "When NOT to Use" items redirect to correct skills?
+- [ ] Is there no overlap with existing skills?
+
+### Red Flags Check
+- [ ] Are all red flags observable behaviors?
+- [ ] Are they specific (not "be careful")?
+- [ ] Do they cover the most common violations?
+
+### Integration Check
+- [ ] Are related skills referenced by name?
+- [ ] Is the direction specified (before/after/complements)?
+- [ ] Does the skill fit into at least one activation chain?
+
+---
+
+## The Process
+
+### Phase 1: Research and Scope
 
 ```
-skills/
-└── skill-name/
-    └── SKILL.md           # Required: The skill definition
+1. IDENTIFY the domain the skill covers -- what specific activity does it improve?
+2. CHECK existing skills -- does any existing skill already cover this? (list them)
+3. DEFINE the boundary -- what is IN scope and what is OUT of scope?
+4. READ the _rules master reference to understand inherited principles
+5. READ 2-3 existing well-crafted skills as reference (code-review, verification-before-completion, brainstorming are good examples)
 ```
 
-Skills are single-file. All information lives in `SKILL.md`. No external dependencies.
+### Phase 2: Draft the Core
 
-## SKILL.md Format — The 10/10 Template
+```
+1. WRITE the Iron Law first -- this defines the skill's non-negotiable rule
+2. WRITE the description -- "Use when..." with specific activation triggers
+3. WRITE When to Use -- specific conditions that activate this skill
+4. WRITE When NOT to Use -- with redirects to correct skills
+5. VERIFY the Iron Law is absolute, falsifiable, and concise
+```
 
-Every skill MUST follow this structure:
+### Phase 3: Build the Guardrails
+
+```
+1. WRITE Anti-Shortcut Rules -- at least 6 specific prohibitions
+   - Think: "What are the most common ways someone would skip this process?"
+   - Each rule must name the specific shortcut and explain why it's wrong
+2. WRITE Common Rationalizations -- at least 5 with one-line rebuttals
+   - Think: "What excuses would someone give for not following this skill?"
+3. WRITE Iron Questions -- at least 8 evidence-requiring questions
+   - Think: "What questions, if answered honestly with evidence, guarantee quality?"
+   - Each must require showing output/evidence, not just saying "yes"
+```
+
+### Phase 4: Define the Process
+
+```
+1. BREAK the process into 3-6 sequential phases
+2. WRITE numbered steps for each phase using action verbs (READ, VERIFY, CHECK, RUN)
+3. ADD decision points where outcomes branch (IF/THEN)
+4. ENSURE each step has a verifiable "done" condition
+5. ADD tables and examples where they improve clarity
+6. TEST by reading the process literally -- would a strict rule-follower succeed?
+```
+
+### Phase 5: Add Safety Nets
+
+```
+1. WRITE Red Flags -- observable behaviors that indicate violation
+2. WRITE the Integration section -- how does this connect to other skills?
+3. WRITE the Output Format -- what does the skill produce? (if applicable)
+4. ADD an Overview with core principle
+```
+
+### Phase 6: Review and Validate
+
+```
+1. RUN the full Quality Checklist (above) against the skill
+2. SCORE the skill against the value rubric (below) -- every cell must say "10/10"
+3. READ the skill from top to bottom as if you've never seen it -- is it clear?
+4. VERIFY no section is missing
+5. CHECK that the skill conforms to _rules master reference principles
+```
+
+---
+
+## SKILL.md Format -- The 10/10 Template
+
+Copy this template when creating a new skill:
 
 ```markdown
 ---
 name: skill-name
-description: "One-line description starting with 'Use when...' that enables automatic activation."
+description: "Use when [specific activation condition] -- [example triggers]."
 ---
 
 # [Skill Title]
 
 ## Overview
-[2-3 sentences: what this skill does and why it matters]
-[Core principle statement]
+
+[2-3 sentences: what this skill does and why it matters.]
+
+**Core principle:** [One-sentence principle that captures the skill's philosophy.]
 
 ## The Iron Law
-[NON-NEGOTIABLE rule in a code block]
+
+\```
+[NON-NEGOTIABLE RULE IN SCREAMING CASE]
+\```
+
+[1-2 sentences explaining the Iron Law and its implications.]
 
 ## When to Use
-[Specific, measurable activation conditions]
+
+**Always:**
+- [Condition 1]
+- [Condition 2]
+
+**Optional but valuable:**
+- [Condition 3]
 
 ## When NOT to Use
-[Counter-examples: when a different skill is appropriate]
+
+- [Counter-example 1] (use `other-skill` instead)
+- [Counter-example 2] (use `other-skill` instead)
 
 ## Anti-Shortcut Rules
-[Code block: "YOU CANNOT:" followed by specific prohibitions]
+
+\```
+YOU CANNOT:
+- [Specific prohibition 1] -- [why it's wrong]
+- [Specific prohibition 2] -- [why it's wrong]
+- [Specific prohibition 3] -- [why it's wrong]
+- [Specific prohibition 4] -- [why it's wrong]
+- [Specific prohibition 5] -- [why it's wrong]
+- [Specific prohibition 6] -- [why it's wrong]
+\```
 
 ## Common Rationalizations (Don't Accept These)
-[Table: Rationalization | Reality]
+
+| Rationalization | Reality |
+|----------------|---------|
+| "[Excuse 1]" | [One-line rebuttal] |
+| "[Excuse 2]" | [One-line rebuttal] |
+| "[Excuse 3]" | [One-line rebuttal] |
+| "[Excuse 4]" | [One-line rebuttal] |
+| "[Excuse 5]" | [One-line rebuttal] |
 
 ## Iron Questions
-[Numbered code block: questions requiring evidence-based answers]
 
-## The Process / The Audit Process
-[Numbered, sequential phases with steps]
-[Key decision points]
-[Verification at each stage]
-[Tables and examples for clarity]
+\```
+1. [Evidence-requiring question]? ([what evidence to show])
+2. [Evidence-requiring question]? ([what evidence to show])
+3. [Evidence-requiring question]? ([what evidence to show])
+4. [Evidence-requiring question]? ([what evidence to show])
+5. [Evidence-requiring question]? ([what evidence to show])
+6. [Evidence-requiring question]? ([what evidence to show])
+7. [Evidence-requiring question]? ([what evidence to show])
+8. [Evidence-requiring question]? ([what evidence to show])
+\```
 
-## Output Format (if applicable)
-[Template for skill output]
+## The Process
 
-## Red Flags — STOP
-[Observable signs the process is being violated]
+### Phase 1: [Phase Name]
+
+\```
+1. [ACTION VERB]: [What to do] -- [done condition]
+2. [ACTION VERB]: [What to do] -- [done condition]
+3. [ACTION VERB]: [What to do] -- [done condition]
+\```
+
+### Phase 2: [Phase Name]
+
+\```
+1. [ACTION VERB]: [What to do] -- [done condition]
+2. IF [condition] THEN [action]
+3. [ACTION VERB]: [What to do] -- [done condition]
+\```
+
+## Output Format
+
+\```markdown
+## [Skill Output Title]
+
+### [Section 1]
+[Template for output]
+
+### [Section 2]
+[Template for output]
+\```
+
+## Red Flags -- STOP
+
+- [Observable violation behavior 1]
+- [Observable violation behavior 2]
+- [Observable violation behavior 3]
+- [Observable violation behavior 4]
 
 ## Integration
-[How this skill connects to other skills]
+
+- **Before:** `skill-name` -- [relationship]
+- **After:** `skill-name` -- [relationship]
+- **Complements:** `skill-name` -- [relationship]
 ```
 
-## Quality Standards
+---
 
-### The Description (YAML frontmatter)
+## Common Mistakes When Writing Skills
 
-Must start with **"Use when..."** — this enables automatic activation:
-- ✅ `"Use when debugging any technical issue — test failures, build errors, unexpected behavior."`
-- ❌ `"A skill for debugging"` (no activation trigger)
-- ❌ `"Debugging methodology"` (no actionable context)
+### Mistake 1: Vague Iron Laws
 
-### The Iron Law
+```
+BAD:  "Try to verify your work"
+GOOD: "NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE"
+```
 
-Must be:
-- **Absolute** — No exceptions, no "it depends"
-- **Falsifiable** — You can determine if it's being followed
-- **Concise** — One sentence in a code block
-- ✅ `NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST`
-- ❌ `Try to find the root cause when possible`
+The Iron Law must be absolute. If it contains "try", "should", "consider", or "when possible", it's not an Iron Law -- it's a suggestion.
 
-### Anti-Shortcut Rules
+### Mistake 2: Yes/No Iron Questions
 
-Must be:
-- **Specific** — Name the exact shortcut being prohibited
-- **Falsifiable** — You can tell if the rule was broken
-- **Exhaustive** — Cover the most common ways people bypass the process
-- ✅ `YOU CANNOT: Say "tests pass" without test output in this response`
-- ❌ `Don't skip steps`
+```
+BAD:  "Did you check the tests?"
+GOOD: "Have I run the FULL test suite in THIS response? (what was the output?)"
+```
 
-### Common Rationalizations
+If the question can be answered "yes" without providing evidence, it's useless. The parenthetical forces specificity.
 
-Must be:
-- **Realistic** — Excuses people actually make
-- **Rebutted** — Each excuse has a one-line shutdown
-- **Formatted as table** — Easy to scan
-- ✅ `"I'll write tests after" | You won't. And if you do, they'll test your implementation, not requirements`
-- ❌ `Don't make excuses` (too vague)
+### Mistake 3: Generic Anti-Shortcut Rules
 
-### Iron Questions
+```
+BAD:  "Don't skip steps"
+GOOD: "YOU CANNOT: Say 'tests pass' without test output in this response -- stale evidence is not evidence"
+```
 
-Must be:
-- **Evidence-requiring** — Can't be answered with "yes" alone
-- **Specific** — About concrete artifacts, not feelings
-- **Numbered** — In a code block for consistency
-- ✅ `Have I run the FULL test suite in THIS response? (what was the output?)`
-- ❌ `Did you test it?` (can be answered with "yes" without evidence)
+Each prohibition must name the exact shortcut, the exact thing being prohibited, and why.
 
-### The Process
+### Mistake 4: Missing "When NOT to Use"
 
-Must be:
-- **Sequential** — Clear order of operations
-- **Verifiable** — Each step has a "done" condition
-- **Actionable** — Concrete actions, not vague advice
-- ✅ `1. RUN all tests  2. VERIFY they pass  3. IF any fail → STOP`
-- ❌ `Make sure everything works`
+A skill without "When NOT to Use" will be activated incorrectly. Every skill must explicitly redirect to the correct skill for out-of-scope tasks.
 
-### Red Flags
+### Mistake 5: Process Steps Without Verification
 
-Must be:
-- **Observable** — Things you can actually detect
-- **Specific** — Not generic warnings
-- ✅ "Wrote production code before a test"
-- ❌ "Be careful"
+```
+BAD:  "1. Review the code"
+GOOD: "1. READ each changed file  2. CHECK for edge cases (null, empty, max, negative)  3. LIST all findings with severity"
+```
 
-## Naming Convention
+Each step must have an observable outcome. "Review" is not observable. "READ and LIST findings" is.
 
-- **Directory name:** `kebab-case`, verb-first or noun-phrase
-- **Avoid:** Generic names like "best-practices" or "tips"
-- ✅ `test-driven-development`, `systematic-debugging`, `security-audit`
-- ❌ `good-coding`, `useful-stuff`, `misc-tips`
+### Mistake 6: Copying Without Understanding
+
+Copying another skill's structure and swapping words produces a cargo-cult skill. Understand WHY each section exists:
+- **Iron Law** exists to create a bright-line rule that prevents rationalization
+- **Anti-Shortcut Rules** exist because people always find ways to skip process
+- **Iron Questions** exist because self-assessment without evidence requirements is worthless
+- **Rationalizations** exist because excuses are predictable and can be pre-rebutted
+
+### Mistake 7: Over-Scoping the Process
+
+A process with 10 phases and 50 steps will be ignored. Keep it to 3-6 phases with 3-5 steps each. If the process is too long, the skill's scope is too broad -- split it into two skills.
+
+### Mistake 8: No Integration Section
+
+Skills don't exist in isolation. Every skill must specify:
+- What skills come before it in a workflow
+- What skills come after it
+- What skills complement it for deeper analysis
+
+---
+
+## Testing a Skill
+
+Before adding a skill to the library, verify it meets quality standards:
+
+### Structural Test
+
+```
+1. READ the skill top to bottom -- is every required section present?
+2. RUN the Quality Checklist above -- does every item pass?
+3. SCORE against the value rubric -- does every cell say "10/10"?
+```
+
+### Literal Interpretation Test
+
+```
+1. READ the process as if you are a strict rule-follower with no domain knowledge
+2. FOLLOW every step exactly as written
+3. IDENTIFY any step that is ambiguous, vague, or unverifiable
+4. FIX those steps until they pass the literal interpretation test
+```
+
+### Activation Test
+
+```
+1. READ the description -- does it clearly match the intended use cases?
+2. LIST 5 scenarios where this skill SHOULD activate -- does the description match?
+3. LIST 5 scenarios where this skill should NOT activate -- does it correctly exclude them?
+4. CHECK for overlap with existing skills -- would two skills both claim to activate?
+```
+
+### Adversarial Test
+
+```
+1. TRY to skip the process by finding loopholes -- do the Anti-Shortcut Rules catch you?
+2. TRY to claim completion without evidence -- do the Iron Questions catch you?
+3. TRY to rationalize skipping steps -- do the Common Rationalizations pre-rebut your excuse?
+4. TRY to violate the Iron Law while technically following the process -- does the Red Flags section catch you?
+```
+
+### Real-World Test
+
+```
+1. APPLY the skill to a real task (not a toy example)
+2. COMPARE the result to what you would produce WITHOUT the skill
+3. IF the skill doesn't produce measurably better results, it shouldn't exist
+4. COLLECT feedback -- what was confusing? What was missing? What was unnecessary?
+```
+
+---
 
 ## What Makes a Skill Valuable
 
@@ -210,24 +517,45 @@ Must be:
 | When NOT to Use | Specific redirects to other skills | "When it doesn't apply" | Missing |
 | Red Flags | Observable, specific behaviors | Generic warnings | Missing |
 | Integration | Specific skill references with trigger conditions | "Works with other skills" | Missing |
+| Description | "Use when..." with specific triggers | Generic one-liner | Missing or vague |
+| Frontmatter | name + description, both correct | Partial | Missing |
 
-## Testing a Skill
+---
 
-Before adding a skill, verify:
+## Skill Directory Structure
 
 ```
-1. FOLLOW the skill yourself on a real project
-2. DOES it produce better results than not following it?
-3. IS the process clear enough to follow literally?
-4. ARE the activation conditions specific enough?
-5. COULD someone misinterpret any step?
-6. IS anything missing? (common edge cases)
-7. CHECK against the quality rubric above — does every cell say "10/10"?
+skills/
+└── skill-name/
+    └── SKILL.md           # Required: The skill definition
 ```
+
+Skills are single-file. All information lives in `SKILL.md`. No external dependencies.
+
+## Naming Convention
+
+- **Directory name:** `kebab-case`, verb-first or noun-phrase
+- **Avoid:** Generic names like "best-practices" or "tips"
+- Good: `test-driven-development`, `systematic-debugging`, `security-audit`
+- Bad: `good-coding`, `useful-stuff`, `misc-tips`
+
+---
+
+## Red Flags -- STOP
+
+- Creating a skill without reading existing skills first
+- Submitting a skill that fails any Quality Checklist item
+- Writing an Iron Law that contains "try", "should", or "when possible"
+- Writing Iron Questions answerable with "yes" alone
+- Skipping the Integration section
+- Writing a process longer than 6 phases (scope too broad -- split the skill)
+- Copying another skill without understanding why each section exists
+- Not testing the skill against a real task before adding it
 
 ## Integration
 
-- This is a meta-skill: used to create new skills
-- All created skills must cross-reference related skills
-- New skills must be added to entry point files (CLAUDE.md, GEMINI.md) activation tables
-- Use `using-skills` to understand how skills compose
+- **Master reference:** `_rules` -- all skills inherit core principles from here
+- **Companion:** `using-skills` -- how to discover and apply skills
+- **Feeds into:** Entry point files (CLAUDE.md, GEMINI.md) -- new skills must be registered in activation tables
+- **Used by:** Any session where a new skill is being created or an existing skill enhanced
+- **Quality gate:** New skills should pass a `code-review` of the SKILL.md file itself

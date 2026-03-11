@@ -1,428 +1,1213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="generator" content="Skills by Amrit v3.5.0">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Skills by Amrit — The Ultimate AI Agent Skills Framework</title>
-  <meta name="description" content="31 skills, 28 commands, 32 workflows, 9 agents, 10 cursor rules. Persistent memory & agent teams for ANY AI coding assistant.">
-  <meta name="keywords" content="AI coding assistant, skills framework, Claude Code, Cursor, Antigravity, agent teams, persistent memory">
-  <meta property="og:title" content="Skills by Amrit — The Ultimate AI Agent Skills Framework">
-  <meta property="og:description" content="Make your AI coding assistant think like a staff engineer. 116 assets across 34 supported agents.">
-  <meta property="og:type" content="website">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
-  <style>
-    .agent-logo { width: 32px; height: 32px; border-radius: 8px; object-fit: contain; margin-bottom: 12px; filter: brightness(0) invert(1); transition: filter 0.3s; }
-    .card:hover .agent-logo { filter: brightness(1) invert(0); }
-    .agent-logo.color { filter: none; }
-    .agent-logo-text { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 800; margin-bottom: 12px; background: var(--bg-glass); border: 1px solid var(--border); }
-    .social-links { display: flex; gap: 16px; justify-content: center; margin-top: 16px; }
-    .social-links a { display: inline-flex; align-items: center; gap: 6px; color: var(--text-muted); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
-    .social-links a:hover { color: var(--accent-1); }
-    .social-links img { width: 18px; height: 18px; filter: brightness(0) invert(0.6); transition: filter 0.2s; }
-    .social-links a:hover img { filter: brightness(0) invert(0.8); }
-  </style>
+<meta charset="UTF-8">
+    <meta name="generator" content="Skills by Amrit v4.1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skills by Amrit — Terminal Docs</title>
+<meta name="description" content="31 skills, 29 commands, 9 agents. The ultimate AI agent skills framework.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--bg:#0a0a0f;--bg-card:#0d0d14;--bg-card-hover:#111119;--bg-sidebar:#08080c;
+--green:#4ade80;--green-dim:#22c55e;--green-glow:rgba(74,222,128,0.15);--green-glow2:rgba(74,222,128,0.08);
+--cyan:#22d3ee;--purple:#a78bfa;--amber:#fbbf24;--rose:#fb7185;--blue:#60a5fa;--orange:#fb923c;
+--text:#e2e8f0;--text-dim:#94a3b8;--text-muted:#64748b;
+--border:#1e293b;--border-hover:#334155;
+--radius:8px;--sidebar-w:280px;
+}
+html{scroll-behavior:smooth;scrollbar-width:thin;scrollbar-color:var(--green-dim) var(--bg)}
+body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+::selection{background:var(--green);color:var(--bg)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--green-dim);border-radius:3px}
+
+/* CRT Effects */
+body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;
+background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px)}
+body::after{content:'';position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9998;
+opacity:0.02;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* Layout */
+.layout{display:flex;min-height:100vh}
+
+/* Sidebar */
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--bg-sidebar);border-right:1px solid var(--border);overflow-y:auto;z-index:100;display:flex;flex-direction:column;transition:transform .3s}
+.sidebar-header{padding:20px;border-bottom:1px solid var(--border)}
+.sidebar-header h1{font-family:'Space Mono',monospace;font-size:.95rem;color:var(--green);text-shadow:0 0 20px var(--green-glow)}
+.sidebar-header p{font-size:.65rem;color:var(--text-muted);margin-top:2px}
+
+.search-box{padding:12px 20px}
+.search-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;color:var(--text);font-family:inherit;font-size:.75rem;outline:none;transition:border-color .2s}
+.search-input:focus{border-color:var(--green);box-shadow:0 0 0 2px var(--green-glow)}
+.search-input::placeholder{color:var(--text-muted)}
+.search-hint{font-size:.6rem;color:var(--text-muted);margin-top:4px;text-align:right}
+.search-hint kbd{background:var(--bg);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-size:.6rem}
+
+.nav-section{padding:16px 20px 6px;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);font-weight:700}
+.nav-link{display:flex;align-items:center;gap:8px;padding:6px 20px;font-size:.72rem;color:var(--text-dim);text-decoration:none;transition:all .15s;border-left:2px solid transparent}
+.nav-link:hover{color:var(--green);background:var(--green-glow2);border-left-color:var(--green)}
+.nav-link.active{color:var(--green);border-left-color:var(--green);background:var(--green-glow2)}
+.nav-icon{width:16px;text-align:center;font-size:.7rem}
+.nav-count{margin-left:auto;font-size:.6rem;background:var(--bg);padding:1px 6px;border-radius:10px;color:var(--text-muted)}
+
+/* Main */
+.main{margin-left:var(--sidebar-w);flex:1;min-width:0}
+
+/* Hero */
+.hero{padding:80px 48px 60px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(ellipse at 30% 50%,var(--green-glow2) 0%,transparent 50%);pointer-events:none}
+.hero-badge{display:inline-block;font-size:.7rem;color:var(--green);border:1px solid rgba(74,222,128,0.3);border-radius:20px;padding:4px 16px;margin-bottom:20px;background:var(--green-glow2)}
+.hero h2{font-family:'Space Mono',monospace;font-size:2.2rem;font-weight:700;line-height:1.2;margin-bottom:12px}
+.hero h2 span{color:var(--green);text-shadow:0 0 30px var(--green-glow)}
+.hero-sub{color:var(--text-dim);font-size:.8rem;max-width:640px;line-height:1.7}
+.hero-stats{display:flex;gap:32px;margin-top:32px;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-num{font-family:'Space Mono',monospace;font-size:1.8rem;font-weight:700;color:var(--green);text-shadow:0 0 20px var(--green-glow)}
+.stat-label{font-size:.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.hero-install{margin-top:32px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:inline-flex;align-items:center;gap:12px;max-width:100%}
+.hero-install code{color:var(--green);font-size:.8rem;white-space:nowrap}
+.hero-install .prompt{color:var(--text-muted);-webkit-user-select:none;user-select:none}
+.copy-btn{background:none;border:1px solid var(--border);color:var(--text-muted);border-radius:4px;padding:4px 10px;cursor:pointer;font-family:inherit;font-size:.65rem;transition:all .2s;white-space:nowrap}
+.copy-btn:hover{border-color:var(--green);color:var(--green)}
+.copy-btn.copied{border-color:var(--green);color:var(--green)}
+
+/* Section */
+.section{padding:48px}
+.section-header{margin-bottom:32px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.section-header h3{font-family:'Space Mono',monospace;font-size:1.2rem;color:var(--green);margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.section-header p{color:var(--text-dim);font-size:.75rem}
+
+/* Category headers */
+.category{margin-bottom:40px}
+.category-title{font-family:'Space Mono',monospace;font-size:.85rem;color:var(--text);margin-bottom:16px;padding:8px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.category-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* Command Cards */
+.cmd-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden;transition:all .2s}
+.cmd-card:hover{border-color:var(--border-hover);background:var(--bg-card-hover)}
+.cmd-card-header{padding:14px 20px;cursor:pointer;display:flex;align-items:center;gap:12px;-webkit-user-select:none;user-select:none}
+.cmd-card-header:hover{background:var(--green-glow2)}
+.cmd-name{font-weight:700;color:var(--green);font-size:.8rem;min-width:140px}
+.cmd-desc{color:var(--text-dim);font-size:.72rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cmd-args{color:var(--text-muted);font-size:.65rem;background:var(--bg);padding:2px 8px;border-radius:4px;white-space:nowrap}
+.cmd-chevron{color:var(--text-muted);transition:transform .2s;font-size:.7rem;margin-left:auto;flex-shrink:0}
+.cmd-card.open .cmd-chevron{transform:rotate(90deg)}
+.cmd-body{display:none;padding:0 20px 16px;border-top:1px solid var(--border)}
+.cmd-card.open .cmd-body{display:block}
+.cmd-usage{margin-top:12px}
+.cmd-usage-label{font-size:.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.cmd-code{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:12px 16px;font-size:.72rem;position:relative;overflow-x:auto}
+.cmd-code .ln{color:var(--text-muted);-webkit-user-select:none;user-select:none;margin-right:8px}
+.cmd-code .flag{color:var(--amber)}
+.cmd-code .arg{color:var(--cyan)}
+.cmd-code .cmt{color:var(--text-muted);font-style:italic}
+.cmd-code .kw{color:var(--green)}
+.cmd-code-copy{position:absolute;top:8px;right:8px}
+
+/* Skill cards grid */
+.skill-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.skill-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;transition:all .2s;cursor:default}
+.skill-card:hover{border-color:var(--border-hover);background:var(--bg-card-hover);transform:translateY(-1px)}
+.skill-card-name{font-weight:700;font-size:.78rem;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.skill-card-desc{color:var(--text-dim);font-size:.68rem;line-height:1.5;margin-bottom:8px}
+.skill-card-trigger{font-size:.6rem;color:var(--text-muted);background:var(--bg);padding:3px 8px;border-radius:4px;display:inline-block}
+.skill-tag{font-size:.55rem;padding:2px 8px;border-radius:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.tag-planning{background:rgba(96,165,250,0.15);color:var(--blue)}
+.tag-quality{background:rgba(74,222,128,0.15);color:var(--green)}
+.tag-audit{background:rgba(251,191,36,0.15);color:var(--amber)}
+.tag-specialized{background:rgba(167,139,250,0.15);color:var(--purple)}
+.tag-meta{background:rgba(251,113,133,0.15);color:var(--rose)}
+
+/* Footer */
+.footer{padding:40px 48px;border-top:1px solid var(--border);text-align:center;color:var(--text-muted);font-size:.7rem}
+.footer a{color:var(--green);text-decoration:none}
+.footer a:hover{text-decoration:underline}
+
+/* Mobile */
+.mobile-toggle{display:none;position:fixed;top:12px;left:12px;z-index:200;background:var(--bg-card);border:1px solid var(--border);color:var(--green);font-size:1.2rem;padding:8px 12px;border-radius:var(--radius);cursor:pointer;font-family:inherit}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:90}
+.overlay.show{display:block}
+
+/* Search highlighting */
+.search-hidden{display:none!important}
+.search-match .cmd-name,.search-match .skill-card-name{text-decoration:underline;text-decoration-color:var(--green);text-underline-offset:3px}
+
+/* Animations */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeInUp .4s ease both}
+
+/* No results */
+.no-results{text-align:center;padding:40px;color:var(--text-muted);font-size:.8rem;display:none}
+.no-results.visible{display:block}
+
+@media(max-width:1024px){
+.sidebar{transform:translateX(-100%)}
+.sidebar.open{transform:translateX(0)}
+.mobile-toggle{display:block}
+.main{margin-left:0}
+.hero{padding:60px 24px 40px}
+.section{padding:32px 24px}
+.hero h2{font-size:1.5rem}
+.hero-stats{gap:20px}
+.stat-num{font-size:1.3rem}
+.skill-grid{grid-template-columns:1fr}
+.cmd-card-header{flex-wrap:wrap}
+.cmd-desc{order:3;width:100%;margin-top:4px;white-space:normal}
+.cmd-args{order:2}
+.footer{padding:32px 24px}
+}
+</style>
 </head>
 <body>
-  <button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">☰</button>
-  <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-  <div class="layout">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-logo">
-        <h1>🧠 Skills by Amrit</h1>
-        <p>AI Agent Framework</p>
-      </div>
-      <nav class="sidebar-nav">
-        <div class="nav-section">Getting Started</div>
-        <a href="#hero" class="nav-link active"><span class="nav-icon">🏠</span> Overview</a>
-        <a href="examples.html" class="nav-link"><span class="nav-icon">📚</span> Examples</a>
-        <a href="#install" class="nav-link"><span class="nav-icon">🚀</span> Installation</a>
-        <a href="#agents" class="nav-link"><span class="nav-icon">🤖</span> Supported Agents</a>
-        <div class="nav-section">Assets</div>
-        <a href="#skills" class="nav-link"><span class="nav-icon">🧠</span> Skills (30)</a>
-        <a href="#commands" class="nav-link"><span class="nav-icon">⚡</span> Commands (25)</a>
-        <a href="#workflows" class="nav-link"><span class="nav-icon">🔄</span> Workflows (29)</a>
-        <a href="#agent-defs" class="nav-link"><span class="nav-icon">🎭</span> Agent Defs (7)</a>
-        <a href="#rules" class="nav-link"><span class="nav-icon">🎯</span> Rules (15)</a>
-        <div class="nav-section">✨ New in v3</div>
-        <a href="#memory" class="nav-link"><span class="nav-icon">💾</span> Persistent Memory</a>
-        <a href="#teams" class="nav-link"><span class="nav-icon">🤝</span> Agent Teams</a>
-        <div class="nav-section">Links</div>
-        <a href="https://github.com/boparaiamrit/skills-by-amrit" class="nav-link" target="_blank"><span class="nav-icon">📦</span> GitHub</a>
-        <a href="https://www.npmjs.com/package/skills-by-amrit" class="nav-link" target="_blank"><span class="nav-icon">📋</span> npm</a>
-      </nav>
-    </aside>
+<button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">&#9776;</button>
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
 
-    <!-- Main Content -->
-    <main class="main">
-      <!-- Hero -->
-      <section class="hero" id="hero">
-        <div class="hero-badge">✨ v3.5.0 — Agent Intelligence Release</div>
-        <h1>Make your AI think like a <span>Staff Engineer</span></h1>
-        <p class="hero-sub">The ultimate skills framework for AI coding assistants. 105 assets across 6 categories. Works with 34 agents including Claude Code, Cursor, Antigravity, and more.</p>
-        <div class="hero-stats">
-          <div class="stat"><div class="stat-num">31</div><div class="stat-label">Skills</div></div>
-          <div class="stat"><div class="stat-num">28</div><div class="stat-label">Commands</div></div>
-          <div class="stat"><div class="stat-num">32</div><div class="stat-label">Workflows</div></div>
-          <div class="stat"><div class="stat-num">7</div><div class="stat-label">Agents</div></div>
-          <div class="stat"><div class="stat-num">15</div><div class="stat-label">Rules</div></div>
-          <div class="stat"><div class="stat-num">34</div><div class="stat-label">Supported</div></div>
-        </div>
-        <div class="hero-cta">
-          <a href="#install" class="btn btn-primary">Get Started →</a>
-          <a href="https://github.com/boparaiamrit/skills-by-amrit" class="btn btn-secondary" target="_blank">⭐ GitHub</a>
-        </div>
-      </section>
+<div class="layout">
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+<div class="sidebar-header">
+<h1>&gt;_ skills-by-amrit</h1>
+<p>AI Agent Skills Framework</p>
+</div>
+<div class="search-box">
+<input type="text" class="search-input" id="searchInput" placeholder="Search commands & skills..." aria-label="Search">
+<div class="search-hint">Press <kbd>/</kbd> to focus &middot; <kbd>Esc</kbd> to clear</div>
+</div>
+<nav>
+<div class="nav-section">Overview</div>
+<a href="#hero" class="nav-link active"><span class="nav-icon">&gt;</span> Home</a>
+<a href="#install" class="nav-link"><span class="nav-icon">$</span> Install</a>
 
-      <!-- Installation -->
-      <section class="section" id="install">
-        <div class="section-header"><h2><span class="emoji">🚀</span> Installation</h2><p>One command. Auto-detects your agents. Installs 105 assets to the right directories.</p></div>
-        <div class="code-block"><span class="label">Terminal</span><span class="comment"># Install everything (auto-detect agents)</span>
-<span class="cmd">npx skills-by-amrit add</span>
+<div class="nav-section">Commands</div>
+<a href="#cmd-planning" class="nav-link"><span class="nav-icon" style="color:var(--blue)">&bull;</span> Planning <span class="nav-count">4</span></a>
+<a href="#cmd-execution" class="nav-link"><span class="nav-icon" style="color:var(--green)">&bull;</span> Execution <span class="nav-count">2</span></a>
+<a href="#cmd-quality" class="nav-link"><span class="nav-icon" style="color:var(--cyan)">&bull;</span> Quality <span class="nav-count">5</span></a>
+<a href="#cmd-auditing" class="nav-link"><span class="nav-icon" style="color:var(--amber)">&bull;</span> Auditing <span class="nav-count">5</span></a>
+<a href="#cmd-debugging" class="nav-link"><span class="nav-icon" style="color:var(--rose)">&bull;</span> Debugging <span class="nav-count">3</span></a>
+<a href="#cmd-content" class="nav-link"><span class="nav-icon" style="color:var(--purple)">&bull;</span> Content <span class="nav-count">5</span></a>
+<a href="#cmd-session" class="nav-link"><span class="nav-icon" style="color:var(--orange)">&bull;</span> Session <span class="nav-count">5</span></a>
 
-<span class="comment"># Install to specific agent</span>
-<span class="cmd">npx skills-by-amrit add --agent claude-code</span>
-<span class="cmd">npx skills-by-amrit add --agent cursor</span>
-<span class="cmd">npx skills-by-amrit add --agent antigravity</span>
+<div class="nav-section">Skills</div>
+<a href="#skills-planning" class="nav-link"><span class="nav-icon" style="color:var(--blue)">&bull;</span> Planning <span class="nav-count">5</span></a>
+<a href="#skills-quality" class="nav-link"><span class="nav-icon" style="color:var(--green)">&bull;</span> Code Quality <span class="nav-count">8</span></a>
+<a href="#skills-audit" class="nav-link"><span class="nav-icon" style="color:var(--amber)">&bull;</span> Auditing <span class="nav-count">12</span></a>
+<a href="#skills-specialized" class="nav-link"><span class="nav-icon" style="color:var(--purple)">&bull;</span> Specialized <span class="nav-count">6</span></a>
 
-<span class="comment"># Install specific skills</span>
-<span class="cmd">npx skills-by-amrit add persistent-memory agent-team-coordination</span>
+<div class="nav-section">Links</div>
+<a href="https://github.com/boparaiamrit/skills-by-amrit" class="nav-link" target="_blank" rel="noopener"><span class="nav-icon">#</span> GitHub</a>
+<a href="https://www.npmjs.com/package/skills-by-amrit" class="nav-link" target="_blank" rel="noopener"><span class="nav-icon">#</span> npm</a>
+</nav>
+</aside>
 
-<span class="comment"># See everything available</span>
-<span class="cmd">npx skills-by-amrit list</span></div>
-        <table>
-          <thead><tr><th>Agent</th><th>Skills</th><th>Commands</th><th>Workflows</th><th>Rules</th></tr></thead>
-          <tbody>
-            <tr><td>🟣 Claude Code</td><td><code>.claude/skills/</code></td><td><code>.claude/commands/</code></td><td>—</td><td>CLAUDE.md</td></tr>
-            <tr><td>🔵 Cursor</td><td><code>.cursor/skills/</code></td><td>—</td><td>—</td><td><code>.cursor/rules/</code></td></tr>
-            <tr><td>🟢 Antigravity</td><td><code>.agent/skills/</code></td><td>—</td><td><code>.agent/workflows/</code></td><td>—</td></tr>
-          </tbody>
-        </table>
-      </section>
+<!-- Main Content -->
+<main class="main">
 
-      <!-- Supported Agents -->
-      <section class="section" id="agents">
-        <div class="section-header"><h2><span class="emoji">🤖</span> 34 Supported Agents</h2><p>Install once, use everywhere. Skills by Amrit works with every major AI coding agent.</p></div>
-        <div class="cards">
-          <div class="card"><img src="logos/anthropic-com.png" class="agent-logo color" alt="Claude Code"><h3>Claude Code</h3><p>Full support — skills, commands, agents, rules</p><span class="card-tag tag-core">Full Support</span></div>
-          <div class="card"><img src="logos/cursor-com.png" class="agent-logo color" alt="Cursor"><h3>Cursor</h3><p>Skills + .mdc cursor rules</p><span class="card-tag tag-core">Full Support</span></div>
-          <div class="card"><img src="logos/gemini-google-com.png" class="agent-logo color" alt="Antigravity"><h3>Antigravity (Gemini)</h3><p>Skills + turbo workflows</p><span class="card-tag tag-core">Full Support</span></div>
-          <div class="card"><img src="logos/gemini-google-com.png" class="agent-logo color" alt="Gemini CLI"><h3>Gemini CLI</h3><p>Skills via <code>.gemini/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
-          <div class="card"><img src="logos/github-com.png" class="agent-logo color" alt="GitHub Copilot"><h3>GitHub Copilot</h3><p>Skills via <code>.github/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
-          <div class="card"><img src="logos/windsurf-com.png" class="agent-logo color" alt="Windsurf"><h3>Windsurf</h3><p>Skills via <code>.windsurf/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
-          <div class="card"><img src="logos/openai-com.png" class="agent-logo color" alt="OpenAI Codex"><h3>OpenAI Codex</h3><p>Skills via <code>.agents/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
-          <div class="card"><img src="logos/cline-bot.png" class="agent-logo color" alt="Cline"><h3>Cline</h3><p>Skills via <code>.cline/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
-          <div class="card"><img src="logos/roocode-com.png" class="agent-logo color" alt="Roo Code"><h3>Roo Code</h3><p>Skills via <code>.roo/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
-          <div class="card"><img src="logos/kilocode-ai.png" class="agent-logo color" alt="Kilo Code"><h3>Kilo Code</h3><p>Skills via <code>.kilocode/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
-          <div class="card"><img src="logos/sourcegraph-com.png" class="agent-logo color" alt="Amp"><h3>Amp</h3><p>Skills via <code>.agents/skills/</code></p><span class="card-tag tag-audit">Skills</span></div>
-          <div class="card"><div class="agent-logo-text">+</div><h3>+23 more agents</h3><p>Augment, Continue, Goose, Trae, Junie, Kode, Qoder, Crush, Droid, and more</p><span class="card-tag tag-audit">Skills</span></div>
-        </div>
-      </section>
+<!-- Hero -->
+<section class="hero" id="hero">
+<div class="hero-badge">v3.5 &mdash; Terminal Docs</div>
+<h2>Make your AI think like a<br><span>Staff Engineer</span></h2>
+<p class="hero-sub">The ultimate skills framework for AI coding assistants. Composable skills, slash commands, and specialist agents that enforce engineering discipline.</p>
+<div class="hero-stats">
+<div class="stat"><div class="stat-num">32</div><div class="stat-label">Skills</div></div>
+<div class="stat"><div class="stat-num">34</div><div class="stat-label">Commands</div></div>
+<div class="stat"><div class="stat-num">9</div><div class="stat-label">Agents</div></div>
+<div class="stat"><div class="stat-num">34</div><div class="stat-label">Supported</div></div>
+</div>
+<div class="hero-install">
+<span class="prompt">$</span>
+<code id="installCmd">npx skills-by-amrit@latest add</code>
+<button class="copy-btn" onclick="copyText('npx skills-by-amrit@latest add',this)">Copy</button>
+</div>
+</section>
 
-      <!-- Skills -->
-      <section class="section" id="skills">
-        <div class="section-header"><h2><span class="emoji">🧠</span> 30 Skills</h2><p>Deep instructional documents that teach AI agents HOW to think about engineering tasks.</p></div>
-        <div class="cards">
-          <div class="card"><span class="card-icon">💡</span><h3>brainstorming</h3><p>Creative ideation — mind maps, structured exploration, divergent thinking</p><span class="card-tag tag-core">Core</span></div>
-          <div class="card"><span class="card-icon">📝</span><h3>writing-plans</h3><p>Task decomposition — dependency-aware plans with effort estimates</p><span class="card-tag tag-core">Core</span></div>
-          <div class="card"><span class="card-icon">⚙️</span><h3>executing-plans</h3><p>Wave-based execution with checkpoints and inline verification</p><span class="card-tag tag-core">Core</span></div>
-          <div class="card"><span class="card-icon">🧪</span><h3>test-driven-development</h3><p>Red-green-refactor cycle, test architecture, coverage strategies</p><span class="card-tag tag-core">Core</span></div>
-          <div class="card"><span class="card-icon">🐛</span><h3>systematic-debugging</h3><p>Hypothesis-driven investigation with evidence chains</p><span class="card-tag tag-core">Core</span></div>
-          <div class="card"><span class="card-icon">🔍</span><h3>code-review</h3><p>Multi-dimensional review with severity-based feedback</p><span class="card-tag tag-core">Core</span></div>
-          <div class="card"><span class="card-icon">✅</span><h3>verification-before-completion</h3><p>Quality gates — automated checks and compliance verification</p><span class="card-tag tag-core">Core</span></div>
-          <div class="card"><span class="card-icon">📦</span><h3>git-workflow</h3><p>Conventional commits, branching, PR workflows</p><span class="card-tag tag-core">Core</span></div>
-          <div class="card"><span class="card-icon">🏛️</span><h3>architecture-audit</h3><p>SOLID compliance, coupling, dependency direction</p><span class="card-tag tag-audit">Audit</span></div>
-          <div class="card"><span class="card-icon">🔒</span><h3>security-audit</h3><p>OWASP top 10, auth flows, secrets management</p><span class="card-tag tag-audit">Audit</span></div>
-          <div class="card"><span class="card-icon">⚡</span><h3>performance-audit</h3><p>N+1 queries, bundle sizes, bottlenecks, caching</p><span class="card-tag tag-audit">Audit</span></div>
-          <div class="card"><span class="card-icon">🗄️</span><h3>database-audit</h3><p>Schema design, indexing, query optimization</p><span class="card-tag tag-audit">Audit</span></div>
-          <div class="card"><span class="card-icon">🎨</span><h3>frontend-audit</h3><p>Component architecture, state management, rendering</p><span class="card-tag tag-audit">Audit</span></div>
-          <div class="card"><span class="card-icon">🌐</span><h3>api-design-audit</h3><p>REST/GraphQL conventions, versioning, pagination</p><span class="card-tag tag-audit">Audit</span></div>
-          <div class="card"><span class="card-icon">📊</span><h3>observability-audit</h3><p>Logging, metrics, tracing, alerting</p><span class="card-tag tag-audit">Audit</span></div>
-          <div class="card"><span class="card-icon">♿</span><h3>accessibility-audit</h3><p>WCAG, keyboard navigation, screen reader support</p><span class="card-tag tag-audit">Audit</span></div>
-          <div class="card"><span class="card-icon">🔄</span><h3>ci-cd-audit</h3><p>Build times, test reliability, deployment safety</p><span class="card-tag tag-audit">Audit</span></div>
-          <div class="card"><span class="card-icon">📦</span><h3>dependency-audit</h3><p>Vulnerability scanning, license compliance, bundle impact</p><span class="card-tag tag-audit">Audit</span></div>
-          <div class="card"><span class="card-icon">♻️</span><h3>refactoring-safely</h3><p>Incremental transformation with test coverage</p><span class="card-tag tag-core">Evolution</span></div>
-          <div class="card"><span class="card-icon">📖</span><h3>writing-documentation</h3><p>API docs, architecture diagrams, READMEs</p><span class="card-tag tag-core">Evolution</span></div>
-          <div class="card"><span class="card-icon">🗺️</span><h3>codebase-mapping</h3><p>Module boundaries, dependency graphs, health metrics</p><span class="card-tag tag-core">Evolution</span></div>
-          <div class="card"><span class="card-icon">🚨</span><h3>incident-response</h3><p>Triage, root cause analysis, post-mortems</p><span class="card-tag tag-core">Evolution</span></div>
-          <div class="card" style="border-color: rgba(124,58,237,0.3);"><span class="card-icon">💾</span><h3>persistent-memory</h3><p>Automated session memory — captures decisions and context. Zero infrastructure.</p><span class="card-tag tag-new">✨ New</span></div>
-          <div class="card" style="border-color: rgba(124,58,237,0.3);"><span class="card-icon">🤝</span><h3>agent-team-coordination</h3><p>Multi-role team coordination with sequential role-switching.</p><span class="card-tag tag-new">✨ New</span></div>
-          <div class="card" style="border-color: rgba(124,58,237,0.3);"><span class="card-icon">🔗</span><h3>full-stack-api-integration</h3><p>End-to-end API integration — spec analysis, SOLID architecture, endpoint implementation</p><span class="card-tag tag-new">✨ New</span></div>
-          <div class="card" style="border-color: rgba(124,58,237,0.3);"><span class="card-icon">🏥</span><h3>product-completeness-audit</h3><p>Functional completeness verification — 5-level spectrum, placeholder detection</p><span class="card-tag tag-new">✨ New</span></div>
-          <div class="card" style="border-color: rgba(124,58,237,0.3);"><span class="card-icon">🔬</span><h3>brutal-exhaustive-audit</h3><p>No-shortcuts 5-pass audit — build, routes, data flow, user flows, edge cases</p><span class="card-tag tag-new">✨ New</span></div>
-          <div class="card"><span class="card-icon">📘</span><h3>using-skills</h3><p>How to use and combine skills effectively</p><span class="card-tag tag-core">Meta</span></div>
-          <div class="card"><span class="card-icon">✍️</span><h3>writing-skills</h3><p>How to create new skills for the framework</p><span class="card-tag tag-core">Meta</span></div>
-        </div>
-      </section>
+<!-- Install -->
+<section class="section" id="install">
+<div class="section-header">
+<h3><span style="color:var(--green)">&gt;</span> Quick Install</h3>
+<p>One command. Auto-detects your AI agents. Installs skills to the right directories.</p>
+</div>
+<div class="cmd-code" style="margin-bottom:16px">
+<div><span class="cmt"># Install everything (auto-detect agents)</span></div>
+<div><span class="kw">$</span> npx skills-by-amrit add</div>
+<div style="margin-top:8px"><span class="cmt"># Install to specific agent</span></div>
+<div><span class="kw">$</span> npx skills-by-amrit add <span class="flag">--agent</span> <span class="arg">claude-code</span></div>
+<div><span class="kw">$</span> npx skills-by-amrit add <span class="flag">--agent</span> <span class="arg">cursor</span></div>
+<div><span class="kw">$</span> npx skills-by-amrit add <span class="flag">--agent</span> <span class="arg">antigravity</span></div>
+<div style="margin-top:8px"><span class="cmt"># Install specific skills only</span></div>
+<div><span class="kw">$</span> npx skills-by-amrit add <span class="arg">persistent-memory</span> <span class="arg">agent-team-coordination</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('npx skills-by-amrit add',this)">Copy</button>
+</div>
+</section>
 
-      <!-- Commands -->
-      <section class="section" id="commands">
-        <div class="section-header"><h2><span class="emoji">⚡</span> 25 Commands</h2><p>Claude Code slash commands for the complete project lifecycle.</p></div>
-        <table>
-          <thead><tr><th>Command</th><th>Description</th><th>Category</th></tr></thead>
-          <tbody>
-            <tr><td><code>/init-project</code></td><td>Initialize project with .planning/ structure</td><td>Lifecycle</td></tr>
-            <tr><td><code>/plan</code></td><td>Create detailed implementation plans</td><td>Lifecycle</td></tr>
-            <tr><td><code>/execute</code></td><td>Execute plans with wave-based steps</td><td>Lifecycle</td></tr>
-            <tr><td><code>/verify</code></td><td>Validate implementation against plans</td><td>Lifecycle</td></tr>
-            <tr><td><code>/progress</code></td><td>Display project status and completion</td><td>Lifecycle</td></tr>
-            <tr><td><code>/research</code></td><td>Deep research with structured reports</td><td>Research</td></tr>
-            <tr><td><code>/doc</code></td><td>Generate documentation</td><td>Research</td></tr>
-            <tr><td><code>/explain</code></td><td>Explain code, architecture, concepts</td><td>Research</td></tr>
-            <tr><td><code>/review</code></td><td>Structured code review</td><td>Quality</td></tr>
-            <tr><td><code>/test</code></td><td>Generate and run tests</td><td>Quality</td></tr>
-            <tr><td><code>/debug</code></td><td>Scientific debugging</td><td>Quality</td></tr>
-            <tr><td><code>/fix-issue</code></td><td>Diagnose and fix issues</td><td>Quality</td></tr>
-            <tr><td><code>/refactor</code></td><td>Safe incremental refactoring</td><td>Quality</td></tr>
-            <tr><td><code>/migrate</code></td><td>Database/code migrations</td><td>Operations</td></tr>
-            <tr><td><code>/performance</code></td><td>Performance profiling</td><td>Operations</td></tr>
-            <tr><td><code>/security-scan</code></td><td>Comprehensive security scan</td><td>Operations</td></tr>
-            <tr><td><code>/deploy-check</code></td><td>Pre-deployment validation</td><td>Operations</td></tr>
-            <tr><td><code>/audit</code></td><td>Full codebase audit</td><td>Operations</td></tr>
-            <tr><td><code>/quick</code></td><td>Quick task execution</td><td>Workflow</td></tr>
-            <tr><td><code>/commit</code></td><td>Conventional commit creation</td><td>Workflow</td></tr>
-            <tr><td style="color: var(--accent-1);"><code>/memory</code></td><td>Persistent memory management ✨</td><td>Agent Intel</td></tr>
-            <tr><td style="color: var(--accent-1);"><code>/team</code></td><td>Agent team coordination ✨</td><td>Agent Intel</td></tr>
-            <tr><td style="color: var(--accent-1);"><code>/integrate</code></td><td>Full-stack API integration from spec ✨</td><td>Integration</td></tr>
-            <tr><td style="color: var(--accent-1);"><code>/health-check</code></td><td>Product completeness audit ✨</td><td>Auditing</td></tr>
-            <tr><td style="color: var(--accent-1);"><code>/deep-audit</code></td><td>Brutal exhaustive 5-pass audit ✨</td><td>Auditing</td></tr>
-          </tbody>
-        </table>
-      </section>
+<!-- COMMANDS -->
+<section class="section" id="commands">
+<div class="section-header">
+<h3><span style="color:var(--green)">&gt;</span> Commands <span style="font-weight:400;font-size:.75rem;color:var(--text-muted)">(29)</span></h3>
+<p>Slash commands for the complete project lifecycle. Click to expand usage details.</p>
+</div>
 
-      <!-- Workflows -->
-      <section class="section" id="workflows">
-        <div class="section-header"><h2><span class="emoji">🔄</span> 29 Workflows</h2><p>Antigravity step-by-step execution scripts with turbo-mode auto-execution.</p></div>
-        <table>
-          <thead><tr><th>Workflow</th><th>Turbo</th><th>Description</th></tr></thead>
-          <tbody>
-            <tr><td><code>/init-project</code></td><td>✅</td><td>Initialize project with .planning/ structure</td></tr>
-            <tr><td><code>/plan-feature</code></td><td>—</td><td>Plan feature with research and task decomposition</td></tr>
-            <tr><td><code>/execute</code></td><td>✅</td><td>Execute plans wave-by-wave with checkpoints</td></tr>
-            <tr><td><code>/verify</code></td><td>✅</td><td>Validate implementation against plan</td></tr>
-            <tr><td><code>/progress</code></td><td>✅</td><td>Display project progress</td></tr>
-            <tr><td><code>/quick</code></td><td>✅</td><td>Quick task execution</td></tr>
-            <tr><td><code>/research</code></td><td>—</td><td>Deep research with structured reports</td></tr>
-            <tr><td><code>/doc</code></td><td>—</td><td>Generate documentation</td></tr>
-            <tr><td><code>/explain</code></td><td>—</td><td>Code explanation</td></tr>
-            <tr><td><code>/codebase-map</code></td><td>✅</td><td>Codebase analysis and mapping</td></tr>
-            <tr><td><code>/review</code></td><td>—</td><td>Structured code review</td></tr>
-            <tr><td><code>/test</code></td><td>✅</td><td>Test generation and execution</td></tr>
-            <tr><td><code>/debug</code></td><td>—</td><td>Scientific debugging</td></tr>
-            <tr><td><code>/fix-issue</code></td><td>—</td><td>Issue diagnosis and fix</td></tr>
-            <tr><td><code>/refactor</code></td><td>—</td><td>Safe refactoring</td></tr>
-            <tr><td><code>/audit</code></td><td>✅</td><td>Full codebase audit</td></tr>
-            <tr><td><code>/security-scan</code></td><td>✅</td><td>Security scanning</td></tr>
-            <tr><td><code>/performance</code></td><td>✅</td><td>Performance profiling</td></tr>
-            <tr><td><code>/migrate</code></td><td>—</td><td>Database/code migration</td></tr>
-            <tr><td><code>/deploy-check</code></td><td>✅</td><td>Deployment validation</td></tr>
-            <tr><td><code>/deps-update</code></td><td>✅</td><td>Dependency updates</td></tr>
-            <tr><td><code>/incident-response</code></td><td>—</td><td>Incident triage and response</td></tr>
-            <tr><td><code>/commit</code></td><td>✅</td><td>Conventional commit creation</td></tr>
-            <tr><td><code>/release</code></td><td>—</td><td>Release preparation</td></tr>
-            <tr><td style="color: var(--accent-1);"><code>/memory-sync</code></td><td>✅</td><td>Persistent memory sync ✨</td></tr>
-            <tr><td style="color: var(--accent-1);"><code>/team-session</code></td><td>✅</td><td>Multi-role team sessions ✨</td></tr>
-            <tr><td style="color: var(--accent-1);"><code>/integrate-api</code></td><td>—</td><td>Full-stack API integration ✨</td></tr>
-            <tr><td style="color: var(--accent-1);"><code>/product-health-check</code></td><td>✅</td><td>Product completeness audit ✨</td></tr>
-            <tr><td style="color: var(--accent-1);"><code>/deep-audit</code></td><td>✅</td><td>Brutal exhaustive audit ✨</td></tr>
-          </tbody>
-        </table>
-      </section>
+<div class="no-results" id="cmdNoResults">No commands match your search.</div>
 
-      <!-- Agent Definitions -->
-      <section class="section" id="agent-defs">
-        <div class="section-header"><h2><span class="emoji">🎭</span> 7 Specialist Agents</h2><p>Claude Code agent definitions — each a focused specialist with protocols and anti-patterns.</p></div>
-        <div class="cards">
-          <div class="card"><span class="card-icon">🔬</span><h3>Researcher</h3><p>Deep codebase and domain research. Exhaustive search with source attribution and evidence-based findings.</p></div>
-          <div class="card"><span class="card-icon">📋</span><h3>Planner</h3><p>Task decomposition and planning. Dependency-aware plans with effort estimates and risk assessments.</p></div>
-          <div class="card"><span class="card-icon">⚙️</span><h3>Executor</h3><p>Plan execution with quality gates. Wave-ordered implementation with checkpoints and fail-fast behavior.</p></div>
-          <div class="card"><span class="card-icon">🔍</span><h3>Reviewer</h3><p>Structured code review. Multi-dimensional analysis with severity-based constructive feedback.</p></div>
-          <div class="card"><span class="card-icon">🐛</span><h3>Debugger</h3><p>Scientific debugging. Hypothesis-driven investigation with evidence chains and root cause focus.</p></div>
-          <div class="card"><span class="card-icon">✅</span><h3>Verifier</h3><p>Work verification and gap analysis. Criteria-driven validation with fix plan generation.</p></div>
-          <div class="card"><span class="card-icon">🗺️</span><h3>Mapper</h3><p>Codebase mapping and analysis. Module boundaries, dependency graphs, and health metrics.</p></div>
-        </div>
-      </section>
+<!-- Planning -->
+<div class="category" id="cmd-planning">
+<div class="category-title"><span class="category-dot" style="background:var(--blue)"></span> Planning</div>
 
-      <!-- Rules -->
-      <section class="section" id="rules">
-        <div class="section-header"><h2><span class="emoji">🎯</span> 15 Rules</h2><p>10 Cursor .mdc rules + 5 universal agent rules.</p></div>
-        <table>
-          <thead><tr><th>Rule</th><th>Type</th><th>Description</th></tr></thead>
-          <tbody>
-            <tr><td>🏗️ core-development</td><td>.mdc</td><td>SOLID, DRY, error handling, testing, commit conventions</td></tr>
-            <tr><td>🚫 anti-hallucination</td><td>.mdc + rule</td><td>Verification-first — never fabricate APIs, paths, configs</td></tr>
-            <tr><td>📋 planning-workflow</td><td>.mdc</td><td>Structured planning: research → design → decompose</td></tr>
-            <tr><td>🐛 debugging-protocol</td><td>.mdc</td><td>Scientific debugging methodology</td></tr>
-            <tr><td>🔒 security</td><td>.mdc</td><td>Auth, input validation, secrets management</td></tr>
-            <tr><td>🗄️ database</td><td>.mdc</td><td>Schema design, indexing, query optimization</td></tr>
-            <tr><td>🧪 testing</td><td>.mdc</td><td>Coverage requirements, fixture patterns</td></tr>
-            <tr><td>🔍 code-review</td><td>.mdc</td><td>Multi-dimensional review checklist</td></tr>
-            <tr><td>🏗️ core-principles</td><td>rule</td><td>SOLID, DRY, KISS, YAGNI, clean architecture</td></tr>
-            <tr><td>⚖️ severity-framework</td><td>rule</td><td>Issue severity classification system</td></tr>
-            <tr><td style="color: var(--accent-1);">💾 memory-protocol</td><td>.mdc + rule</td><td>Auto session memory read/write ✨</td></tr>
-            <tr><td style="color: var(--accent-1);">🤝 team-protocol</td><td>.mdc + rule</td><td>Sequential role-switching coordination ✨</td></tr>
-          </tbody>
-        </table>
-      </section>
+<div class="cmd-card" data-search="discuss pre-planning decision capture preferences">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/discuss</span>
+<span class="cmd-desc">Capture user preferences and lock decisions BEFORE planning begins</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/discuss</span> <span class="arg">add authentication</span></div>
+<div><span class="kw">/discuss</span> <span class="arg">redesign the dashboard</span></div>
+<div style="margin-top:6px"><span class="cmt"># Presents multiple-choice questions with recommendations.</span></div>
+<div><span class="cmt"># User answers in one line: 1A 2B 3C 4A 5A</span></div>
+<div><span class="cmt"># Decisions locked before planning &mdash; zero rework.</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/discuss',this)">Copy</button></div>
+</div>
+</div>
+</div>
 
-      <!-- Persistent Memory -->
-      <section class="section" id="memory">
-        <div class="section-header"><h2><span class="emoji">💾</span> Persistent Memory System <span style="color: var(--accent-1);">✨ NEW</span></h2><p>Every AI session starts from scratch. Not anymore. Zero-infrastructure session memory for ANY agent.</p></div>
-        <div class="diagram">
-<span class="highlight">SESSION START</span>                           <span class="highlight">SESSION END</span>
-┌────────────────────┐                  ┌────────────────────┐
-│ 1. Read MEMORY.md  │                  │ 8. Create session  │
-│ 2. Read LATEST.md  │───<span class="accent"> work </span>───▶    │    log              │
-│ 3. Full context!   │                  │ 9. Write handoff   │
-└────────────────────┘                  │ 10. Update memory  │
-                                        └────────────────────┘
+<div class="cmd-card" data-search="plan implementation create detailed task writing">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/plan</span>
+<span class="cmd-desc">Create a detailed implementation plan with task anatomy and context budgets</span>
+<span class="cmd-args">[feature-or-phase]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/plan</span> <span class="arg">user authentication</span></div>
+<div><span class="kw">/plan</span> <span class="flag">--from-discuss</span></div>
+<div style="margin-top:6px"><span class="cmt"># Creates an executable prompt so clear that a different</span></div>
+<div><span class="cmt"># agent could execute it and produce identical results.</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/plan',this)">Copy</button></div>
+</div>
+</div>
+</div>
 
-<span class="warn">.planning/</span>
-├── <span class="accent">MEMORY.md</span>              ← 🧠 Project brain (~300 lines)
-├── sessions/               ← 📝 Session logs
-├── decisions/DECISIONS.md  ← 📋 Decision log (append-only)
-├── context/
-│   ├── architecture.md     ← 🏗️ Architecture decisions
-│   ├── patterns.md         ← 🔄 Established patterns
-│   ├── gotchas.md          ← ⚠️ Known issues
-│   └── tech-debt.md        ← 🔧 Technical debt
-└── handoffs/<span class="accent">LATEST.md</span>      ← 📤 Last session's handoff</div>
-        <div class="comparison">
-          <div class="comp-card theirs">
-            <h4>❌ claude-mem</h4>
-            <div class="comp-item">⚠️ Requires SQLite + ChromaDB + Bun</div>
-            <div class="comp-item">⚠️ Claude Code only</div>
-            <div class="comp-item">⚠️ Plugin + worker service setup</div>
-            <div class="comp-item">⚠️ Not git-native</div>
-            <div class="comp-item">⚠️ Variable token cost</div>
-          </div>
-          <div class="comp-card ours">
-            <h4>✅ Skills by Amrit</h4>
-            <div class="comp-item">✅ Zero infrastructure</div>
-            <div class="comp-item">✅ ANY agent (34 supported)</div>
-            <div class="comp-item">✅ 4 lines in GEMINI.md</div>
-            <div class="comp-item">✅ Git-native (markdown files)</div>
-            <div class="comp-item">✅ ~1,650 tokens flat</div>
-          </div>
-        </div>
-      </section>
+<div class="cmd-card" data-search="research deep topic technology codebase investigation">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/research</span>
+<span class="cmd-desc">Deep research on a topic, technology, or codebase area</span>
+<span class="cmd-args">[topic-or-question]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/research</span> <span class="arg">best auth libraries for Next.js</span></div>
+<div><span class="kw">/research</span> <span class="arg">how does the payment module work</span></div>
+<div style="margin-top:6px"><span class="cmt"># Produces a structured research report with findings,</span></div>
+<div><span class="cmt"># recommendations, and source attribution.</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/research',this)">Copy</button></div>
+</div>
+</div>
+</div>
 
-      <!-- Agent Teams -->
-      <section class="section" id="teams">
-        <div class="section-header"><h2><span class="emoji">🤝</span> Agent Team Coordination <span style="color: var(--accent-1);">✨ NEW</span></h2><p>Claude Code-style team dynamics for ANY agent. Sequential role-switching with shared blackboard.</p></div>
-        <div class="diagram">
-┌────────────────────────────────────────────────┐
-│              Single Agent Session               │
-│                                                 │
-│  Phase 1: <span class="highlight">🔬 Researcher</span>                       │
-│     → Research, evidence, findings              │
-│     → Write handoff document                    │
-│                                                 │
-│  Phase 2: <span class="highlight">📐 Architect</span>                        │
-│     → Read research, design solution            │
-│     → Write handoff document                    │
-│                                                 │
-│  Phase 3: <span class="highlight">📋 Planner</span>                          │
-│     → Read design, create tasks                 │
-│     → Write handoff document                    │
-│                                                 │
-│  Phase 4: <span class="highlight">⚙️ Executor</span>                         │
-│     → Read plan, implement tasks                │
-│     → Write handoff document                    │
-│                                                 │
-│  Phase 5: <span class="highlight">🔍 Reviewer</span>                         │
-│     → Read ALL handoffs, review code            │
-│     → Write review report                       │
-└────────────────────────────────────────────────┘</div>
-        <div class="comparison">
-          <div class="comp-card theirs">
-            <h4>❌ Claude Code Agent Teams</h4>
-            <div class="comp-item">⚠️ Requires tmux + iTerm</div>
-            <div class="comp-item">⚠️ Claude Code only</div>
-            <div class="comp-item">⚠️ Possible file conflicts (parallel)</div>
-            <div class="comp-item">⚠️ Possible context loss (parallel)</div>
-          </div>
-          <div class="comp-card ours">
-            <h4>✅ Skills by Amrit</h4>
-            <div class="comp-item">✅ Zero infrastructure</div>
-            <div class="comp-item">✅ ANY agent (34 supported)</div>
-            <div class="comp-item">✅ No file conflicts (sequential)</div>
-            <div class="comp-item">✅ No context loss (sequential)</div>
-          </div>
-        </div>
-        <table>
-          <thead><tr><th>Preset</th><th>Roles</th><th>Best For</th></tr></thead>
-          <tbody>
-            <tr><td>⚡ Quick</td><td>Researcher → Executor → Reviewer</td><td>Small features</td></tr>
-            <tr><td>🏗️ Full</td><td>Researcher → Architect → Planner → Executor → Reviewer</td><td>Complex features</td></tr>
-            <tr><td>🐛 Debug</td><td>Investigator → Fixer → Verifier</td><td>Bug hunting</td></tr>
-          </tbody>
-        </table>
-      </section>
+<div class="cmd-card" data-search="init-project initialize project context planning roadmap">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/init-project</span>
+<span class="cmd-desc">Initialize a new project with deep context gathering, planning structure, and roadmap</span>
+<span class="cmd-args">[project-description]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/init-project</span> <span class="arg">SaaS dashboard with auth and billing</span></div>
+<div style="margin-top:6px"><span class="cmt"># Creates .planning/ directory structure:</span></div>
+<div><span class="cmt">#   PROJECT.md, REQUIREMENTS.md, ROADMAP.md,</span></div>
+<div><span class="cmt">#   STATE.md, MEMORY.md, config.json, plans/</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/init-project',this)">Copy</button></div>
+</div>
+</div>
+</div>
+</div>
 
-      <footer class="footer">
-        <p>Built with <span class="footer-heart">❤️</span> by <a href="https://github.com/boparaiamrit">Amritpal Singh Boparai</a></p>
-        <p style="margin-top: 8px; font-size: 0.8rem;">Making AI agents think like staff engineers, one skill at a time.</p>
-        <div class="social-links">
-          <a href="https://github.com/boparaiamrit" target="_blank"><img src="https://cdn.simpleicons.org/github/ffffff" alt="GitHub"> boparaiamrit</a>
-          <a href="https://x.com/boparaiamrit" target="_blank"><img src="https://cdn.simpleicons.org/x/ffffff" alt="X/Twitter"> @boparaiamrit</a>
-          <a href="https://www.npmjs.com/package/skills-by-amrit" target="_blank"><img src="https://cdn.simpleicons.org/npm/CB3837" alt="npm"> skills-by-amrit</a>
-        </div>
-        <p style="margin-top: 16px; font-size: 0.75rem;">
-          <a href="https://github.com/boparaiamrit/skills-by-amrit">GitHub</a> ·
-          <a href="https://www.npmjs.com/package/skills-by-amrit">npm</a> ·
-          <a href="https://github.com/boparaiamrit/skills-by-amrit/blob/main/LICENSE">MIT License</a>
-        </p>
-      </footer>
-    </main>
-  </div>
+<!-- Execution -->
+<div class="category" id="cmd-execution">
+<div class="category-title"><span class="category-dot" style="background:var(--green)"></span> Execution</div>
 
-  <script>
-    // Mobile sidebar toggle
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
-      document.getElementById('overlay').classList.toggle('show');
-    }
+<div class="cmd-card" data-search="execute plan wave parallelization checkpoints state tracking">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/execute</span>
+<span class="cmd-desc">Execute an implementation plan with wave-based parallelization and checkpoints</span>
+<span class="cmd-args">[plan-name]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/execute</span>                  <span class="cmt"># Execute current plan</span></div>
+<div><span class="kw">/execute</span> <span class="arg">auth-phase-1</span>     <span class="cmt"># Execute specific plan</span></div>
+<div><span class="kw">/execute</span> <span class="flag">--continue</span>        <span class="cmt"># Resume from checkpoint</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/execute',this)">Copy</button></div>
+</div>
+</div>
+</div>
 
-    // Active nav link on scroll
-    const sections = document.querySelectorAll('section[id], .hero[id]');
-    const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
-    window.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
-      });
-    });
+<div class="cmd-card" data-search="quick small task fast fix one-off change without planning">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/quick</span>
+<span class="cmd-desc">Execute a small task without full project planning</span>
+<span class="cmd-args">[task-description]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/quick</span> <span class="arg">add dark mode toggle to settings page</span></div>
+<div><span class="kw">/quick</span> <span class="arg">fix the broken login redirect</span></div>
+<div style="margin-top:6px"><span class="cmt"># For tasks &lt; 30 min. Bug fixes, config changes,</span></div>
+<div><span class="cmt"># small features, documentation updates.</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/quick',this)">Copy</button></div>
+</div>
+</div>
+</div>
+</div>
 
-    // Fade-in on scroll
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.card, .stat, .comp-card').forEach(el => {
-      el.classList.add('fade-in');
-      observer.observe(el);
-    });
+<!-- Quality -->
+<div class="category" id="cmd-quality">
+<div class="category-title"><span class="category-dot" style="background:var(--cyan)"></span> Quality</div>
 
-    // Close sidebar on nav click (mobile)
-    navLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        if (window.innerWidth <= 1024) toggleSidebar();
-      });
-    });
-  </script>
+<div class="cmd-card" data-search="review code changes diff quality correctness">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/review</span>
+<span class="cmd-desc">Perform a thorough code review of specified files or the current diff</span>
+<span class="cmd-args">[file-or-branch]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/review</span>                   <span class="cmt"># Review staged changes</span></div>
+<div><span class="kw">/review</span> <span class="arg">src/auth.ts</span>        <span class="cmt"># Review specific file</span></div>
+<div><span class="kw">/review</span> <span class="arg">feature/auth</span>       <span class="cmt"># Review branch diff</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/review',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="verify validate implementation acceptance criteria UAT">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/verify</span>
+<span class="cmd-desc">Validate built features through systematic verification and conversational UAT</span>
+<span class="cmd-args">[plan-name or phase-number]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/verify</span> <span class="arg">auth-plan</span>          <span class="cmt"># Verify specific plan</span></div>
+<div><span class="kw">/verify</span> <span class="arg">2</span>                   <span class="cmt"># Verify phase 2</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/verify',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="quality-gate technical checks build types lint test security">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/quality-gate</span>
+<span class="cmd-desc">Run technical quality checks before commits or PRs</span>
+<span class="cmd-args">[mode: quick|full|pre-commit|pre-pr]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/quality-gate</span>              <span class="cmt"># Full check</span></div>
+<div><span class="kw">/quality-gate</span> <span class="arg">quick</span>        <span class="cmt"># Fast check</span></div>
+<div><span class="kw">/quality-gate</span> <span class="arg">pre-pr</span>       <span class="cmt"># PR readiness</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/quality-gate',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="commit stage conventional message smart git">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/commit</span>
+<span class="cmd-desc">Stage changes and create a well-formatted conventional commit</span>
+<span class="cmd-args">[optional-scope]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/commit</span>                    <span class="cmt"># Auto-detect type and scope</span></div>
+<div><span class="kw">/commit</span> <span class="arg">auth</span>               <span class="cmt"># Scope: auth</span></div>
+<div style="margin-top:6px"><span class="cmt"># Types: feat, fix, refactor, docs, test, chore, perf, ci</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/commit',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="deploy-check pre-deployment safety checks staging production">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/deploy-check</span>
+<span class="cmd-desc">Run pre-deployment safety checks</span>
+<span class="cmd-args">[environment: staging|production]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/deploy-check</span>              <span class="cmt"># Default: production</span></div>
+<div><span class="kw">/deploy-check</span> <span class="arg">staging</span>      <span class="cmt"># Staging checks</span></div>
+<div style="margin-top:6px"><span class="cmt"># Checks: build, types, lint, tests, git state,</span></div>
+<div><span class="cmt"># env vars, migrations, dependencies</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/deploy-check',this)">Copy</button></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Auditing -->
+<div class="category" id="cmd-auditing">
+<div class="category-title"><span class="category-dot" style="background:var(--amber)"></span> Auditing</div>
+
+<div class="cmd-card" data-search="audit comprehensive codebase security performance architecture database">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/audit</span>
+<span class="cmd-desc">Run a comprehensive audit covering security, performance, architecture, and database</span>
+<span class="cmd-args">[scope: security|performance|architecture|database|all]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/audit</span>                     <span class="cmt"># Run all audits</span></div>
+<div><span class="kw">/audit</span> <span class="arg">security</span>           <span class="cmt"># Security only</span></div>
+<div><span class="kw">/audit</span> <span class="arg">performance</span>        <span class="cmt"># Performance only</span></div>
+<div style="margin-top:6px"><span class="cmt"># Creates AUDIT-REPORT.md with severity-classified findings</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/audit',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="deep-audit brutal exhaustive multi-pass 5 passes build routes data flow">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/deep-audit</span>
+<span class="cmd-desc">Brutal, exhaustive, multi-pass audit. 5 passes: build, routes, data flow, user flows, edge cases</span>
+<span class="cmd-args">[scope: pass1|pass2|pass3|pass4|pass5|all]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/deep-audit</span>                <span class="cmt"># All 5 passes</span></div>
+<div><span class="kw">/deep-audit</span> <span class="arg">pass1</span>          <span class="cmt"># Build verification only</span></div>
+<div style="margin-top:6px"><span class="cmt"># Cannot say "similar to above" or "the rest are fine".</span></div>
+<div><span class="cmt"># Every file checked. Every route visited. No shortcuts.</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/deep-audit',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="security-scan comprehensive analysis code dependencies secrets configuration">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/security-scan</span>
+<span class="cmd-desc">Comprehensive security analysis across code, dependencies, secrets, and configuration</span>
+<span class="cmd-args">[optional-scope]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/security-scan</span>             <span class="cmt"># Full project scan</span></div>
+<div><span class="kw">/security-scan</span> <span class="arg">auth</span>        <span class="cmt"># Scan auth module only</span></div>
+<div style="margin-top:6px"><span class="cmt"># Covers: secret detection, dependency vulns, code patterns,</span></div>
+<div><span class="cmt"># auth/authz, input validation, configuration security</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/security-scan',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="performance profile analyze optimize benchmarking bottleneck">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/performance</span>
+<span class="cmd-desc">Profile, analyze, and optimize application performance with structured benchmarking</span>
+<span class="cmd-args">[area-to-profile]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/performance</span> <span class="arg">api</span>           <span class="cmt"># Profile API endpoints</span></div>
+<div><span class="kw">/performance</span> <span class="arg">database</span>      <span class="cmt"># Database queries</span></div>
+<div><span class="kw">/performance</span> <span class="arg">bundle</span>        <span class="cmt"># JS/CSS bundle size</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/performance',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="health-check product completeness functional placeholder broken flows disconnected">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/health-check</span>
+<span class="cmd-desc">Audit the product for functional completeness &mdash; find placeholders, broken flows, missing states</span>
+<span class="cmd-args">[scope: full|routes|flows|api|all]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/health-check</span>              <span class="cmt"># Full audit</span></div>
+<div><span class="kw">/health-check</span> <span class="arg">routes</span>       <span class="cmt"># Route completeness</span></div>
+<div><span class="kw">/health-check</span> <span class="arg">flows</span>        <span class="cmt"># User flow completeness</span></div>
+<div style="margin-top:6px"><span class="cmt"># Distinguishes "looks done" from "is done"</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/health-check',this)">Copy</button></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Debugging -->
+<div class="category" id="cmd-debugging">
+<div class="category-title"><span class="category-dot" style="background:var(--rose)"></span> Debugging</div>
+
+<div class="cmd-card" data-search="debug systematic diagnosis issue structured problem solving">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/debug</span>
+<span class="cmd-desc">Systematically debug an issue using structured diagnosis</span>
+<span class="cmd-args">[error-message-or-description]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/debug</span> <span class="arg">TypeError: Cannot read property 'id' of undefined</span></div>
+<div><span class="kw">/debug</span> <span class="arg">login redirects to 404 after OAuth</span></div>
+<div style="margin-top:6px"><span class="cmt"># Reproduce &rarr; Isolate &rarr; Diagnose &rarr; Fix &rarr; Verify</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/debug',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="fix-issue github linear issue number end-to-end">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/fix-issue</span>
+<span class="cmd-desc">Fix a GitHub/Linear issue by number</span>
+<span class="cmd-args">[issue-number]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/fix-issue</span> <span class="arg">42</span></div>
+<div><span class="kw">/fix-issue</span> <span class="arg">GH-128</span></div>
+<div style="margin-top:6px"><span class="cmt"># Creates branch, implements fix, writes tests,</span></div>
+<div><span class="cmt"># creates PR with issue reference.</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/fix-issue',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="explain code analogies diagrams step-by-step walkthrough educational">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/explain</span>
+<span class="cmd-desc">Explain code with analogies, diagrams, and step-by-step walkthrough</span>
+<span class="cmd-args">[file-or-function]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/explain</span> <span class="arg">src/middleware/auth.ts</span></div>
+<div><span class="kw">/explain</span> <span class="arg">the payment processing pipeline</span></div>
+<div style="margin-top:6px"><span class="cmt"># Summary &rarr; Analogy &rarr; ASCII diagram &rarr; Line-by-line walkthrough</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/explain',this)">Copy</button></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Content -->
+<div class="category" id="cmd-content">
+<div class="category-title"><span class="category-dot" style="background:var(--purple)"></span> Content &amp; Refactoring</div>
+
+<div class="cmd-card" data-search="doc documentation generate update readme api">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/doc</span>
+<span class="cmd-desc">Generate or update documentation for the specified code</span>
+<span class="cmd-args">[file-or-module]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/doc</span> <span class="arg">src/api/</span>               <span class="cmt"># Document module</span></div>
+<div><span class="kw">/doc</span> <span class="arg">src/utils/helpers.ts</span>    <span class="cmt"># Document file</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/doc',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="redesign ui ux visual overhaul frontend audit components tokens">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/redesign</span>
+<span class="cmd-desc">Run a full UI/UX redesign audit with component census and design token extraction</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/redesign</span></div>
+<div><span class="kw">/redesign</span> <span class="arg">"the dashboard feels cluttered"</span></div>
+<div style="margin-top:6px"><span class="cmt"># Backend scan &rarr; Component census &rarr; Token extraction</span></div>
+<div><span class="cmt"># &rarr; UX analysis &rarr; Consistency scoring &rarr; Recommendations</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/redesign',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="refactor safely code verification correctness extract rename">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/refactor</span>
+<span class="cmd-desc">Safely refactor code with verification at each step</span>
+<span class="cmd-args">[file-or-pattern-to-refactor]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/refactor</span> <span class="arg">src/auth/</span></div>
+<div><span class="kw">/refactor</span> <span class="arg">the UserService class is too large</span></div>
+<div style="margin-top:6px"><span class="cmt"># If no tests exist, writes characterization tests FIRST.</span></div>
+<div><span class="cmt"># Extract, rename, move, inline, simplify.</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/refactor',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="migrate database code schema rollback safety">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/migrate</span>
+<span class="cmd-desc">Plan and execute database or code migrations with rollback safety</span>
+<span class="cmd-args">[migration-description]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/migrate</span> <span class="arg">add user roles table</span></div>
+<div><span class="kw">/migrate</span> <span class="arg">rename email field to email_address</span></div>
+<div style="margin-top:6px"><span class="cmt"># Types: database, code, data, infrastructure migrations</span></div>
+<div><span class="cmt"># Always includes rollback strategy.</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/migrate',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="integrate api full-stack frontend backend spec endpoint">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/integrate</span>
+<span class="cmd-desc">Integrate an API from a PM's spec into the frontend with full surface mapping</span>
+<span class="cmd-args">[api-spec-url or endpoint description]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/integrate</span> <span class="arg">https://docs.api.com/v2/users</span></div>
+<div><span class="kw">/integrate</span> <span class="arg">from clipboard</span></div>
+<div style="margin-top:6px"><span class="cmt"># Maps every file that consumes the data,</span></div>
+<div><span class="cmt"># creates modular SOLID-compliant API layer.</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/integrate',this)">Copy</button></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Session -->
+<div class="category" id="cmd-session">
+<div class="category-title"><span class="category-dot" style="background:var(--orange)"></span> Session &amp; Collaboration</div>
+
+<div class="cmd-card" data-search="memory persistent session read write compress init context">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/memory</span>
+<span class="cmd-desc">Persistent memory management &mdash; read, write, and maintain project memory</span>
+<span class="cmd-args">[init|read|write|compress|status]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/memory</span> <span class="arg">init</span>       <span class="cmt"># Initialize memory for project</span></div>
+<div><span class="kw">/memory</span> <span class="arg">read</span>       <span class="cmt"># Read current memory</span></div>
+<div><span class="kw">/memory</span> <span class="arg">write</span>      <span class="cmt"># Write session learnings</span></div>
+<div><span class="kw">/memory</span> <span class="arg">compress</span>   <span class="cmt"># Compress when too large</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/memory',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="progress project phase status task completion roadmap">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/progress</span>
+<span class="cmd-desc">Show current project progress, phase status, and task completion</span>
+<span class="cmd-args">[optional-phase-number]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/progress</span>              <span class="cmt"># Show all phases</span></div>
+<div><span class="kw">/progress</span> <span class="arg">2</span>            <span class="cmt"># Show phase 2 details</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/progress',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="settings configuration mode depth workflow preferences">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/settings</span>
+<span class="cmd-desc">View or modify project planning configuration</span>
+<span class="cmd-args">[set key value | reset]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/settings</span>                          <span class="cmt"># Show current</span></div>
+<div><span class="kw">/settings</span> <span class="arg">set mode auto</span>           <span class="cmt"># Auto-advance</span></div>
+<div><span class="kw">/settings</span> <span class="arg">set depth quick</span>         <span class="cmt"># Fast planning</span></div>
+<div><span class="kw">/settings</span> <span class="arg">reset</span>                    <span class="cmt"># Reset defaults</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/settings',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="context switch mode dev research review behavior">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/context</span>
+<span class="cmd-desc">Switch context mode to change how the assistant behaves</span>
+<span class="cmd-args">[mode: dev|research|review]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/context</span> <span class="arg">dev</span>        <span class="cmt"># Development mode</span></div>
+<div><span class="kw">/context</span> <span class="arg">research</span>   <span class="cmt"># Research mode</span></div>
+<div><span class="kw">/context</span> <span class="arg">review</span>     <span class="cmt"># Code review mode</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/context',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="learn extract reusable patterns learnings session save">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/learn</span>
+<span class="cmd-desc">Extract reusable patterns and learnings from the current session</span>
+<span class="cmd-args">[category: error|debug|architecture|tool|workflow|all]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/learn</span>                 <span class="cmt"># Extract all categories</span></div>
+<div><span class="kw">/learn</span> <span class="arg">debug</span>            <span class="cmt"># Debugging learnings only</span></div>
+<div><span class="kw">/learn</span> <span class="arg">architecture</span>     <span class="cmt"># Architecture decisions</span></div>
+<div style="margin-top:6px"><span class="cmt"># Saves to .planning/LEARNINGS.md, deduplicated</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/learn',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="team multi-agent council session subagent specialist coordination">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/team</span>
+<span class="cmd-desc">Start a multi-agent council session with real subagent spawning</span>
+<span class="cmd-args">[objective] [--preset full|rapid|debug|architecture]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/team</span> <span class="arg">implement user auth</span></div>
+<div><span class="kw">/team</span> <span class="arg">fix payments bug</span> <span class="flag">--preset debug</span></div>
+<div><span class="kw">/team</span> <span class="arg">redesign API layer</span> <span class="flag">--preset architecture</span> <span class="flag">--auto</span></div>
+<div><span class="kw">/team</span> <span class="arg">resume</span>             <span class="cmt"># Resume existing session</span></div>
+<div><span class="kw">/team</span> <span class="arg">board</span>              <span class="cmt"># Show task board</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/team',this)">Copy</button></div>
+</div>
+</div>
+</div>
+
+<div class="cmd-card" data-search="test generate comprehensive tests coverage TDD unit integration">
+<div class="cmd-card-header" onclick="toggleCard(this)">
+<span class="cmd-name">/test</span>
+<span class="cmd-desc">Generate comprehensive tests for specified code</span>
+<span class="cmd-args">[file-or-function]</span>
+<span class="cmd-chevron">&#9654;</span>
+</div>
+<div class="cmd-body">
+<div class="cmd-usage">
+<div class="cmd-usage-label">Usage</div>
+<div class="cmd-code"><div><span class="kw">/test</span> <span class="arg">src/services/auth.ts</span></div>
+<div><span class="kw">/test</span> <span class="arg">the payment processing function</span></div>
+<div style="margin-top:6px"><span class="cmt"># Covers: happy path, error cases, edge cases,</span></div>
+<div><span class="cmt"># state transitions, data variations</span></div>
+<button class="copy-btn cmd-code-copy" onclick="copyText('/test',this)">Copy</button></div>
+</div>
+</div>
+</div>
+</div>
+
+</section>
+
+<!-- SKILLS -->
+<section class="section" id="skills">
+<div class="section-header">
+<h3><span style="color:var(--green)">&gt;</span> Skills <span style="font-weight:400;font-size:.75rem;color:var(--text-muted)">(31)</span></h3>
+<p>Deep instructional documents that teach AI agents HOW to think about engineering tasks. Each skill has an Iron Law that cannot be violated.</p>
+</div>
+
+<div class="no-results" id="skillNoResults">No skills match your search.</div>
+
+<!-- Planning Skills -->
+<div class="category" id="skills-planning">
+<div class="category-title"><span class="category-dot" style="background:var(--blue)"></span> Planning</div>
+<div class="skill-grid">
+
+<div class="skill-card" data-search="brainstorming creative ideation design features">
+<div class="skill-card-name"><span class="skill-tag tag-planning">Planning</span> brainstorming</div>
+<div class="skill-card-desc">Creative ideation before implementation. Explores intent, requirements, and design before any code is written.</div>
+<div class="skill-card-trigger">Trigger: Before any creative work &mdash; features, components, functionality</div>
+</div>
+
+<div class="skill-card" data-search="writing-plans task decomposition implementation detailed plan">
+<div class="skill-card-name"><span class="skill-tag tag-planning">Planning</span> writing-plans</div>
+<div class="skill-card-desc">Write implementation plans that are executable prompts. Every task has &lt;files&gt;, &lt;action&gt;, &lt;verify&gt;, &lt;done&gt;.</div>
+<div class="skill-card-trigger">Trigger: Multi-step task needing a plan before code</div>
+</div>
+
+<div class="skill-card" data-search="executing-plans wave execution checkpoints state management">
+<div class="skill-card-name"><span class="skill-tag tag-planning">Planning</span> executing-plans</div>
+<div class="skill-card-desc">Execute plans task by task with deviation handling, checkpoints, and atomic commits. Plans are contracts.</div>
+<div class="skill-card-trigger">Trigger: Have a detailed plan, ready to implement</div>
+</div>
+
+<div class="skill-card" data-search="codebase-mapping module boundaries dependency mental model">
+<div class="skill-card-name"><span class="skill-tag tag-planning">Planning</span> codebase-mapping</div>
+<div class="skill-card-desc">Create a comprehensive mental model of the system. Observation before action, understanding before modification.</div>
+<div class="skill-card-trigger">Trigger: First encountering a codebase or before auditing</div>
+</div>
+
+<div class="skill-card" data-search="persistent-memory session context decisions cross-session">
+<div class="skill-card-name"><span class="skill-tag tag-planning">Planning</span> persistent-memory</div>
+<div class="skill-card-desc">Automated context preservation across AI sessions. File-based memory protocol, zero infrastructure, any agent.</div>
+<div class="skill-card-trigger">Trigger: Start/end of any session needing continuity</div>
+</div>
+
+</div>
+</div>
+
+<!-- Code Quality Skills -->
+<div class="category" id="skills-quality">
+<div class="category-title"><span class="category-dot" style="background:var(--green)"></span> Code Quality</div>
+<div class="skill-grid">
+
+<div class="skill-card" data-search="code-review multi-dimensional severity feedback merge">
+<div class="skill-card-name"><span class="skill-tag tag-quality">Quality</span> code-review</div>
+<div class="skill-card-desc">Systematic review covering correctness, security, performance, and maintainability. No merge without review.</div>
+<div class="skill-card-trigger">Trigger: Completing tasks, before merging, when asked to review</div>
+</div>
+
+<div class="skill-card" data-search="test-driven-development TDD red green refactor failing test">
+<div class="skill-card-name"><span class="skill-tag tag-quality">Quality</span> test-driven-development</div>
+<div class="skill-card-desc">Write the test first. Watch it fail. Write minimal code to pass. Refactor. Repeat.</div>
+<div class="skill-card-trigger">Trigger: Any implementation work &mdash; features, fixes, refactors</div>
+</div>
+
+<div class="skill-card" data-search="systematic-debugging hypothesis investigation root cause evidence">
+<div class="skill-card-name"><span class="skill-tag tag-quality">Quality</span> systematic-debugging</div>
+<div class="skill-card-desc">Hypothesis-driven investigation with evidence chains. Always find root cause before attempting fixes.</div>
+<div class="skill-card-trigger">Trigger: Any technical issue, test failure, unexpected behavior</div>
+</div>
+
+<div class="skill-card" data-search="verification-before-completion quality gates evidence claims done">
+<div class="skill-card-name"><span class="skill-tag tag-quality">Quality</span> verification-before-completion</div>
+<div class="skill-card-desc">Quality gates: run verification commands and confirm output before making any success claims.</div>
+<div class="skill-card-trigger">Trigger: About to claim work is complete, fixed, or done</div>
+</div>
+
+<div class="skill-card" data-search="refactoring-safely incremental transformation test-backed preserve behavior">
+<div class="skill-card-name"><span class="skill-tag tag-quality">Quality</span> refactoring-safely</div>
+<div class="skill-card-desc">Change structure without changing behavior. Every refactoring step must be verified by tests.</div>
+<div class="skill-card-trigger">Trigger: Restructuring, renaming, extracting, or migrating code</div>
+</div>
+
+<div class="skill-card" data-search="git-workflow branching committing merging atomic history clean">
+<div class="skill-card-name"><span class="skill-tag tag-quality">Quality</span> git-workflow</div>
+<div class="skill-card-desc">Clean history, atomic commits, and proper branch management. Every commit tells a story.</div>
+<div class="skill-card-trigger">Trigger: Any git operations &mdash; branching, committing, merging</div>
+</div>
+
+<div class="skill-card" data-search="codebase-conformity pattern uniformity match existing conventions">
+<div class="skill-card-name"><span class="skill-tag tag-quality">Quality</span> codebase-conformity</div>
+<div class="skill-card-desc">Read before writing, match before creating. The existing codebase is the specification.</div>
+<div class="skill-card-trigger">Trigger: Adding any new code to an existing codebase</div>
+</div>
+
+<div class="skill-card" data-search="writing-documentation readme api architecture onboarding inline">
+<div class="skill-card-name"><span class="skill-tag tag-quality">Quality</span> writing-documentation</div>
+<div class="skill-card-desc">Write for the reader who has zero context, is in a hurry, and will judge your project in 30 seconds.</div>
+<div class="skill-card-trigger">Trigger: Creating or updating any documentation</div>
+</div>
+
+</div>
+</div>
+
+<!-- Auditing Skills -->
+<div class="category" id="skills-audit">
+<div class="category-title"><span class="category-dot" style="background:var(--amber)"></span> Auditing</div>
+<div class="skill-grid">
+
+<div class="skill-card" data-search="architecture-audit SOLID coupling cohesion structure patterns">
+<div class="skill-card-name"><span class="skill-tag tag-audit">Audit</span> architecture-audit</div>
+<div class="skill-card-desc">Evaluate structural health &mdash; patterns, coupling, cohesion, and alignment between claims and code.</div>
+<div class="skill-card-trigger">Trigger: "Audit the architecture" or evaluating codebase structure</div>
+</div>
+
+<div class="skill-card" data-search="security-audit OWASP auth injection data exposure vulnerabilities">
+<div class="skill-card-name"><span class="skill-tag tag-audit">Audit</span> security-audit</div>
+<div class="skill-card-desc">Find vulnerabilities before attackers do. Covers auth, injection, data exposure, dependencies, infra.</div>
+<div class="skill-card-trigger">Trigger: "Is this secure?", before production deploy, handling user data</div>
+</div>
+
+<div class="skill-card" data-search="performance-audit N+1 queries memory CPU rendering caching bottleneck">
+<div class="skill-card-name"><span class="skill-tag tag-audit">Audit</span> performance-audit</div>
+<div class="skill-card-desc">Measure before optimizing. Profile before guessing. No optimization without profiling data.</div>
+<div class="skill-card-trigger">Trigger: "Why is this slow?", investigating high resource usage</div>
+</div>
+
+<div class="skill-card" data-search="database-audit schema indexing migrations constraints query optimization">
+<div class="skill-card-name"><span class="skill-tag tag-audit">Audit</span> database-audit</div>
+<div class="skill-card-desc">Schema should enforce business rules. Every query on production must hit an index.</div>
+<div class="skill-card-trigger">Trigger: Auditing schema, migrations, query patterns</div>
+</div>
+
+<div class="skill-card" data-search="frontend-audit component state management rendering bundle accessibility">
+<div class="skill-card-name"><span class="skill-tag tag-audit">Audit</span> frontend-audit</div>
+<div class="skill-card-desc">Component architecture, state management, rendering performance. Framework-agnostic.</div>
+<div class="skill-card-trigger">Trigger: Auditing frontend code, component patterns</div>
+</div>
+
+<div class="skill-card" data-search="api-design-audit REST GraphQL versioning pagination contracts error handling">
+<div class="skill-card-name"><span class="skill-tag tag-audit">Audit</span> api-design-audit</div>
+<div class="skill-card-desc">APIs are contracts. Design for the consumer. No breaking change without versioning.</div>
+<div class="skill-card-trigger">Trigger: Designing, reviewing, or auditing APIs</div>
+</div>
+
+<div class="skill-card" data-search="observability-audit logging metrics tracing alerting monitoring dashboards">
+<div class="skill-card-name"><span class="skill-tag tag-audit">Audit</span> observability-audit</div>
+<div class="skill-card-desc">Every system must answer: what happened, when, why, to whom? Structured logging, tracing, alerting.</div>
+<div class="skill-card-trigger">Trigger: Auditing logging, monitoring, alerting</div>
+</div>
+
+<div class="skill-card" data-search="accessibility-audit WCAG keyboard navigation screen reader a11y inclusive">
+<div class="skill-card-name"><span class="skill-tag tag-audit">Audit</span> accessibility-audit</div>
+<div class="skill-card-desc">15% of the world has a disability. No interactive element without keyboard access. No image without alt text.</div>
+<div class="skill-card-trigger">Trigger: Auditing UI accessibility, WCAG compliance</div>
+</div>
+
+<div class="skill-card" data-search="ci-cd-audit build pipeline deployment release rollback secrets">
+<div class="skill-card-name"><span class="skill-tag tag-audit">Audit</span> ci-cd-audit</div>
+<div class="skill-card-desc">Deployment should be boring. Automated, tested, reversible, and auditable.</div>
+<div class="skill-card-trigger">Trigger: Auditing build pipelines, deployment processes</div>
+</div>
+
+<div class="skill-card" data-search="dependency-audit vulnerability license supply chain outdated packages">
+<div class="skill-card-name"><span class="skill-tag tag-audit">Audit</span> dependency-audit</div>
+<div class="skill-card-desc">Every dependency is a liability. Justify every one. No unaudited dependency in production.</div>
+<div class="skill-card-trigger">Trigger: Reviewing dependencies, investigating supply chain</div>
+</div>
+
+<div class="skill-card" data-search="product-completeness-audit functional visual placeholder hardcoded broken flows">
+<div class="skill-card-name"><span class="skill-tag tag-audit">Audit</span> product-completeness-audit</div>
+<div class="skill-card-desc">A beautiful UI with hardcoded data is a demo, not a product. Visual completeness does not equal functional completeness.</div>
+<div class="skill-card-trigger">Trigger: Product "looks done" but flows may be broken</div>
+</div>
+
+<div class="skill-card" data-search="brutal-exhaustive-audit no-shortcuts multi-pass every file every route">
+<div class="skill-card-name"><span class="skill-tag tag-audit">Audit</span> brutal-exhaustive-audit</div>
+<div class="skill-card-desc">Every file checked. Every route visited. Every flow walked. No exceptions, no shortcuts, no "it's probably fine."</div>
+<div class="skill-card-trigger">Trigger: Need absolutely thorough, multi-pass audit</div>
+</div>
+
+</div>
+</div>
+
+<!-- Specialized Skills -->
+<div class="category" id="skills-specialized">
+<div class="category-title"><span class="category-dot" style="background:var(--purple)"></span> Specialized</div>
+<div class="skill-grid">
+
+<div class="skill-card" data-search="incident-response production outage triage mitigation post-mortem">
+<div class="skill-card-name"><span class="skill-tag tag-specialized">Special</span> incident-response</div>
+<div class="skill-card-desc">Mitigate first, investigate second, fix permanently third. Every second counts during an outage.</div>
+<div class="skill-card-trigger">Trigger: Production incidents &mdash; outages, breaches, data corruption</div>
+</div>
+
+<div class="skill-card" data-search="full-stack-api-integration endpoint surface map SOLID modular integration testing">
+<div class="skill-card-name"><span class="skill-tag tag-specialized">Special</span> full-stack-api-integration</div>
+<div class="skill-card-desc">Map the ENTIRE integration surface before writing code. One missed file = one broken page.</div>
+<div class="skill-card-trigger">Trigger: Integrating APIs from a spec into existing frontend</div>
+</div>
+
+<div class="skill-card" data-search="ui-ux-redesign visual overhaul design tokens components uniformity">
+<div class="skill-card-name"><span class="skill-tag tag-specialized">Special</span> ui-ux-redesign</div>
+<div class="skill-card-desc">Exhaustive frontend audit: design tokens, components, layouts, typography, color, spacing, animations.</div>
+<div class="skill-card-trigger">Trigger: Frontend needs a visual overhaul or redesign</div>
+</div>
+
+<div class="skill-card" data-search="agent-team-coordination multi-agent council subagent spawning handoffs orchestrator">
+<div class="skill-card-name"><span class="skill-tag tag-specialized">Special</span> agent-team-coordination</div>
+<div class="skill-card-desc">Multi-agent council using real subagent spawning. Orchestrator stays lean, specialists execute in fresh contexts.</div>
+<div class="skill-card-trigger">Trigger: Complex multi-step tasks needing specialist agents</div>
+</div>
+
+<div class="skill-card" data-search="using-skills discovery activation composition effective skill library">
+<div class="skill-card-name"><span class="skill-tag tag-meta">Meta</span> using-skills</div>
+<div class="skill-card-desc">If a skill exists for your situation, you MUST use it. Guides discovery, activation, and composition.</div>
+<div class="skill-card-trigger">Trigger: Any task that could benefit from the skills library</div>
+</div>
+
+<div class="skill-card" data-search="writing-skills create new skill iron law activation conditions verifiable">
+<div class="skill-card-name"><span class="skill-tag tag-meta">Meta</span> writing-skills</div>
+<div class="skill-card-desc">Every skill must have a clear Iron Law, defined activation conditions, and a verifiable process.</div>
+<div class="skill-card-trigger">Trigger: Creating new skills for the framework</div>
+</div>
+
+</div>
+</div>
+
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+<p>Built by <a href="https://github.com/boparaiamrit" target="_blank" rel="noopener">Amritpal Singh Boparai</a></p>
+<p style="margin-top:6px">Making AI agents think like staff engineers, one skill at a time.</p>
+<p style="margin-top:12px">
+<a href="https://github.com/boparaiamrit/skills-by-amrit" target="_blank" rel="noopener">GitHub</a> &middot;
+<a href="https://www.npmjs.com/package/skills-by-amrit" target="_blank" rel="noopener">npm</a> &middot;
+<a href="https://github.com/boparaiamrit/skills-by-amrit/blob/main/LICENSE" target="_blank" rel="noopener">MIT License</a>
+</p>
+</footer>
+
+</main>
+</div>
+
+<script>
+// Mobile sidebar
+function toggleSidebar(){
+document.getElementById('sidebar').classList.toggle('open');
+document.getElementById('overlay').classList.toggle('show');
+}
+
+// Expand/collapse command cards
+function toggleCard(header){
+const card=header.closest('.cmd-card');
+card.classList.toggle('open');
+}
+
+// Copy to clipboard
+function copyText(text,btn){
+navigator.clipboard.writeText(text).then(()=>{
+const orig=btn.textContent;
+btn.textContent='Copied!';
+btn.classList.add('copied');
+setTimeout(()=>{btn.textContent=orig;btn.classList.remove('copied')},1500);
+});
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown',(e)=>{
+if(e.key==='/'&&document.activeElement.tagName!=='INPUT'){
+e.preventDefault();
+document.getElementById('searchInput').focus();
+}
+if(e.key==='Escape'){
+const si=document.getElementById('searchInput');
+si.value='';
+si.blur();
+filterAll('');
+}
+});
+
+// Search
+const searchInput=document.getElementById('searchInput');
+searchInput.addEventListener('input',(e)=>filterAll(e.target.value.toLowerCase().trim()));
+
+function filterAll(q){
+// Filter command cards
+const cmdCards=document.querySelectorAll('.cmd-card');
+const cmdCategories=document.querySelectorAll('#commands .category');
+let cmdVisible=0;
+cmdCards.forEach(c=>{
+const name=c.querySelector('.cmd-name')?.textContent||'';
+const desc=c.querySelector('.cmd-desc')?.textContent||'';
+const data=c.getAttribute('data-search')||'';
+const match=!q||name.toLowerCase().includes(q)||desc.toLowerCase().includes(q)||data.toLowerCase().includes(q);
+c.classList.toggle('search-hidden',!match);
+if(match){c.classList.add('search-match');cmdVisible++}else{c.classList.remove('search-match')}
+});
+cmdCategories.forEach(cat=>{
+const visible=cat.querySelectorAll('.cmd-card:not(.search-hidden)').length;
+cat.classList.toggle('search-hidden',visible===0);
+});
+document.getElementById('cmdNoResults').classList.toggle('visible',cmdVisible===0&&q);
+
+// Filter skill cards
+const skillCards=document.querySelectorAll('.skill-card');
+const skillCategories=document.querySelectorAll('#skills .category');
+let skillVisible=0;
+skillCards.forEach(c=>{
+const name=c.querySelector('.skill-card-name')?.textContent||'';
+const desc=c.querySelector('.skill-card-desc')?.textContent||'';
+const data=c.getAttribute('data-search')||'';
+const match=!q||name.toLowerCase().includes(q)||desc.toLowerCase().includes(q)||data.toLowerCase().includes(q);
+c.classList.toggle('search-hidden',!match);
+if(match){c.classList.add('search-match');skillVisible++}else{c.classList.remove('search-match')}
+});
+skillCategories.forEach(cat=>{
+const visible=cat.querySelectorAll('.skill-card:not(.search-hidden)').length;
+cat.classList.toggle('search-hidden',visible===0);
+});
+document.getElementById('skillNoResults').classList.toggle('visible',skillVisible===0&&q);
+}
+
+// Active nav on scroll
+const sections=document.querySelectorAll('section[id],.hero[id]');
+const navLinks=document.querySelectorAll('.nav-link[href^="#"]');
+window.addEventListener('scroll',()=>{
+let current='';
+sections.forEach(s=>{if(window.scrollY>=s.offsetTop-120)current=s.id});
+navLinks.forEach(l=>{
+l.classList.remove('active');
+if(l.getAttribute('href')==='#'+current)l.classList.add('active');
+});
+});
+
+// Fade-in on scroll
+const obs=new IntersectionObserver(entries=>{
+entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('animate-in');obs.unobserve(e.target)}});
+},{threshold:0.05});
+document.querySelectorAll('.cmd-card,.skill-card,.stat').forEach(el=>obs.observe(el));
+
+// Close sidebar on nav click (mobile)
+document.querySelectorAll('.nav-link').forEach(l=>{
+l.addEventListener('click',()=>{if(window.innerWidth<=1024)toggleSidebar()});
+});
+</script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-

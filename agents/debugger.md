@@ -8,6 +8,7 @@ allowed-tools:
   - Bash
   - Write
   - Edit
+model: opus
 ---
 
 # Debugger Agent

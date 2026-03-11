@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.1.0] — 2026-03-11 — Intelligence Expansion Release
+
+### 🚀 Major Features
+
+- **Model Routing for Agents** — All 9 agents now have `model` frontmatter (Opus for deep reasoning: planner, reviewer, verifier, debugger, investigator; Sonnet for execution: executor, researcher, mapper, fixer) enabling cost-optimized agent dispatch
+- **6 New Slash Commands** — `/learn`, `/quality-gate`, `/checkpoint`, `/loop`, `/orchestrate`, `/context` with full workflow implementations
+- **Multi-Agent Orchestration** (`/orchestrate`) — Chain agents in predefined sequences (feature, bugfix, refactor, security) with structured handoff documents and SHIP/NEEDS WORK/BLOCKED verdicts
+- **Continuous Learning** (`/learn`) — Extract reusable patterns from sessions across 8 categories with deduplication, persisted to `.planning/LEARNINGS.md`
+- **Quality Gate Pipeline** (`/quality-gate`) — 6-step quality pipeline (Build → Type Check → Lint → Test → Security → Diff) with 4 modes: quick, full, pre-commit, pre-pr
+- **Hook Profile System** — Three-tier hook gating (minimal/standard/strict) via `SBA_HOOK_PROFILE` env var with per-hook profile mapping
+- **Context Modes** (`/context`) — Switch between dev (code-first), research (read-widely), and review (quality-first) modes that change workflow behavior
+
+### 🔧 Improvements
+
+- **Master `_rules` Skill** — Created the missing `_rules` skill (347 lines) consolidating all core principles, anti-hallucination protocol, severity framework, and skill activation table
+- **Enhanced `writing-skills`** — Expanded from 234 to 561 lines with skill anatomy, quality checklist, full template, 8 common mistakes with BAD/GOOD examples, and 5 testing methods
+- **Strategic Compaction Hook** (`suggest-compact.js`) — Suggests `/compact` at logical breakpoints (60%+ context usage, post-verification) with 15-call cooldown
+- **Cost Tracking Hook** (`cost-tracker.js`) — Session metrics (tool calls, files, agents) logged to `.planning/cost-log.md` on session end
+- **Checkpoint System** (`/checkpoint`) — Named progress snapshots with create/verify/list modes stored in `.planning/checkpoints/`
+- **Bounded Loop Execution** (`/loop`) — Repetitive tasks with safety bounds (max iterations, stall detection, test-between-iterations)
+
+### 📝 Documentation & Distribution
+
+- **Claude Code Plugin** — Added `.claude-plugin/plugin.json` and `marketplace.json` for plugin marketplace distribution
+- **Codex CLI Support** — Added `.codex/config.toml` with 3 agent profiles (planner, executor, reviewer)
+- **4 Stack-Specific Examples** — Real-world CLAUDE.md files for Next.js SaaS, Python API, Go Microservice, and Rust CLI with BAD/GOOD patterns
+- **Terminal-Aesthetic Docs Site** — Single-page HTML documentation (`docs/index.html`) with search, expandable cards, CRT effects, and responsive design
+
+### 📊 Stats
+
+- **6 new commands** (34 total)
+- **5 new workflows** (37 total)
+- **3 new hooks** (8 total)
+- **1 new skill** (_rules) + 1 enhanced (writing-skills) — 32 skills total
+- **3 context modes** (new)
+- **4 example projects** (new)
+- **4 Codex config files** (new)
+- **2 plugin distribution files** (new)
+- **28 new files, 11 modified**
+
+---
+
 ## 4.0.0 — 2026-03-10 — Production Infrastructure & 12-Platform Parity
 
 ### 🚀 Major Features
