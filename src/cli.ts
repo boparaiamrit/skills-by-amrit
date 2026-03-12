@@ -1077,14 +1077,14 @@ function generateCopilotHooksJson(hooksDir: string): string {
     postToolUse: [
       {
         type: "command",
-        bash: `node "${hookPath}/context-monitor.js"`,
+        bash: `node "${hookPath}/context-monitor.cjs"`,
         timeoutSec: 5,
       },
     ],
     sessionStart: [
       {
         type: "command",
-        bash: `node "${hookPath}/update-check.js"`,
+        bash: `node "${hookPath}/update-check.cjs"`,
         timeoutSec: 10,
       },
     ],
@@ -1204,7 +1204,7 @@ function installCopilotHooks(
   let installed = 0;
 
   // Copy hook JS files
-  const hookFiles = readdirSync(hooksSrc).filter((f: string) => f.endsWith(".js"));
+  const hookFiles = readdirSync(hooksSrc).filter((f: string) => f.endsWith(".cjs") || f.endsWith(".js"));
   for (const file of hookFiles) {
     copyFileSync(join(hooksSrc, file), join(targetDir, file));
     installed++;
@@ -1480,14 +1480,14 @@ function generateCursorHooksJson(hooksDir: string): string {
       postToolUse: [
         {
           type: "command",
-          command: `node "${hookPath}/context-monitor.js"`,
+          command: `node "${hookPath}/context-monitor.cjs"`,
           timeoutSec: 5,
         },
       ],
       sessionStart: [
         {
           type: "command",
-          command: `node "${hookPath}/update-check.js"`,
+          command: `node "${hookPath}/update-check.cjs"`,
           timeoutSec: 10,
         },
       ],
@@ -1506,7 +1506,7 @@ function generateWindsurfHooksJson(hooksDir: string): string {
       post_write_code: [
         {
           type: "command",
-          command: `node "${hookPath}/context-monitor.js"`,
+          command: `node "${hookPath}/context-monitor.cjs"`,
           timeoutSec: 5,
         },
       ],
@@ -1536,7 +1536,7 @@ function installPlatformHooks(
   let installed = 0;
 
   // Copy hook JS files
-  const hookFiles = readdirSync(hooksSrc).filter((f: string) => f.endsWith(".js"));
+  const hookFiles = readdirSync(hooksSrc).filter((f: string) => f.endsWith(".cjs") || f.endsWith(".js"));
   for (const file of hookFiles) {
     copyFileSync(join(hooksSrc, file), join(hooksTargetDir, file));
     installed++;
@@ -2105,7 +2105,7 @@ function registerClaudeHooks(
 
   ensureDir(hooksDir);
 
-  const hookFiles = readdirSync(hooksSrc).filter((f: string) => f.endsWith(".js"));
+  const hookFiles = readdirSync(hooksSrc).filter((f: string) => f.endsWith(".cjs") || f.endsWith(".js"));
   for (const file of hookFiles) {
     copyFileSync(join(hooksSrc, file), join(hooksDir, file));
   }
@@ -2114,7 +2114,7 @@ function registerClaudeHooks(
   const settings = readClaudeSettings(settingsPath);
 
   // Register PostToolUse hooks: context-monitor
-  const contextMonitorCmd = buildHookPath(hooksDir, "context-monitor.js");
+  const contextMonitorCmd = buildHookPath(hooksDir, "context-monitor.cjs");
   if (addCommandHook(settings, "PostToolUse", contextMonitorCmd, "context-monitor")) {
     result.registered.push("context-monitor");
   } else {
@@ -2122,7 +2122,7 @@ function registerClaudeHooks(
   }
 
   // Register SessionStart hook: update-check
-  const updateCheckCmd = buildHookPath(hooksDir, "update-check.js");
+  const updateCheckCmd = buildHookPath(hooksDir, "update-check.cjs");
   if (addCommandHook(settings, "SessionStart", updateCheckCmd, "update-check")) {
     result.registered.push("update-check");
   } else {
@@ -2141,7 +2141,7 @@ function registerClaudeHooks(
   }
 
   // Register statusline (PreInputSanitization)
-  const statuslineCmd = buildHookPath(hooksDir, "statusline.js");
+  const statuslineCmd = buildHookPath(hooksDir, "statusline.cjs");
   const hasExistingStatusline = settings.statusLine != null;
 
   if (!hasExistingStatusline || forceStatusline) {

@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.1.1] — 2026-03-12 — Critical Hook Bugfix Release
+
+### 🔴 Critical Fixes
+
+- **All hooks crash in ESM projects** — Hooks used `require()` (CommonJS) but `package.json` has `"type": "module"`, causing `ReferenceError: require is not defined` in any ESM project. **Fix:** Renamed all 7 hook files from `.js` to `.cjs` to force CommonJS mode regardless of project module type
+- **Security gate completely non-functional** — All regex patterns in `security-gate` were broken due to incorrect string escaping (`\(` in JS strings = `(`, not `\(`), producing `SyntaxError: Invalid regular expression` on startup. Password detection, API key scanning, eval/XSS/SQLi checks were never running. **Fix:** Rewrote all patterns using proper RegExp literals
+- **Missing frontmatter on `/memory` command** — The only command without YAML frontmatter, breaking command registration and metadata extraction. **Fix:** Added standard frontmatter block
+
+### 🟠 High Priority Fixes
+
+- **Unsafe JSON.parse on metrics files** — Corrupted temp files in `context-monitor` and `suggest-compact` hooks could crash with unhandled exception instead of graceful exit. **Fix:** Wrapped metrics file parsing in dedicated try-catch with clean exit
+- **Brittle Gemini platform detection** — All hooks used `GEMINI_API_KEY` env var presence to detect Gemini CLI, but users may have this var set while using Claude Code, causing wrong hook event names. **Fix:** Changed to explicit `GEMINI_CLI === '1'` check
+- **cost-tracker creates .planning/ directory** — The hook's own comment said "Don't create .planning if it doesn't exist" but the code created it anyway, polluting projects that don't use planning. **Fix:** Now returns early if `.planning/` doesn't exist
+- **CLI installer referenced `.js` hook filenames** — Updated all hardcoded hook paths and file filters in `src/cli.ts` to use `.cjs` extensions
+
+### 📊 Stats
+
+- **7 hooks renamed** (`.js` → `.cjs`)
+- **1 hook rewritten** (security-gate regex patterns)
+- **1 command fixed** (memory.md frontmatter)
+- **3 hooks patched** (JSON.parse safety, platform detection, directory creation)
+- **CLI installer updated** (hook path references)
+
+---
+
 ## [4.1.0] — 2026-03-11 — Intelligence Expansion Release
 
 ### 🚀 Major Features

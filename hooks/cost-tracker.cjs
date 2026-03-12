@@ -86,14 +86,9 @@ function writeSummary(data, metrics) {
   var planningDir = path.join(cwd, '.planning');
   var logPath = path.join(planningDir, 'cost-log.md');
 
-  // Don't create .planning if it doesn't exist — only write if project uses planning
+  // Only write cost log if .planning already exists — don't create it
   if (!fs.existsSync(planningDir)) {
-    try {
-      fs.mkdirSync(planningDir, { recursive: true });
-    } catch (e) {
-      // Can't create directory, skip writing
-      return;
-    }
+    return;
   }
 
   var now = new Date();
