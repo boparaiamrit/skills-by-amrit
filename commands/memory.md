@@ -1,3 +1,10 @@
+---
+name: memory
+description: "Manage persistent memory — init, read, write, compress, status."
+disable-model-invocation: true
+argument-hint: "[init|read|write|compress|status]"
+---
+
 # /memory — Persistent Memory Management
 
 Manage the project's persistent memory system. This command handles reading, writing, and maintaining the `.planning/` memory directory.

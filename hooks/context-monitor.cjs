@@ -50,7 +50,13 @@ process.stdin.on('end', () => {
       process.exit(0);
     }
 
-    const metrics = JSON.parse(fs.readFileSync(metricsPath, 'utf8'));
+    let metrics;
+    try {
+      metrics = JSON.parse(fs.readFileSync(metricsPath, 'utf8'));
+    } catch (e) {
+      // Corrupted metrics file — exit gracefully
+      process.exit(0);
+    }
     const now = Math.floor(Date.now() / 1000);
 
     // Ignore stale metrics
@@ -127,7 +133,7 @@ process.stdin.on('end', () => {
 
     const output = {
       hookSpecificOutput: {
-        hookEventName: process.env.GEMINI_API_KEY ? 'AfterTool' : 'PostToolUse',
+        hookEventName: process.env.GEMINI_CLI === '1' ? 'AfterTool' : 'PostToolUse',
         additionalContext: message
       }
     };

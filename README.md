@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">🧠 Skills by Amrit</h1>
   <p align="center">
-    <strong>The ultimate AI agent skills framework — 32 skills · 34 commands · 37 workflows · 9 agents · 10 cursor rules · 8 hooks · 13 modules · 11 templates</strong>
+    <strong>The ultimate AI agent skills framework — 33 skills · 34 commands · 37 workflows · 9 agents · 10 cursor rules · 8 hooks · 13 modules · 11 templates</strong>
   </p>
   <p align="center">
     Make your AI coding assistant think like a staff engineer.
@@ -363,15 +363,21 @@ Skills are deep instructional documents that teach AI agents HOW to think about 
 | 26 | 🏥 **product-completeness-audit** | Functional completeness verification — 5-level completeness spectrum, placeholder detection, broken flow identification, and API connection validation |
 | 27 | 🔬 **brutal-exhaustive-audit** | No-shortcuts 5-pass audit — build verification, route checking, data flow tracing, user flow testing, and edge case validation with anti-shortcut rules |
 
-#### 🔸 Meta (4 skills)
+#### 🔀 Migration (1 skill) — ✨ NEW in v4.2
 
 | # | Skill | Description |
 |:---:|:---|:---|
-| 28 | 📘 **using-skills** | How to use and combine skills effectively in your workflow |
-| 29 | ✍️ **writing-skills** | How to create new skills — format, quality standards, and testing requirements |
-| 30 | 🔄 **codebase-conformity** | Pattern uniformity enforcement — read existing patterns before writing, match them exactly, double-verify conformity before claiming done |
-| 31 | 🎨 **ui-ux-redesign** | Full-stack visual audit — inventories backend APIs, audits every component and design token, analyzes user flows, and produces layered redesign recommendations |
-| 32 | 📏 **_rules** | Master rules skill — consolidates core principles, anti-hallucination protocol, severity framework, and skill activation table |
+| 28 | 🔀 **nextjs-to-nuxt-migration** | Next.js → Nuxt 4 migration — submodule analysis, backend verification, multi-pass execution (backend wiring → feature completeness → CSS polish → verification), sidebar registration, theme/dark-mode rules, URL encoding, Agent Team File Protocol, and Playwright visual QA |
+
+#### 🔸 Meta (5 skills)
+
+| # | Skill | Description |
+|:---:|:---|:---|
+| 29 | 📘 **using-skills** | How to use and combine skills effectively in your workflow |
+| 30 | ✍️ **writing-skills** | How to create new skills — format, quality standards, and testing requirements |
+| 31 | 🔄 **codebase-conformity** | Pattern uniformity enforcement — read existing patterns before writing, match them exactly, double-verify conformity before claiming done |
+| 32 | 🎨 **ui-ux-redesign** | Full-stack visual audit — inventories backend APIs, audits every component and design token, analyzes user flows, and produces layered redesign recommendations |
+| 33 | 📏 **_rules** | Master rules skill — consolidates core principles, anti-hallucination protocol, severity framework, and skill activation table |
 
 ---
 

@@ -2,6 +2,59 @@
 
 All notable changes to this project will be documented in this file.
 
+## [4.2.0] — 2026-03-16 — Next.js to Nuxt Migration Skill
+
+### ✨ Added
+
+- **New skill: `nextjs-to-nuxt-migration`** — Comprehensive 2100-line skill for porting any module from a Next.js (React) app to Nuxt 4 (Vue 3) backed by NestJS
+  - Generic placeholders (`{module}`, `{Module}`, `{Model}`, `{react-repo}`, `{nuxt-repo}`, `{nestjs-repo}`) — user provides module name and repo paths once, skill substitutes everywhere
+  - Phase -1 submodule analysis (5-step: understand → data flow → UI actions → backend verification → task plan)
+  - Multi-pass execution: Pass 1 (backend wiring) → Pass 2 (feature completeness) → Pass 3 (CSS polish) → Pass 4 (verification)
+  - JSON-to-server-side translation reference (select-all pattern, pagination, debounced search, export polling)
+  - Nuxt 4 navigation patterns: `navigateTo()`, `useRouter().push()`, `<NuxtLink>` — with common mistake prevention
+  - Sidebar registration protocol (`AppSidebar.vue` navMenu) for every new module page
+  - Theme Configurator rules — CSS variable tokens (`bg-background`, `text-foreground`, `border-border`) and dark mode compliance
+  - URL encoding for Title Case status values — Axios auto-encoding, double-encoding prevention
+  - Title Case status enum standard (`'Active'`, `'In Progress'`, `'Not Started'`) across all modules
+  - Backend type system reference: standard API response envelope, error response, status conventions, query param rules
+  - UI Design Patterns: modal vs slideover decision, `p-6` padding rules, card gradient patterns, font color/contrast rules, loading skeleton shapes
+  - Agent Team File Protocol: `.planning/{module}/RESEARCH.md`, `PLAN.md`, `EXECUTING.md`, `VERIFY.md` templates
+  - Playwright visual QA: 5-step protocol with JS `evaluate()` for stretched button detection and card height mismatch detection
+  - Multi-agent strategy: parallel Phase -1 analysis, sequential execution, CSS-only Pass 3 can parallelize
+  - Full concept translation reference: hooks → composables, Context → Pinia, react-hook-form → composable pattern, shadcn/ui → shadcn-vue
+
+### 📊 Stats
+
+- **Skills:** 32 → 33
+- **New file:** `skills/nextjs-to-nuxt-migration/SKILL.md` (2112 lines)
+
+---
+
+## [4.1.1] — 2026-03-12 — Critical Hook Bugfix Release
+
+### 🔴 Critical Fixes
+
+- **All hooks crash in ESM projects** — Hooks used `require()` (CommonJS) but `package.json` has `"type": "module"`, causing `ReferenceError: require is not defined` in any ESM project. **Fix:** Renamed all 7 hook files from `.js` to `.cjs` to force CommonJS mode regardless of project module type
+- **Security gate completely non-functional** — All regex patterns in `security-gate` were broken due to incorrect string escaping (`\(` in JS strings = `(`, not `\(`), producing `SyntaxError: Invalid regular expression` on startup. Password detection, API key scanning, eval/XSS/SQLi checks were never running. **Fix:** Rewrote all patterns using proper RegExp literals
+- **Missing frontmatter on `/memory` command** — The only command without YAML frontmatter, breaking command registration and metadata extraction. **Fix:** Added standard frontmatter block
+
+### 🟠 High Priority Fixes
+
+- **Unsafe JSON.parse on metrics files** — Corrupted temp files in `context-monitor` and `suggest-compact` hooks could crash with unhandled exception instead of graceful exit. **Fix:** Wrapped metrics file parsing in dedicated try-catch with clean exit
+- **Brittle Gemini platform detection** — All hooks used `GEMINI_API_KEY` env var presence to detect Gemini CLI, but users may have this var set while using Claude Code, causing wrong hook event names. **Fix:** Changed to explicit `GEMINI_CLI === '1'` check
+- **cost-tracker creates .planning/ directory** — The hook's own comment said "Don't create .planning if it doesn't exist" but the code created it anyway, polluting projects that don't use planning. **Fix:** Now returns early if `.planning/` doesn't exist
+- **CLI installer referenced `.js` hook filenames** — Updated all hardcoded hook paths and file filters in `src/cli.ts` to use `.cjs` extensions
+
+### 📊 Stats
+
+- **7 hooks renamed** (`.js` → `.cjs`)
+- **1 hook rewritten** (security-gate regex patterns)
+- **1 command fixed** (memory.md frontmatter)
+- **3 hooks patched** (JSON.parse safety, platform detection, directory creation)
+- **CLI installer updated** (hook path references)
+
+---
+
 ## [4.1.0] — 2026-03-11 — Intelligence Expansion Release
 
 ### 🚀 Major Features

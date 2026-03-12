@@ -11,30 +11,35 @@ const SENSITIVE_FILES = ['.env', '.env.local', '.env.production', '.env.staging'
   'credentials.json', 'secrets.json', 'service-account.json'];
 const SENSITIVE_EXTENSIONS = ['.pem', '.key', '.p12', '.pfx', '.jks', '.keystore'];
 
-// Build regex from string to avoid triggering security linters on pattern definitions
-function re(pattern, flags) { return new RegExp(pattern, flags); }
-
 // Security patterns: [regex, label, description]
 const SECRET_PATTERNS = [
-  [re('password\s*[:=]\s*[\'"][^\'"]{4,}[\'"]', 'gi'), 'hardcoded-password', 'Hardcoded password detected'],
-  [re('api[_-]?key\s*[:=]\s*[\'"][^\'"]{8,}[\'"]', 'gi'), 'hardcoded-api-key', 'Hardcoded API key detected'],
-  [re('secret\s*[:=]\s*[\'"][^\'"]{8,}[\'"]', 'gi'), 'hardcoded-secret', 'Hardcoded secret detected'],
-  [re('token\s*[:=]\s*[\'"][^\'"]{8,}[\'"]', 'gi'), 'hardcoded-token', 'Hardcoded token detected'],
-  [re('-----BEGIN (?:RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----', 'g'), 'private-key', 'Private key material detected'],
-  [re('AKIA[0-9A-Z]{16}', 'g'), 'aws-access-key', 'AWS access key detected'],
-  [re('ghp_[A-Za-z0-9_]{36}', 'g'), 'github-pat', 'GitHub personal access token detected'],
-  [re('sk-[A-Za-z0-9]{20,}', 'g'), 'openai-key', 'OpenAI API key detected'],
-  [re('xox[bpras]-[A-Za-z0-9-]{10,}', 'g'), 'slack-token', 'Slack token detected'],
+  [/password\s*[:=]\s*['"][^'"]{4,}['"]/gi, 'hardcoded-password', 'Hardcoded password detected'],
+  [/api[_-]?key\s*[:=]\s*['"][^'"]{8,}['"]/gi, 'hardcoded-api-key', 'Hardcoded API key detected'],
+  [/secret\s*[:=]\s*['"][^'"]{8,}['"]/gi, 'hardcoded-secret', 'Hardcoded secret detected'],
+  [/token\s*[:=]\s*['"][^'"]{8,}['"]/gi, 'hardcoded-token', 'Hardcoded token detected'],
+  [/-----BEGIN (?:RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----/g, 'private-key', 'Private key material detected'],
+  [/AKIA[0-9A-Z]{16}/g, 'aws-access-key', 'AWS access key detected'],
+  [/ghp_[A-Za-z0-9_]{36}/g, 'github-pat', 'GitHub personal access token detected'],
+  [/sk-[A-Za-z0-9]{20,}/g, 'openai-key', 'OpenAI API key detected'],
+  [/xox[bpras]-[A-Za-z0-9-]{10,}/g, 'slack-token', 'Slack token detected'],
 ];
 
 // Anti-pattern checks — detects dangerous coding patterns in scanned code
+// Note: some patterns are split to avoid triggering security linters on this file
+const EVAL_RE = new RegExp('\\bev' + 'al\\s*\\(', 'g');
+const INNERHTML_RE = /innerHTML\s*=/g;
+const SQL_CONCAT_RE = new RegExp('\\bquery\\s*\\(\\s*[\'"`].*\\+\\s*', 'g');
+const CMD_INJECT_RE = new RegExp('child_process.*\\$\\{', 'gs');
+const DOC_WRITE_RE = new RegExp('document\\.write\\s*\\(', 'g');
+const DANGEROUS_HTML_RE = new RegExp('dangerous' + 'lySetInnerHTML', 'g');
+
 const ANTIPATTERN_CHECKS = [
-  [re('\bev' + 'al\s*\(', 'g'), 'eval-usage', 'Dynamic code evaluation — potential code injection risk'],
-  [re('innerHTML\s*=', 'g'), 'innerhtml-assignment', 'innerHTML assignment — potential XSS risk'],
-  [re('\bquery\s*\(\s*[\'"`].*\+\s*', 'g'), 'sql-concatenation', 'SQL string concatenation — potential SQL injection'],
-  [re('child_process.*\$\{', 'gs'), 'command-injection', 'child_process with interpolation — potential command injection'],
-  [re('document\.write\s*\(', 'g'), 'document-write', 'document.write() — potential XSS risk'],
-  [re('dangerous' + 'lySetInnerHTML', 'g'), 'dangerous-html', 'Unsafe HTML injection — ensure content is sanitized'],
+  [EVAL_RE, 'eval-usage', 'Dynamic code evaluation — potential code injection risk'],
+  [INNERHTML_RE, 'innerhtml-assignment', 'innerHTML assignment — potential XSS risk'],
+  [SQL_CONCAT_RE, 'sql-concatenation', 'SQL string concatenation — potential SQL injection'],
+  [CMD_INJECT_RE, 'command-injection', 'child_process with interpolation — potential command injection'],
+  [DOC_WRITE_RE, 'document-write', 'document.write() — potential XSS risk'],
+  [DANGEROUS_HTML_RE, 'dangerous-html', 'Unsafe HTML injection — ensure content is sanitized'],
 ];
 
 // File paths that are expected to contain pattern-like strings (skip token/password checks)
@@ -94,7 +99,7 @@ function checkContent(content, filePath) {
 
   // Check for .env file content patterns (KEY=value lines)
   if (!isTestFile) {
-    const envPattern = re('^[A-Z][A-Z0-9_]+=.+$', 'gm');
+    const envPattern = /^[A-Z][A-Z0-9_]+=.+$/gm;
     const envPatternCount = (content.match(envPattern) || []).length;
     if (envPatternCount >= 3) {
       warnings.push({
@@ -160,7 +165,7 @@ process.stdin.on('end', function() {
 
     const output = {
       hookSpecificOutput: {
-        hookEventName: process.env.GEMINI_API_KEY ? 'AfterTool' : 'PostToolUse',
+        hookEventName: process.env.GEMINI_CLI === '1' ? 'AfterTool' : 'PostToolUse',
         additionalContext: formatWarnings(warnings, target.filePath),
       }
     };
